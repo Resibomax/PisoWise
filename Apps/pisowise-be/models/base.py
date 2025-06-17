@@ -1,4 +1,4 @@
-from pydantic import EmailStr
+from pydantic import BaseModel, EmailStr
 from sqlalchemy import Column, Integer, String, Date, ForeignKey, Float
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship
@@ -80,13 +80,13 @@ class AIInsight(Base):
 
 
 # User Create Model
-class UserCreate(Base):
+class UserCreate(BaseModel):
     email: EmailStr
     username: str
 
 
 # User Response Model
-class UserResponse(Base):
+class UserResponse(BaseModel):
     id: str
     email: EmailStr
     username: str
