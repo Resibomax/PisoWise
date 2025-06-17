@@ -1,5 +1,6 @@
 import "./globals.css";
-import Navbar from "./navbar";
+import ConditionalNavbar from "@/components/wrappers/ConditionalNav";
+
 
 export default function RootLayout({
   children,
@@ -8,8 +9,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className="antialiased">
-        <Navbar />
+      <body className="antialiased bg-[#123524]">
+        {/* Renders Navbar only on non-landing pages */}
+        <ConditionalNavbar />
         {children}
       </body>
     </html>

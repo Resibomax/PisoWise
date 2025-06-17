@@ -8,6 +8,10 @@ export default function Landing() {
         backgroundSize: "auto",
       }}
     >
+      {/* Landing Page Navbar/Logo Only */}
+      <div className="flex fixed top-0 items-center justify-center pt-6 z-50 w-full">
+        <div className="text-white text-lg font-medium">Logo</div>
+      </div>
       Hello PisoWise
     </div>
   );
