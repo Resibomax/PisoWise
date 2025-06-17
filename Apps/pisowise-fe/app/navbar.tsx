@@ -1,0 +1,21 @@
+import React from "react";
+import { CircleUser } from "lucide-react";
+
+export default function Navbar() {
+  return (
+    <div className="flex fixed items-center justify-center pt-6 z-50 w-full">
+      <div className="bg-[#1B1212]/45 backdrop-blur-md rounded-full px-4 shadow-lg">
+        <div className="flex items-center justify-between min-w-[288px] min-h-[34px]">
+          {/* Logo */}
+          <div className="text-white text-lg font-medium">Logo</div>
+
+          {/* User Icon */}
+          <button className="text-white hover:text-white/80 transition-colors rounded-full hover:bg-white/10 p-1">
+            <CircleUser className="h-6 w-6" />
+            <span className="sr-only">User profile</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
