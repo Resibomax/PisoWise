@@ -5,6 +5,6 @@ app = FastAPI()
 
 @app.get("/")
 def read_root():
-    return {"message": "Hello from FastAPI on Lambda!"}
+    return {"message": "Hello from FastAPI on Lambda! Testing CI/CD pipeline"}
 
 handler = Mangum(app)
