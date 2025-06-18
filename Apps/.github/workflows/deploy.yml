@@ -5,12 +5,12 @@ on:
     branches:
       - main
       - staging
-      - feat/PSW-20-DevOps
+      - staging-test
     paths:
       - 'Apps/pisowise-be/**'
       - '.github/workflows/deploy.yml'
   workflow_dispatch:
-    
+
 jobs:
   deploy-backend:
     runs-on: ubuntu-latest
