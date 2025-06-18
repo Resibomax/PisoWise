@@ -26,4 +26,12 @@ export const mockProjects: Project[] = [
     budget: 20000,
     spent: 15000,
   },
+
+  {
+    id: "3",
+    title: "AWSCC Website",
+    description: "Redesign the company website to improve user experience.",
+    budget: 20000,
+    spent: 15000,
+  },
 ];

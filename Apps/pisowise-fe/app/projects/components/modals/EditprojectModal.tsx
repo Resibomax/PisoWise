@@ -1,7 +1,6 @@
 "use client"
 
 import type React from "react"
-
 import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import {
@@ -14,13 +13,8 @@ import {
 } from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import type { Project } from "../../mockProject"
 
-interface Project {
-  id: string
-  title: string
-  description: string
-  budget: number
-}
 
 interface EditProjectModalProps {
   isOpen: boolean
@@ -61,7 +55,6 @@ export function EditProjectModal({ isOpen, onClose, onEdit, project }: EditProje
     setTitle("")
     setDescription("")
     setBudget("")
-    onClose()
   }
 
   const handleClose = () => {
@@ -74,7 +67,7 @@ export function EditProjectModal({ isOpen, onClose, onEdit, project }: EditProje
 
   return (
     <Dialog open={isOpen} onOpenChange={handleClose}>
-      <DialogContent className="sm:max-w-[425px] font-roboto-light text-[14px] [&_input]:selection:bg-[#246A49] [&_input]:selection:text-white">
+      <DialogContent className="sm:max-w-[425px] font-roboto-light text-[14px] [&_input]:selection:bg-blue-500 [&_input]:selection:text-white">
         <form onSubmit={handleSubmit}>
           <DialogHeader>
             <DialogTitle className="text-left font-[Ember] text-[24px]">Edit Project</DialogTitle>
@@ -85,7 +78,13 @@ export function EditProjectModal({ isOpen, onClose, onEdit, project }: EditProje
           <div className="grid gap-4 py-4">
             <div className="grid gap-2">
               <Label htmlFor="title">Name</Label>
-              <Input id="title" value={title} onChange={(e) => setTitle(e.target.value)} required />
+              <Input
+                id="title"
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
+                className="selection:bg-blue-500 selection:text-white"
+                required
+              />
             </div>
 
             <div className="grid gap-2">
@@ -97,6 +96,7 @@ export function EditProjectModal({ isOpen, onClose, onEdit, project }: EditProje
                 onChange={(e) => setBudget(e.target.value)}
                 min="0"
                 step="0.01"
+                className="selection:bg-blue-500 selection:text-white"
                 required
               />
             </div>
@@ -106,7 +106,7 @@ export function EditProjectModal({ isOpen, onClose, onEdit, project }: EditProje
                 id="description"
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
-                className="h-[80px]"
+                className="h-[80px] selection:bg-blue-500 selection:text-white"
                 required
               />
             </div>

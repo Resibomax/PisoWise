@@ -30,7 +30,7 @@ export default function ProjectCard({
   return (
     <Card>
       <div
-        className={`bg-black rounded-xl px-[20px] py-[16px] shadow-lg w-full h-auto ${className}`}
+        className={`bg-[#1B1212] rounded-xl px-[20px] py-[16px] shadow-lg w-full h-auto ${className}`}
       >
         <CardHeader className="flex items-center justify-between text-white">
           {/* Header with title and action */}
