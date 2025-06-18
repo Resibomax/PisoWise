@@ -1,8 +1,10 @@
+import ProjectsPage from "./components/ProjectsPage";
+
 export default function Projects() {
     return (
       <div
-        className="flex items-center justify-center h-screen font-[Ember] text-white text-4xl">
-        Hello Projects
+        className="flex flex-col items-center justify-start h-screen font-[Ember] text-white">
+        <ProjectsPage />
       </div>
     );
   }

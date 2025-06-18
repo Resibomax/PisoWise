@@ -1,5 +1,6 @@
 @import "tailwindcss";
 @import "tw-animate-css";
+@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@300;400&display=swap");
 
 
 @custom-variant dark (&:is(.dark *));
@@ -50,6 +51,21 @@
 }
 
 :root {
+    /* Roboto font families */
+    --font-roboto-light: "Roboto", sans-serif;
+    --font-roboto-regular: "Roboto", sans-serif;
+    --radius: 0.625rem;
+  
+  /* Font utility classes */
+  .font-roboto-light {
+    font-family: var(--font-roboto-light);
+    font-weight: 300;
+  }
+  
+  .font-roboto-regular {
+    font-family: var(--font-roboto-regular);
+    font-weight: 400;
+  }
   --radius: 0.625rem;
   --background: oklch(1 0 0);
   --foreground: oklch(0.145 0 0);

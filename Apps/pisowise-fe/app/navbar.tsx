@@ -3,7 +3,7 @@ import { CircleUser } from "lucide-react";
 
 export default function Navbar() {
   return (
-    <div className="flex fixed items-center justify-center pt-6 z-50 w-full">
+    <div className="flex items-center justify-center pt-6 z-50 w-full">
       <div className="bg-[#1B1212]/45 backdrop-blur-md rounded-full px-4 shadow-lg">
         <div className="flex items-center justify-between min-w-[288px] min-h-[34px]">
           {/* Logo */}
