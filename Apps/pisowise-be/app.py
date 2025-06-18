@@ -13,7 +13,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-app.include_router(user_controller.user_router, prefix="/users")
+app.include_router(user_controller.user_router)
 
 
 @app.get("/")
@@ -22,4 +22,3 @@ def read_root():
 
 
 handler = Mangum(app)
-

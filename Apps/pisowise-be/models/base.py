@@ -36,6 +36,9 @@ class Project(Base):
     # relationship to the Receipt Model
     receipts = relationship("Receipt", back_populates="project")
 
+    # relationship to the ai_insights
+    ai_insights = relationship("AIInsight", back_populates="project")
+
 
 # Receipt Model
 class Receipt(Base):
@@ -87,9 +90,12 @@ class UserCreate(BaseModel):
 
 # User Response Model
 class UserResponse(BaseModel):
-    id: str
+    user_id: str
     email: EmailStr
     username: str
+
+    class Config:
+        from_attributes = True
 
 
 """

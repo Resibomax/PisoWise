@@ -17,7 +17,7 @@ def get_database_url():
         ssm = boto3.client("ssm", region_name=AWS_REGION)
         response = ssm.get_parameter(Name="/pisowise/db", WithDecryption=True)
 
-        db_url = response["Parameter"]["Value"]
+        db_url = response["Parameter"]["Value"].strip()
 
         if db_url.startswith("postgres://"):
             db_url = db_url.replace("postgres://", "postgresql://", 1)
