@@ -1,6 +1,6 @@
-from sqlalchemy.orm import Session, joinedload
+from sqlalchemy.orm import Session
 from models.base import User  # SQLAlchemy model defined here
-from models.base import UserCreate
+from models.user import UserCreate
 from typing import List
 
 

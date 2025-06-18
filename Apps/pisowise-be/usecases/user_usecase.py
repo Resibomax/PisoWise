@@ -1,6 +1,7 @@
 from sqlalchemy.orm import Session
 from repositories.user_repository import UserRepository
-from models.base import UserCreate, UserResponse, User
+from models.base import User
+from models.user import UserCreate, UserResponse
 from typing import List
 
 

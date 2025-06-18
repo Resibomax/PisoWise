@@ -1,4 +1,3 @@
-from pydantic import BaseModel, EmailStr
 from sqlalchemy import Column, Integer, String, Date, ForeignKey, Float
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship
@@ -80,22 +79,6 @@ class AIInsight(Base):
 
     # relationship to the Project Model
     project = relationship("Project", back_populates="ai_insights")
-
-
-# User Create Model
-class UserCreate(BaseModel):
-    email: EmailStr
-    username: str
-
-
-# User Response Model
-class UserResponse(BaseModel):
-    user_id: str
-    email: EmailStr
-    username: str
-
-    class Config:
-        from_attributes = True
 
 
 """
