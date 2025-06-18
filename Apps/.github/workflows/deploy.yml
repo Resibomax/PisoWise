@@ -5,6 +5,7 @@ on:
     branches:
       - main
       - staging
+      - feat/PSW-20-DevOps
     paths:
       - 'Apps/pisowise-be/**'
       - '.github/workflows/deploy.yml'
