@@ -1,6 +1,6 @@
 import "./globals.css";
 import ConditionalNavbar from "@/components/wrappers/ConditionalNav";
-
+import { Toaster } from "@/components/ui/sonner";
 
 export default function RootLayout({
   children,
@@ -13,6 +13,9 @@ export default function RootLayout({
         {/* Renders Navbar only on non-landing pages */}
         <ConditionalNavbar />
         {children}
+        <Toaster richColors
+          position="bottom-right"
+        />
       </body>
     </html>
   );

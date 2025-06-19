@@ -1,23 +1,28 @@
-import { create } from "zustand"
-import { mockProjects, type Project } from "../projects/mockProject"
+import { create } from "zustand";
+import { mockProjects, type Project } from "../projects/mockProject";
+import { toast } from "sonner";
 
 interface ProjectStore {
   // State
-  projects: Project[]
-  isCreateModalOpen: boolean
-  isEditModalOpen: boolean
-  selectedProject: Project | null
+  projects: Project[];
+  isCreateModalOpen: boolean;
+  isEditModalOpen: boolean;
+  selectedProject: Project | null;
 
   // Actions
-  addProject: (title: string, description: string, budget: number) => void
-  updateProject: (id: string, title: string, description: string, budget: number) => void
-  deleteProject: (id: string) => void
+  addProject: (title: string, description: string, budget: number) => void;
+  updateProject: (
+    id: string,
+    title: string,
+    description: string,
+    budget: number
+  ) => void;
 
   // Modal actions
-  openCreateModal: () => void
-  closeCreateModal: () => void
-  openEditModal: (project: Project) => void
-  closeEditModal: () => void
+  openCreateModal: () => void;
+  closeCreateModal: () => void;
+  openEditModal: (project: Project) => void;
+  closeEditModal: () => void;
 }
 
 export const useProjectStore = create<ProjectStore>((set, get) => ({
@@ -29,36 +34,71 @@ export const useProjectStore = create<ProjectStore>((set, get) => ({
 
   // Project actions
   addProject: (title: string, description: string, budget: number) => {
-    const { projects } = get()
-    const newId = (projects.length + 1).toString()
+    try {
+      const { projects } = get();
+      const newId = (projects.length + 1).toString();
 
-    const newProject: Project = {
-      id: newId,
-      title,
-      description,
-      budget,
-      spent: 0,
+      const newProject: Project = {
+        id: newId,
+        title,
+        description,
+        budget,
+        spent: 0,
+      };
+
+      set((state) => ({
+        projects: [...state.projects, newProject],
+        isCreateModalOpen: false,
+      }));
+      toast.success("Project created successfully", {
+        description: `"${title}" has been added to your projects.`,
+        style: {
+          backgroundColor: "#349868",
+          color: "white", 
+        },
+      }); 
+    } catch (error) {
+      toast.error("Failed to create project", {
+        description: "Please try again.",
+        style: {
+          backgroundColor: "#FF2C2C", 
+          color: "white", 
+        },
+      });
     }
-
-    set((state) => ({
-      projects: [...state.projects, newProject],
-      isCreateModalOpen: false,
-    }))
   },
+  updateProject: (
+    id: string,
+    title: string,
+    description: string,
+    budget: number
+  ) => {
+    try {
+      set((state) => ({
+        projects: state.projects.map((project: Project) =>
+          project.id === id
+            ? { ...project, title, description, budget }
+            : project
+        ),
+        isEditModalOpen: false,
+      }));
 
-  updateProject: (id: string, title: string, description: string, budget: number) => {
-    set((state) => ({
-      projects: state.projects.map((project: Project) =>
-        project.id === id ? { ...project, title, description, budget } : project,
-      ),
-      isEditModalOpen: false,
-    }))
-  },
-
-  deleteProject: (id: string) => {
-    set((state) => ({
-      projects: state.projects.filter((project: Project) => project.id !== id),
-    }))
+      toast.success("Project updated successfully", {
+        description: `"${title}" has been updated.`,
+        style: {
+          backgroundColor: "#349868", 
+          color: "white", 
+        },
+      });
+    } catch (error) {
+      toast.error("Failed to update project", {
+        description: "Please try again.",
+        style: {
+          backgroundColor: "#FF2C2C", 
+          color: "white", 
+        },
+      });
+    }
   },
 
   // Modal actions
@@ -76,4 +116,4 @@ export const useProjectStore = create<ProjectStore>((set, get) => ({
       isEditModalOpen: false,
       selectedProject: null,
     }),
-}))
+}));
