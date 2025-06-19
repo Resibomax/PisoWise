@@ -18,7 +18,6 @@ export default function Landing() {
         </DialogTrigger>
 
         <DialogContent className="bg-[#FBF5F3] p-4 rounded-[12px] shadow-lg text-center w-[90%] max-w-md pt-10">
-          {/* Required accessible title */}
           <DialogTitle className="sr-only">Login Modal</DialogTitle>
 
           <div>
