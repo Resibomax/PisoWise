@@ -54,7 +54,7 @@ export function EditProjectModal() {
                 id="title"
                 value={editForm.title}
                 onChange={(e) => setEditFormField("title", e.target.value)}
-                className="selection:bg-blue-500 selection:text-white"
+                className="selection:bg-blue-500 selection:text-white text-[#8B8483]"
                 required
               />
             </div>
@@ -68,7 +68,7 @@ export function EditProjectModal() {
                 onChange={(e) => setEditFormField("budget", e.target.value)}
                 min="0"
                 step="0.01"
-                className="selection:bg-blue-500 selection:text-white"
+                className="selection:bg-blue-500 selection:text-white text-[#8B8483]"
                 required
               />
             </div>
@@ -78,14 +78,14 @@ export function EditProjectModal() {
                 id="description"
                 value={editForm.description}
                 onChange={(e) => setEditFormField("description", e.target.value)}
-                className="h-[80px] selection:bg-blue-500 selection:text-white"
+                className="h-[80px] selection:bg-blue-500 selection:text-white text-[#8B8483]"
                 required
               />
             </div>
           </div>
           <DialogFooter>
-            <Button type="submit" className="bg-[#246A49] rounded-[12px]">
-              Save Changes
+            <Button type="submit" className="bg-[#246A49] hover:bg-[#349868] rounded-[12px] w-full">
+              Done
             </Button>
           </DialogFooter>
         </form>

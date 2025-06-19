@@ -39,7 +39,7 @@ export const useProjectStore = create<ProjectStore>((set, get) => ({
       toast.error("Failed to create project", {
         description: "Please try again.",
         style: {
-          backgroundColor: "#FF2C2C",
+          backgroundColor: "#E73648",
           color: "white",
         },
       })
@@ -65,7 +65,7 @@ export const useProjectStore = create<ProjectStore>((set, get) => ({
       toast.error("Failed to update project", {
         description: "Please try again.",
         style: {
-          backgroundColor: "#FF2C2C",
+          backgroundColor: "#E73648",
           color: "white",
         },
       })

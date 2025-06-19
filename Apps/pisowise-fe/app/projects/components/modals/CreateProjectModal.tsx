@@ -74,7 +74,7 @@ export function CreateProjectModal() {
             </div>
           </div>
           <DialogFooter>
-            <Button type="submit" className="bg-[#246A49] rounded-[12px]">
+            <Button type="submit" className="bg-[#246A49] hover:bg-[#349868] rounded-[12px] w-full">
               Done
             </Button>
           </DialogFooter>
