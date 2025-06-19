@@ -43,6 +43,27 @@ export default function Landing() {
           <br />
           Smarter.
         </div>
+        <div className="text-center mt-2">
+          <Button
+            className="mt-4 text-[#123524] text-[16px]"
+            variant="outline"
+            size="lg"
+            onClick={() => setView("signup")}
+          >
+            Create Account
+          </Button>
+          <br />
+          <Button
+            className="mt-4 text-[#FBF5F3] text-[16px]"
+            variant="soft"
+            size="lg"
+            onClick={() => setView("login")}
+          >
+            Sign in
+          </Button>
+        </div>
+
+        <p className="text-sm text-[#FBF5F3] mt-4">Current View: {view}</p>
       </div>
     </div>
   );
