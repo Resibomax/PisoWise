@@ -1,40 +1,50 @@
 import { Button } from "@/components/ui/button";
+import Image from "next/image";
 
 export default function Landing() {
   return (
     <div
-      className="flex flex-col items-center justify-center h-screen font-[Ember]"
+      className="relative h-screen font-[Ember]"
       style={{
         backgroundImage: "url('/assets/bg-lines.svg')",
         backgroundRepeat: "repeat",
         backgroundSize: "auto",
       }}
     >
-      <div className="text-center text-[40px] font-bold leading-[40px] tracking-[-0.4px] text-[#FBF5F3]">
-        Snap
-        <br />
-        Receipts.
-        <br />
-        Track
-        <br />
-        Smarter.
+      {/* Logo placeholder */}
+      <div className="absolute top-6 left-1/2 transform -translate-x-1/2">
+        <div className="w-16 h-16 font-semibold text-[#FBF5F3]">
+          Logo
+        </div>
       </div>
-      <div className="text-center mt-4">
-        <Button
-          className="mt-4 text-[#123524] text-[16px]"
-          variant="outline"
-          size="lg"
-        >
-          Create Account
-        </Button>
-        <br />
-        <Button
-          className="mt-4 text-[#FBF5F3] text-[16px]"
-          variant="soft"
-          size="lg"
-        >
-          Sign in
-        </Button>
+
+      <div className="flex flex-col items-center justify-center h-full">
+        <div className="text-center text-[40px] font-bold leading-[45px] tracking-[-0.4px] text-[#FBF5F3]">
+          Snap
+          <br />
+          Receipts.
+          <br />
+          Track
+          <br />
+          Smarter.
+        </div>
+        <div className="text-center mt-2">
+          <Button
+            className="mt-4 text-[#123524] text-[16px]"
+            variant="outline"
+            size="lg"
+          >
+            Create Account
+          </Button>
+          <br />
+          <Button
+            className="mt-4 text-[#FBF5F3] text-[16px]"
+            variant="soft"
+            size="lg"
+          >
+            Sign in
+          </Button>
+        </div>
       </div>
     </div>
   );
