@@ -1,11 +1,20 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import Image from "next/image";
-import { useLandingStore } from "../app/store/loginStore";
+import { Dialog } from "@/components/ui/dialog";
+import { useAuthStore } from "./store/authStore";
+import LogInModal from "./landing/components/modals/LogInModal";
+import SignUpModal from "./landing/components/modals/SignUpModal";
 
 export default function Landing() {
-  const { view, setView, logoUrl } = useLandingStore();
+  const {
+    openSignup,
+    openLogin,
+    isLoginOpen,
+    isSignupOpen,
+    closeLogin,
+    closeSignup,
+  } = useAuthStore();
 
   return (
     <div
@@ -18,21 +27,12 @@ export default function Landing() {
     >
       {/* Logo placeholder */}
       <div className="absolute top-6 left-1/2 transform -translate-x-1/2">
-        {logoUrl ? (
-          <Image
-            src={logoUrl}
-            alt="Logo"
-            width={64}
-            height={64}
-            className="rounded-full"
-          />
-        ) : (
-          <div className="w-16 h-16 font-semibold text-[#FBF5F3] flex items-center justify-center">
-            Logo
-          </div>
-        )}
+        <div className="w-16 h-16 font-semibold text-[#FBF5F3] flex items-center justify-center">
+          Logo
+        </div>
       </div>
 
+      {/* Main content */}
       <div className="flex flex-col items-center justify-center h-full">
         <div className="text-center text-[40px] font-bold leading-[45px] tracking-[-0.4px] text-[#FBF5F3]">
           Snap
@@ -45,26 +45,32 @@ export default function Landing() {
         </div>
         <div className="text-center mt-2">
           <Button
+            onClick={openSignup}
             className="mt-4 text-[#123524] text-[16px]"
             variant="outline"
             size="lg"
-            onClick={() => setView("signup")}
           >
             Create Account
           </Button>
           <br />
           <Button
+            onClick={openLogin}
             className="mt-4 text-[#FBF5F3] text-[16px]"
             variant="soft"
             size="lg"
-            onClick={() => setView("login")}
           >
             Sign in
           </Button>
         </div>
-
-        <p className="text-sm text-[#FBF5F3] mt-4">Current View: {view}</p>
       </div>
+
+      {/* Render modals via Dialog */}
+      <Dialog open={isLoginOpen} onOpenChange={closeLogin}>
+        {isLoginOpen && <LogInModal onClose={closeLogin} />}
+      </Dialog>
+      <Dialog open={isSignupOpen} onOpenChange={closeSignup}>
+        {isSignupOpen && <SignUpModal onClose={closeSignup} />}
+      </Dialog>
     </div>
   );
 }
