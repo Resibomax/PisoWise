@@ -1,7 +1,12 @@
+"use client";
+
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
+import { useLandingStore } from "../app/store/loginStore";
 
 export default function Landing() {
+  const { view, setView, logoUrl } = useLandingStore();
+
   return (
     <div
       className="relative h-screen font-[Ember]"
@@ -13,9 +18,19 @@ export default function Landing() {
     >
       {/* Logo placeholder */}
       <div className="absolute top-6 left-1/2 transform -translate-x-1/2">
-        <div className="w-16 h-16 font-semibold text-[#FBF5F3]">
-          Logo
-        </div>
+        {logoUrl ? (
+          <Image
+            src={logoUrl}
+            alt="Logo"
+            width={64}
+            height={64}
+            className="rounded-full"
+          />
+        ) : (
+          <div className="w-16 h-16 font-semibold text-[#FBF5F3] flex items-center justify-center">
+            Logo
+          </div>
+        )}
       </div>
 
       <div className="flex flex-col items-center justify-center h-full">
@@ -27,23 +42,6 @@ export default function Landing() {
           Track
           <br />
           Smarter.
-        </div>
-        <div className="text-center mt-2">
-          <Button
-            className="mt-4 text-[#123524] text-[16px]"
-            variant="outline"
-            size="lg"
-          >
-            Create Account
-          </Button>
-          <br />
-          <Button
-            className="mt-4 text-[#FBF5F3] text-[16px]"
-            variant="soft"
-            size="lg"
-          >
-            Sign in
-          </Button>
         </div>
       </div>
     </div>
