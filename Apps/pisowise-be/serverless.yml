@@ -1,5 +1,5 @@
 
-service: fastapi-serverless
+service: pisowise-be
 frameworkVersion: '3'
 
 provider:
@@ -10,6 +10,7 @@ provider:
 functions:
   api:
     handler: app.handler
+    description: FastAPI backend for PisoWise project deployed using Serverless Framework
     events:
       - httpApi: '*'
 
