@@ -1,4 +1,5 @@
 import boto3
+from urllib.parse import urlparse, urlunparse, quote_plus
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
@@ -21,6 +22,20 @@ def get_database_url():
 
         if db_url.startswith("postgres://"):
             db_url = db_url.replace("postgres://", "postgresql://", 1)
+
+        db_password = quote_plus("xJ3tOmgpTwxxm49_E|H|TYhLv41a")
+
+        parsed = urlparse(db_url)
+
+        if not parsed.username:
+            raise ValueError("Database URL must include username")
+
+        # Rebuild netloc with username:password@host:port
+        netloc = f"{parsed.username}:{db_password}@{parsed.hostname}"
+        if parsed.port:
+            netloc += f":{parsed.port}"
+
+        db_url = urlunparse(parsed._replace(netloc=netloc))
 
         print(f"Database URL fetched from SSM: {db_url}")
         return db_url
