@@ -16,6 +16,7 @@ var/
 *.egg-info/
 .installed.cfg
 *.egg
+ap-southeast-1-bundle.pem
 
 # Serverless directories
 .serverless
