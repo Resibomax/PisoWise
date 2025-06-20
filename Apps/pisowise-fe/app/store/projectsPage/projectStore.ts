@@ -6,6 +6,7 @@ interface ProjectStore {
   projects: Project[]
   addProject: (title: string, description: string, budget: number) => void
   updateProject: (id: string, title: string, description: string, budget: number) => void
+  getProjectById: (id: string) => Project | undefined
 }
 
 export const useProjectStore = create<ProjectStore>((set, get) => ({
@@ -70,5 +71,10 @@ export const useProjectStore = create<ProjectStore>((set, get) => ({
         },
       })
     }
+  },
+
+  getProjectById(id) {
+    const { projects } = get()
+    return projects.find((project) => project.id === id)
   },
 }))

@@ -38,13 +38,20 @@ export default function ProjectsPage() {
             {projects.map((project) => (
               <ProjectCard
                 key={project.id}
+                id={project.id}
                 title={project.title}
                 description={project.description}
                 budget={project.budget}
                 spent={project.spent}
                 headerAction={
-                  <div className="p-1 hover:bg-white rounded-full transition-color hover:text-black">
-                    <SquarePen className="w-5 h-5 cursor-pointer" onClick={() => openEditModal(project)} />
+                  <div
+                    className="p-1 hover:bg-white rounded-full transition-color hover:text-black"
+                    onClick={(e) => {
+                      e.stopPropagation()
+                      openEditModal(project)
+                    }}
+                  >
+                    <SquarePen className="w-5 h-5 cursor-pointer" />
                   </div>
                 }
                 className="w-full rounded-xl shadow-lg p-6"
