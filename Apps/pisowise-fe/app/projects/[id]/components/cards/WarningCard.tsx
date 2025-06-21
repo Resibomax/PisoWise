@@ -20,7 +20,7 @@ export default function WarningCard({ spent, budget }: WarningCardProps) {
     >
       <CardContent className="p-4">
         <div className="flex items-center">
-          <div>
+          <div className="p-2">
             <TriangleAlert className="w-6 h-6 text-white" />
           </div>
           <div className="text-white px-5">

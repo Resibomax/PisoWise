@@ -5,10 +5,10 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Undo2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
-import Receipt from "./Receipt";
+import Receipt from "../Receipt";
 import { useReceiptStore } from "@/app/store/projectDetails/receiptsStore";
 import { useState } from "react";
-import EditReceipt from "./EditReceipt";
+import EditReceipt from "../EditReceipt";
 
 interface ReceiptsCardProps {
   title: string;
@@ -25,7 +25,7 @@ export default function ReceiptsCard({ title, projectId }: ReceiptsCardProps) {
   return (
     <Card
       className={cn(
-        "bg-[#1B1212] border-none shadow-lg cursor-pointer hover:shadow-xl transition-shadow",
+        "bg-[#1B1212] border-none shadow-lg cursor-pointer hover:shadow-xl transition-shadow"
       )}
     >
       <CardContent className="p-5">

@@ -5,10 +5,10 @@ import { useProjectStore } from "@/app/store/projectsPage/projectStore";
 import { useModalStore } from "@/app/store/projectsPage/modalStore";
 import { EditProjectModal } from "../components/modals/EditprojectModal";
 import { ProjectHeader } from "./components/Header";
-import BudgetCard from "./components/BudgetCard";
-import ReceiptsCard from "./components/ReceiptsCard";
-import InsightsCard from "./components/AIInsightsCard";
-import WarningCard from "./components/WarningCard";
+import BudgetCard from "./components/cards/BudgetCard";
+import ReceiptsCard from "./components/cards/ReceiptsCard";
+import InsightsCard from "./components/cards/AIInsightsCard";
+import WarningCard from "./components/cards/WarningCard";
 
 export default function ProjectDetailsPage() {
   const params = useParams();
@@ -32,7 +32,7 @@ export default function ProjectDetailsPage() {
   const isSpentAboveThreshold = project.spent / project.budget > 0.8;
 
   return (
-    <div className="w-full max-w-7xl mx-auto mt-4 p-4 md:px-8 lg:px-16 text-white">
+    <div className="w-full max-w-[1380px] mx-auto mt-4 p-4 md:px-8 lg:px-16 text-white">
       <ProjectHeader project={project} onEdit={() => openEditModal(project)} />
       <div className="space-y-[20px]">
         <div>

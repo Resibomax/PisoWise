@@ -15,7 +15,7 @@ export default function ProjectsPage() {
   const { openCreateModal, openEditModal } = useModalStore();
 
   return (
-    <div className="w-full max-w-7xl mx-auto mt-4 p-4 md:px-8 lg:px-16">
+    <div className="w-full max-w-[1380px] mx-auto mt-4 p-4 md:px-8 lg:px-16">
       <div className="flex flex-row items-center justify-between md:justify-start gap-6 w-full mb-6">
         <p className="text-3xl font-[Ember] text-white">Projects</p>
         <Button
