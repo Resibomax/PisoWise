@@ -5,6 +5,11 @@ import { Dialog } from "@/components/ui/dialog";
 import { useAuthStore } from "./store/authStore";
 import LogInModal from "./landing/components/modals/LogInModal";
 import SignUpModal from "./landing/components/modals/SignUpModal";
+import VerificationModal from "./landing/components/modals/VerificationModal";
+import ResetPasswordModal from "./landing/components/modals/ResetPasswordModal";
+import { useEffect } from "react";
+import { useRouter } from "next/navigation";
+import { initializeAmplifyOAuth } from "@/lib/auth/amplify-oauth";
 
 export default function Landing() {
   const {
@@ -12,9 +17,35 @@ export default function Landing() {
     openLogin,
     isLoginOpen,
     isSignupOpen,
+    isVerificationOpen,
+    isResetPasswordOpen,
     closeLogin,
     closeSignup,
+    closeVerification,
+    closeResetPassword,
+    checkAuthState,
+    isAuthenticated,
+    isLoading,
   } = useAuthStore();
+  
+  const router = useRouter();
+
+  // Initialize Amplify
+  useEffect(() => {
+    initializeAmplifyOAuth();
+  }, []);
+
+  // Check authentication state when component mounts
+  useEffect(() => {
+    checkAuthState();
+  }, [checkAuthState]);
+
+  // Redirect authenticated users to projects page
+  useEffect(() => {
+    if (!isLoading && isAuthenticated) {
+      router.push("/projects");
+    }
+  }, [isAuthenticated, isLoading, router]);
 
   return (
     <div
@@ -68,6 +99,12 @@ export default function Landing() {
       </Dialog>
       <Dialog open={isSignupOpen} onOpenChange={closeSignup}>
         {isSignupOpen && <SignUpModal onClose={closeSignup} />}
+      </Dialog>
+      <Dialog open={isVerificationOpen} onOpenChange={closeVerification}>
+        {isVerificationOpen && <VerificationModal onClose={closeVerification} />}
+      </Dialog>
+      <Dialog open={isResetPasswordOpen} onOpenChange={closeResetPassword}>
+        {isResetPasswordOpen && <ResetPasswordModal onClose={closeResetPassword} />}
       </Dialog>
     </div>
   );
