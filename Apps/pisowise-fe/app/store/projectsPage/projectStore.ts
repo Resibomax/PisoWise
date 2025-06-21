@@ -21,6 +21,8 @@ export const useProjectStore = create<ProjectStore>((set, get) => ({
     try {
       const { projects } = get();
       const newId = (projects.length + 1).toString();
+      const { projects } = get();
+      const newId = (projects.length + 1).toString();
 
       const newProject: Project = {
         id: newId,
