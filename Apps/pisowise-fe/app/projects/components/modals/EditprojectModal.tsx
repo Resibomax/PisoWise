@@ -1,8 +1,8 @@
-"use client"
+"use client";
 
-import type React from "react"
-import { useEffect } from "react"
-import { Button } from "@/components/ui/button"
+import type React from "react";
+import { useEffect } from "react";
+import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
@@ -10,41 +10,54 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { useModalStore } from "@/app/store/projectsPage/modalStore"
-import { useFormStore } from "@/app/store/projectsPage/formStore"
+} from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { useModalStore } from "@/app/store/projectsPage/modalStore";
+import { useFormStore } from "@/app/store/projectsPage/formStore";
 
 export function EditProjectModal() {
-  const { isEditModalOpen, selectedProject, closeEditModal } = useModalStore()
-  const { editForm, setEditFormField, submitEditForm, resetEditForm, initializeEditForm } = useFormStore()
+  const { isEditModalOpen, selectedProject, closeEditModal } = useModalStore();
+  const {
+    editForm,
+    setEditFormField,
+    submitEditForm,
+    resetEditForm,
+    initializeEditForm,
+  } = useFormStore();
 
   // Initialize form when modal opens with a selected project
   useEffect(() => {
     if (isEditModalOpen && selectedProject) {
-      initializeEditForm(selectedProject.title, selectedProject.description, selectedProject.budget)
+      initializeEditForm(
+        selectedProject.title,
+        selectedProject.description,
+        selectedProject.budget,
+      );
     }
-  }, [isEditModalOpen, selectedProject, initializeEditForm])
+  }, [isEditModalOpen, selectedProject, initializeEditForm]);
 
   const handleClose = () => {
-    resetEditForm()
-    closeEditModal()
-  }
+    resetEditForm();
+    closeEditModal();
+  };
 
   const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
-    submitEditForm()
-  }
+    e.preventDefault();
+    submitEditForm();
+  };
 
   return (
     <Dialog open={isEditModalOpen} onOpenChange={handleClose}>
       <DialogContent className="sm:max-w-[425px] font-roboto-light text-[14px] [&_input]:selection:bg-blue-500 [&_input]:selection:text-white">
         <form onSubmit={handleSubmit}>
           <DialogHeader>
-            <DialogTitle className="text-left font-[Ember] text-[24px]">Edit Project</DialogTitle>
+            <DialogTitle className="text-left font-[Ember] text-[24px]">
+              Edit Project
+            </DialogTitle>
             <DialogDescription className="text-left">
-              Make changes to your project. Click "Save Changes" when you're done.
+              Make changes to your project. Click "Save Changes" when you're
+              done.
             </DialogDescription>
           </DialogHeader>
           <div className="grid gap-4 py-4">
@@ -77,19 +90,24 @@ export function EditProjectModal() {
               <Input
                 id="description"
                 value={editForm.description}
-                onChange={(e) => setEditFormField("description", e.target.value)}
+                onChange={(e) =>
+                  setEditFormField("description", e.target.value)
+                }
                 className="h-[80px] selection:bg-blue-500 selection:text-white text-[#8B8483]"
                 required
               />
             </div>
           </div>
           <DialogFooter>
-            <Button type="submit" className="bg-[#246A49] hover:bg-[#349868] rounded-[12px] w-full">
+            <Button
+              type="submit"
+              className="bg-[#246A49] hover:bg-[#349868] rounded-[12px] w-full"
+            >
               Done
             </Button>
           </DialogFooter>
         </form>
       </DialogContent>
     </Dialog>
-  )
+  );
 }

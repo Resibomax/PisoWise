@@ -13,9 +13,7 @@ export default function RootLayout({
         {/* Renders Navbar only on non-landing pages */}
         <ConditionalNavbar />
         {children}
-        <Toaster richColors
-          position="bottom-right"
-        />
+        <Toaster richColors position="bottom-right" />
       </body>
     </html>
   );

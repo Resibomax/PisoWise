@@ -2,18 +2,25 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Plus } from "lucide-react";
 
 interface CreateProjectProps {
-    onClick: () => void
-  }
+  onClick: () => void;
+}
 
-{/*Create New Project Card Component*/}
+{
+  /*Create New Project Card Component*/
+}
 export default function NoProjectsCard({ onClick }: CreateProjectProps) {
-    return (
-        <Card className="bg-[#1B1212]/45 hover:bg-[#1B1212]/35 h-[186px] min-w-[320px] flexitems-center justify-center text-white font-[Ember] cursor-pointer" onClick={onClick}>
-            <CardContent className="flex flex-col items-center">
-                <Plus className="w-8 h-8 mb-2" />
-                <h1>No Projects Available</h1>
-                <span className="text-[#8B8483]">Create your first project to get started!</span>
-            </CardContent>
-        </Card>
-    );
+  return (
+    <Card
+      className="bg-[#1B1212]/45 hover:bg-[#1B1212]/35 h-[186px] min-w-[320px] flexitems-center justify-center text-white font-[Ember] cursor-pointer"
+      onClick={onClick}
+    >
+      <CardContent className="flex flex-col items-center">
+        <Plus className="w-8 h-8 mb-2" />
+        <h1>No Projects Available</h1>
+        <span className="text-[#8B8483]">
+          Create your first project to get started!
+        </span>
+      </CardContent>
+    </Card>
+  );
 }
