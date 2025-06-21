@@ -18,7 +18,7 @@ export default function Receipt({ projectId }: ReceiptProps) {
         <Link
           key={receipt.id}
           href={`/projects/${projectId}/receipts/${receipt.id}`}
-          className="block p-3 bg-transparent rounded-lg  transition-colors border border-[#349868]"
+          className="block p-3 bg-transparent rounded-[12px]  transition-colors border border-[#349868]"
         >
           <div className="flex items-center justify-between">
             <div>

@@ -34,7 +34,7 @@ export default function ProjectDetailsPage() {
       <div className="space-y-[20px]">
         <BudgetCard spent={project.spent} budget={project.budget} />
         <ReceiptsCard projectId={project.id} title={project.title} />
-        <InsightsCard />
+        <InsightsCard projectId={project.id} />
       </div>
       <EditProjectModal />
     </div>

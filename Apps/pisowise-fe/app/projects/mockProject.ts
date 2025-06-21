@@ -109,3 +109,78 @@ export const mockReceipts: ReceiptDetails[] = [
     receiptImage: "https://example.com/receipt4.jpg",
   },
 ];
+
+export interface AIInsight {
+  id: string;
+  projectId: string;
+  message: string;
+  generatedAt: string;
+}
+
+export const mockAIInsights: AIInsight[] = [
+  {
+    id: "ai-1",
+    projectId: "1",
+    message:
+      "Current spending trajectory suggests you may exceed budget by 15% if current pace continues. Consider optimizing development resources.",
+    generatedAt: "2024-01-15T10:30:00Z",
+  },
+  {
+    id: "ai-2",
+    projectId: "1",
+    message:
+      "Implementing automated testing tools could reduce debugging time by 25% and improve delivery speed.",
+    generatedAt: "2024-01-14T14:20:00Z",
+  },
+  {
+    id: "ai-3",
+    projectId: "1",
+    message:
+      "Analysis shows potential savings of $2,000 by switching to alternative payment processing solutions.",
+    generatedAt: "2024-01-13T09:15:00Z",
+  },
+
+  {
+    id: "ai-4",
+    projectId: "2",
+    message:
+      "Your Adobe Creative Suite investment shows high ROI. Consider expanding design capabilities to reduce outsourcing costs.",
+    generatedAt: "2024-01-15T11:45:00Z",
+  },
+  {
+    id: "ai-5",
+    projectId: "2",
+    message:
+      "Based on current spending patterns, project is likely to finish 10% under budget with 3 days ahead of schedule.",
+    generatedAt: "2024-01-14T16:30:00Z",
+  },
+  {
+    id: "ai-6",
+    projectId: "2",
+    message:
+      "Consider adding user testing sessions to validate design decisions before final implementation.",
+    generatedAt: "2024-01-13T12:20:00Z",
+  },
+
+  {
+    id: "ai-7",
+    projectId: "3",
+    message:
+      "AWS spending analysis suggests switching to reserved instances could save 30% on compute costs.",
+    generatedAt: "2024-01-15T08:20:00Z",
+  },
+  {
+    id: "ai-8",
+    projectId: "3",
+    message:
+      "Current infrastructure setup may require additional security measures to meet compliance standards.",
+    generatedAt: "2024-01-14T13:10:00Z",
+  },
+  {
+    id: "ai-9",
+    projectId: "3",
+    message:
+      "Adding CloudWatch monitoring could prevent potential downtime and improve system reliability.",
+    generatedAt: "2024-01-13T15:45:00Z",
+  },
+];
