@@ -13,7 +13,7 @@ export interface Project {
 export const mockProjects: Project[] = [
   {
     id: "1",
-    title: "Mobile App Development",
+    title: "PWA Development",
     description: "Develop a mobile app for e-commerce platform.",
     budget: 50000,
     spent: 32000,

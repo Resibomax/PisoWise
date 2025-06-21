@@ -49,9 +49,6 @@ export default function ProjectCard({
         <p className="font-roboto-light text-[16px] text-[#8B8483] mb-2">
           {description}
         </p>
-        <p className="font-roboto-light text-[16px] text-[#8B8483] mb-2">
-          {description}
-        </p>
       </div>
 
       <div className="font-roboto-regular space-y-1 mb-[10px]">
@@ -67,10 +64,6 @@ export default function ProjectCard({
 
         {/* Progress Bar */}
         <div className="mb-2">
-          <Progress
-            value={Math.min(percentageUsed, 100)}
-            className="h-2 bg-[#123524] [&>div]:bg-[#349868]"
-          />
           <Progress
             value={Math.min(percentageUsed, 100)}
             className="h-2 bg-[#123524] [&>div]:bg-[#349868]"
