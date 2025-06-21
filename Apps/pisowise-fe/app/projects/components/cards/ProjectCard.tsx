@@ -1,15 +1,15 @@
-import type React from "react"
-import { Progress } from "@/components/ui/progress"
-import { useRouter } from "next/navigation"
+import type React from "react";
+import { Progress } from "@/components/ui/progress";
+import { useRouter } from "next/navigation";
 
 interface ProjectCardProps {
-  id: string
-  title: string
-  description: string
-  budget: number
-  spent: number
-  headerAction?: React.ReactNode
-  className?: string
+  id: string;
+  title: string;
+  description: string;
+  budget: number;
+  spent: number;
+  headerAction?: React.ReactNode;
+  className?: string;
 }
 
 export default function ProjectCard({
@@ -21,17 +21,23 @@ export default function ProjectCard({
   headerAction,
   className = "",
 }: ProjectCardProps) {
-  const router = useRouter()
+  const router = useRouter();
 
   const handleViewDetails = () => {
-    router.push(`/projects/${id}`)
-  }
-  const percentageUsed = (spent / budget) * 100
+    router.push(`/projects/${id}`);
+  };
+  const percentageUsed = (spent / budget) * 100;
 
   return (
-    <div className={`relative bg-[#1B1212] rounded-xl px-[20px] py-[16px] shadow-lg w-full h-auto cursor-pointer ${className}`} onClick={handleViewDetails}>
-      
-      {headerAction && <div className="absolute top-[16px] right-[20px] z-10">{headerAction}</div>}
+    <div
+      className={`relative bg-[#1B1212] rounded-xl px-[20px] py-[16px] shadow-lg w-full h-auto cursor-pointer ${className}`}
+      onClick={handleViewDetails}
+    >
+      {headerAction && (
+        <div className="absolute top-[16px] right-[20px] z-10">
+          {headerAction}
+        </div>
+      )}
 
       {/* Header with title */}
       <div className="pr-12">
@@ -40,7 +46,9 @@ export default function ProjectCard({
 
       <div>
         {/* Description */}
-        <p className="font-roboto-light text-[16px] text-[#8B8483] mb-2">{description}</p>
+        <p className="font-roboto-light text-[16px] text-[#8B8483] mb-2">
+          {description}
+        </p>
       </div>
 
       <div className="font-roboto-regular space-y-1 mb-[10px]">
@@ -56,7 +64,10 @@ export default function ProjectCard({
 
         {/* Progress Bar */}
         <div className="mb-2">
-          <Progress value={Math.min(percentageUsed, 100)} className="h-2 bg-[#123524] [&>div]:bg-[#349868]" />
+          <Progress
+            value={Math.min(percentageUsed, 100)}
+            className="h-2 bg-[#123524] [&>div]:bg-[#349868]"
+          />
         </div>
       </div>
 
@@ -65,5 +76,5 @@ export default function ProjectCard({
         {percentageUsed.toFixed(1)}% Used
       </div>
     </div>
-  )
+  );
 }
