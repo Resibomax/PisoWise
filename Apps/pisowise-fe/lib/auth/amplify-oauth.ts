@@ -12,19 +12,18 @@ export function initializeAmplifyOAuth() {
       Cognito: {
         userPoolId,
         userPoolClientId,
-        identityPoolId: '', 
         signUpVerificationMethod: 'code',
         loginWith: {
-          email: true,
-          username: false,
-          phone: false,
           oauth: {
             domain,
             scopes: ['email', 'profile', 'openid'],
             redirectSignIn: [`${origin}/auth/callback`],
             redirectSignOut: [`${origin}`],
-            responseType: 'code',
-          }
+            responseType: 'code'
+          },
+          email: true,
+          phone: false,
+          username: false,
         }
       }
     }

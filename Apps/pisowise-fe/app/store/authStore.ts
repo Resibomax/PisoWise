@@ -10,6 +10,7 @@ import {
   confirmResetPassword,
   signInWithRedirect
 } from 'aws-amplify/auth';
+import { initializeAmplifyOAuth } from "@/lib/auth/amplify-oauth";
 
 interface User {
   email: string;
@@ -105,23 +106,11 @@ export const useAuthStore = create<AuthStore>((set) => ({
 
 signInWithGoogle: async () => {
   set({ isLoading: true, error: null });
+
   try {
-    const origin = typeof window !== 'undefined' ? window.location.origin : '';
-    console.log("Redirecting to Google with:", {
-      provider: 'Google',
-      redirectSignIn: `${origin}/auth/callback`,
-      redirectSignOut: `${origin}`
-    });
-    
-    await signInWithRedirect({
-      provider: 'Google',
-      options: {
-        redirectSignIn: [`${origin}/auth/callback`],
-        redirectSignOut: [`${origin}`]
-      }
-    });
-    
-    console.log("signInWithRedirect completed");
+    initializeAmplifyOAuth(); 
+
+    await signInWithRedirect({ provider: 'Google' });
 
   } catch (error: any) {
     console.error('Error signing in with Google:', error);
