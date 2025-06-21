@@ -22,9 +22,12 @@ jobs:
         with:
           node-version: '20'
           cache: 'npm'
+          cache-dependency-path: Apps/pisowise-fe/package-lock.json
 
       - name: Install dependencies
         run: npm ci
+        working-directory: Apps/pisowise-fe
 
       - name: Check formatting
         run: npm run format:check
+        working-directory: Apps/pisowise-fe
