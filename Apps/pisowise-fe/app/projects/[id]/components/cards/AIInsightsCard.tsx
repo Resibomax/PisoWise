@@ -27,8 +27,8 @@ export default function InsightsCard({ projectId }: AIInsightsDisplayProps) {
     >
       <CardContent className="p-5">
         <div className="text-white mb-4">
-          <p className="font-[Ember] text-[24px]">AI Insights</p>
-          <p className="font-roboto-light text-[14px]">
+          <p className="font-[Ember] text-[24px] md:text[30px]">AI Insights</p>
+          <p className="font-roboto-light text-[14px] md:text-[18px]">
             AI-generated project analysis
           </p>
         </div>

@@ -23,7 +23,7 @@ export const mockProjects: Project[] = [
     title: "Website Redesign",
     description: "Redesign the company website to improve user experience.",
     budget: 20000,
-    spent: 18000,
+    spent: 13690,
   },
   {
     id: "3",
@@ -94,20 +94,7 @@ export const mockReceipts: ReceiptDetails[] = [
     totalItems: 1,
     receiptImage: "https://example.com/receipt3.jpg",
   },
-  {
-    id: "4",
-    projectId: "3",
-    title: "Receipt 1",
-    date: "2023-10-15",
-    totalAmount: 89.99,
-    items: [
-      { id: "1", name: "EC2 Instance", price: 49.99, quantity: 1 },
-      { id: "2", name: "S3 Storage", price: 25.0, quantity: 1 },
-      { id: "3", name: "CloudFront CDN", price: 15.0, quantity: 1 },
-    ],
-    totalItems: 3,
-    receiptImage: "https://example.com/receipt4.jpg",
-  },
+
   {
     id: "5",
     projectId: "1",

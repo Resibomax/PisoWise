@@ -26,20 +26,20 @@ export default function BudgetCard({
     >
       <CardContent className="p-5">
         <div className="space-y-4">
-          <div className="grid grid-cols-2 gap-4">
+          <div className="flex justify-between md:justify-center md:gap-[50%] items-center">
             <div className="space-y-1">
-              <p className="text-white text-[16px] font-roboto-regular">
+              <p className="text-white text-[16px] md:text-[20px] font-roboto-regular">
                 Spent:
               </p>
-              <p className="text-white font-[Ember] text-[20px]">
+              <p className="text-white font-[Ember] text-[25px] md:text-[30px]">
                 ₱{spent.toLocaleString()}
               </p>
             </div>
             <div className="space-y-1">
-              <p className="text-white text-[16px] font-roboto-regular">
+              <p className="text-white text-[16px] md:text-[20px] font-roboto-regular">
                 Budget:
               </p>
-              <p className="text-white font-[Ember] text-[20px]">
+              <p className="text-white font-[Ember] text-[25px] md:text-[30px]">
                 ₱{budget.toLocaleString()}
               </p>
             </div>

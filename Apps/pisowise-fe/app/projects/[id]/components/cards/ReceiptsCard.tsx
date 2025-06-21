@@ -25,12 +25,14 @@ export default function ReceiptsCard({ title, projectId }: ReceiptsCardProps) {
   return (
     <Card
       className={cn(
-        "bg-[#1B1212] border-none shadow-lg cursor-pointer hover:shadow-xl transition-shadow"
+        "bg-[#1B1212] border-none shadow-lg cursor-pointer hover:shadow-xl transition-shadow",
       )}
     >
       <CardContent className="p-5">
         <div className="flex items-center justify-between">
-          <p className="font-[Ember] text-[24px] text-white">Receipts</p>
+          <p className="font-[Ember] text-[24px] md:text-[30px] text-white">
+            Receipts
+          </p>
           {isEditing ? (
             <Button
               className="flex gap-2 items-center bg-transparent hover:bg-white hover:text-black rounded-[12px] text-white"
@@ -39,15 +41,19 @@ export default function ReceiptsCard({ title, projectId }: ReceiptsCardProps) {
               <Undo2 className="cursor-pointer h-5 w-5" />
             </Button>
           ) : hasReceipts ? (
-            <Pen
-              className="h-6 w-6 text-white"
+            <div
+              className="p-1 hover:bg-white hover:text-black rounded-[12px] transition-color text-white"
               onClick={() => setIsEditing(!isEditing)}
-            />
+            >
+              <Pen className="h-6 w-6" />
+            </div>
           ) : (
-            <Plus className="h-6 w-6 text-white" />
+            <div className="p-1 hover:bg-white hover:text-black rounded-[12px] transition-color text-white">
+              <Plus className="h-6 w-6" />
+            </div>
           )}
         </div>
-        <p className="text-white font-roboto-light text-[14px]">
+        <p className="text-white font-roboto-light text-[14px] md:text-[18px]">
           All Receipts for {title}
         </p>
         <div className="mt-4">
@@ -62,7 +68,7 @@ export default function ReceiptsCard({ title, projectId }: ReceiptsCardProps) {
             <Receipt projectId={projectId} />
           ) : (
             <div className="flex items-center justify-center text-[#49C187]">
-              <Button className="text-[#49C187] bg-[#123524] w-full">
+              <Button className="text-[#49C187] bg-[#123524] w-full hover:bg-white hover:text-[#123524] cursor-pointer">
                 No Receipts
               </Button>
             </div>

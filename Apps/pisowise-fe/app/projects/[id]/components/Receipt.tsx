@@ -22,18 +22,20 @@ export default function Receipt({ projectId }: ReceiptProps) {
         >
           <div className="flex items-center justify-between">
             <div>
-              <h3 className="text-white font-roboto-regular text-[16px]">
+              <h3 className="text-white font-roboto-regular text-[16px] md:text-[18px]">
                 {receipt.title}
               </h3>
-              <p className="text-white font-roboto-light text-[12px]">
+              <p className="text-white font-roboto-light text-[12px] md:text-[14px]">
                 {receipt.totalItems} Items
               </p>
             </div>
             <div className="flex items-center">
-              <p className="text-white font-roboto-regular text-[16px]">
+              <p className="text-white font-roboto-regular text-[16px] md:text-[20px]">
                 ₱{receipt.totalAmount.toLocaleString()}
               </p>
-              <ChevronRight className="h-4 w-4 text-white ml-2" />
+              <div className="p-1 hover:bg-white hover:text-black rounded-[12px] transition-color text-white ml-2">
+                <ChevronRight className="h-6 w-6" />
+              </div>
             </div>
           </div>
         </Link>
