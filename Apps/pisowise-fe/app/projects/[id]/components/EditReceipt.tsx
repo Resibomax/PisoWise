@@ -2,13 +2,13 @@
 
 import { useReceiptStore } from "@/app/store/projectDetails/receiptsStore";
 import Link from "next/link";
-import { ChevronRight } from "lucide-react";
+import { Trash } from "lucide-react";
 
 interface ReceiptProps {
   projectId: string;
 }
 
-export default function Receipt({ projectId }: ReceiptProps) {
+export default function EditReceipt({ projectId }: ReceiptProps) {
   const { getReceiptsByProjectId } = useReceiptStore();
   const receipts = getReceiptsByProjectId(projectId);
 
@@ -18,22 +18,24 @@ export default function Receipt({ projectId }: ReceiptProps) {
         <Link
           key={receipt.id}
           href={`/projects/${projectId}/receipts/${receipt.id}`}
-          className="block p-3 bg-transparent rounded-[12px]  transition-colors border border-[#349868]"
+          className="block p-3 bg-transparent rounded-[12px] transition-colors border border-[#349868]"
         >
           <div className="flex items-center justify-between">
-            <div>
-              <h3 className="text-white font-roboto-regular text-[16px]">
-                {receipt.title}
-              </h3>
-              <p className="text-white font-roboto-light text-[12px]">
-                {receipt.totalItems} Items
-              </p>
+            <div className="flex items-center gap-2">
+              <Trash className="cursor-pointer h-5 w-5 text-[#E73648]" />
+              <div>
+                <h3 className="text-white font-roboto-regular text-[16px]">
+                  {receipt.title}
+                </h3>
+                <p className="text-white font-roboto-light text-[12px]">
+                  {receipt.totalItems} Items
+                </p>
+              </div>
             </div>
             <div className="flex items-center">
               <p className="text-white font-roboto-regular text-[16px]">
                 ₱{receipt.totalAmount.toLocaleString()}
               </p>
-              <ChevronRight className="h-4 w-4 text-white ml-2" />
             </div>
           </div>
         </Link>

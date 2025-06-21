@@ -7,7 +7,8 @@ import { EditProjectModal } from "../components/modals/EditprojectModal";
 import { ProjectHeader } from "./components/Header";
 import BudgetCard from "./components/BudgetCard";
 import ReceiptsCard from "./components/ReceiptsCard";
-import InsightsCard from "./components/InsightsCard";
+import InsightsCard from "./components/AIInsightsCard";
+import WarningCard from "./components/WarningCard";
 
 export default function ProjectDetailsPage() {
   const params = useParams();
@@ -28,11 +29,18 @@ export default function ProjectDetailsPage() {
     );
   }
 
+  const isSpentAboveThreshold = project.spent / project.budget > 0.8;
+
   return (
     <div className="w-full max-w-7xl mx-auto mt-4 p-4 md:px-8 lg:px-16 text-white">
       <ProjectHeader project={project} onEdit={() => openEditModal(project)} />
       <div className="space-y-[20px]">
-        <BudgetCard spent={project.spent} budget={project.budget} />
+        <div>
+          <BudgetCard spent={project.spent} budget={project.budget} />
+          {isSpentAboveThreshold && (
+            <WarningCard spent={project.spent} budget={project.budget} />
+          )}
+        </div>
         <ReceiptsCard projectId={project.id} title={project.title} />
         <InsightsCard projectId={project.id} />
       </div>

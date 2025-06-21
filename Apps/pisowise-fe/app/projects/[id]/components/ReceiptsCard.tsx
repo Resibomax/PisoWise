@@ -2,10 +2,13 @@
 
 import { Plus, Pen } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
+import { Undo2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import Receipt from "./Receipt";
 import { useReceiptStore } from "@/app/store/projectDetails/receiptsStore";
+import { useState } from "react";
+import EditReceipt from "./EditReceipt";
 
 interface ReceiptsCardProps {
   title: string;
@@ -17,6 +20,8 @@ export default function ReceiptsCard({ title, projectId }: ReceiptsCardProps) {
   const receipts = getReceiptsByProjectId(projectId);
   const hasReceipts = receipts.length > 0;
 
+  const [isEditing, setIsEditing] = useState(false);
+
   return (
     <Card
       className={cn(
@@ -26,8 +31,18 @@ export default function ReceiptsCard({ title, projectId }: ReceiptsCardProps) {
       <CardContent className="p-5">
         <div className="flex items-center justify-between">
           <p className="font-[Ember] text-[24px] text-white">Receipts</p>
-          {hasReceipts ? (
-            <Pen className="h-6 w-6 text-white" />
+          {isEditing ? (
+            <Button
+              className="flex gap-2 items-center bg-transparent hover:bg-white hover:text-black rounded-[12px] text-white"
+              onClick={() => setIsEditing(false)}
+            >
+              <Undo2 className="cursor-pointer h-5 w-5" />
+            </Button>
+          ) : hasReceipts ? (
+            <Pen
+              className="h-6 w-6 text-white"
+              onClick={() => setIsEditing(!isEditing)}
+            />
           ) : (
             <Plus className="h-6 w-6 text-white" />
           )}
@@ -36,7 +51,14 @@ export default function ReceiptsCard({ title, projectId }: ReceiptsCardProps) {
           All Receipts for {title}
         </p>
         <div className="mt-4">
-          {hasReceipts ? (
+          {isEditing ? (
+            <div className="text-white space-y-2">
+              <EditReceipt projectId={projectId} />
+              <Button className="text-white bg-[#349868] w-full rounded-[12px]">
+                Add Receipt
+              </Button>
+            </div>
+          ) : hasReceipts ? (
             <Receipt projectId={projectId} />
           ) : (
             <div className="flex items-center justify-center text-[#49C187]">

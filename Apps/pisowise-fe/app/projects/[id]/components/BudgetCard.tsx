@@ -48,7 +48,7 @@ export default function BudgetCard({
           <div>
             <Progress
               value={Math.min(budgetPercentage, 100)}
-              className={`w-full h-2 bg-[#123524] [&>div]:bg-[#349868]`}
+              className={`w-full h-2 bg-[#246A49] [&>div]:bg-[#349868]`}
             />
             <span className={`font-roboto-regular text-gray-300 text-sm`}>
               {budgetPercentage.toFixed(1)}% Used

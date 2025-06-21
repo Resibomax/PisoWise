@@ -16,14 +16,14 @@ export const mockProjects: Project[] = [
     title: "PWA Development",
     description: "Develop a mobile app for e-commerce platform.",
     budget: 50000,
-    spent: 32000,
+    spent: 42000,
   },
   {
     id: "2",
     title: "Website Redesign",
     description: "Redesign the company website to improve user experience.",
     budget: 20000,
-    spent: 15000,
+    spent: 18000,
   },
   {
     id: "3",
@@ -107,6 +107,19 @@ export const mockReceipts: ReceiptDetails[] = [
     ],
     totalItems: 3,
     receiptImage: "https://example.com/receipt4.jpg",
+  },
+  {
+    id: "5",
+    projectId: "1",
+    title: "Receipt 3",
+    date: "2023-10-15",
+    totalAmount: 250.0,
+    items: [
+      { id: "1", name: "Office Chair", price: 150.0, quantity: 1 },
+      { id: "2", name: "Desk Lamp", price: 50.0, quantity: 2 },
+    ],
+    totalItems: 3, // 1 + 2
+    receiptImage: "https://example.com/receipt3.jpg",
   },
 ];
 
