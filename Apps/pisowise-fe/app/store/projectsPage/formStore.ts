@@ -1,25 +1,35 @@
-import { create } from "zustand"
-import { useProjectStore } from "./projectStore"
-import { useModalStore } from "./modalStore"
+import { create } from "zustand";
+import { useProjectStore } from "./projectStore";
+import { useModalStore } from "./modalStore";
 
 interface FormStore {
   createForm: {
-    title: string
-    description: string
-    budget: string
-  }
+    title: string;
+    description: string;
+    budget: string;
+  };
   editForm: {
-    title: string
-    description: string
-    budget: string
-  }
-  setCreateFormField: (field: "title" | "description" | "budget", value: string) => void
-  setEditFormField: (field: "title" | "description" | "budget", value: string) => void
-  resetCreateForm: () => void
-  resetEditForm: () => void
-  submitCreateForm: () => void
-  submitEditForm: () => void
-  initializeEditForm: (title: string, description: string, budget: number) => void
+    title: string;
+    description: string;
+    budget: string;
+  };
+  setCreateFormField: (
+    field: "title" | "description" | "budget",
+    value: string,
+  ) => void;
+  setEditFormField: (
+    field: "title" | "description" | "budget",
+    value: string,
+  ) => void;
+  resetCreateForm: () => void;
+  resetEditForm: () => void;
+  submitCreateForm: () => void;
+  submitEditForm: () => void;
+  initializeEditForm: (
+    title: string,
+    description: string,
+    budget: number,
+  ) => void;
 }
 
 export const useFormStore = create<FormStore>((set, get) => ({
@@ -35,7 +45,10 @@ export const useFormStore = create<FormStore>((set, get) => ({
     budget: "",
   },
 
-  setCreateFormField: (field: "title" | "description" | "budget", value: string) =>
+  setCreateFormField: (
+    field: "title" | "description" | "budget",
+    value: string,
+  ) =>
     set((state) => ({
       createForm: {
         ...state.createForm,
@@ -43,7 +56,10 @@ export const useFormStore = create<FormStore>((set, get) => ({
       },
     })),
 
-  setEditFormField: (field: "title" | "description" | "budget", value: string) =>
+  setEditFormField: (
+    field: "title" | "description" | "budget",
+    value: string,
+  ) =>
     set((state) => ({
       editForm: {
         ...state.editForm,
@@ -79,50 +95,55 @@ export const useFormStore = create<FormStore>((set, get) => ({
     }),
 
   submitCreateForm: () => {
-    const { createForm, resetCreateForm } = get()
-    const { title, description, budget } = createForm
+    const { createForm, resetCreateForm } = get();
+    const { title, description, budget } = createForm;
 
     if (!title.trim() || !description.trim() || !budget.trim()) {
-      return
+      return;
     }
 
-    const budgetNumber = Number.parseFloat(budget)
+    const budgetNumber = Number.parseFloat(budget);
     if (isNaN(budgetNumber) || budgetNumber <= 0) {
-      return
+      return;
     }
 
     // Get the project store actions
-    const { addProject } = useProjectStore.getState()
-    const { closeCreateModal } = useModalStore.getState()
+    const { addProject } = useProjectStore.getState();
+    const { closeCreateModal } = useModalStore.getState();
 
-    addProject(title.trim(), description.trim(), budgetNumber)
-    closeCreateModal()
-    resetCreateForm()
+    addProject(title.trim(), description.trim(), budgetNumber);
+    closeCreateModal();
+    resetCreateForm();
   },
 
   submitEditForm: () => {
-    const { editForm, resetEditForm } = get()
-    const { title, description, budget } = editForm
+    const { editForm, resetEditForm } = get();
+    const { title, description, budget } = editForm;
 
     if (!title.trim() || !description.trim() || !budget.trim()) {
-      return
+      return;
     }
 
-    const budgetNumber = Number.parseFloat(budget)
+    const budgetNumber = Number.parseFloat(budget);
     if (isNaN(budgetNumber) || budgetNumber <= 0) {
-      return
+      return;
     }
 
     // Get the stores
-    const { updateProject } = useProjectStore.getState()
-    const { selectedProject, closeEditModal } = useModalStore.getState()
+    const { updateProject } = useProjectStore.getState();
+    const { selectedProject, closeEditModal } = useModalStore.getState();
 
     if (!selectedProject) {
-      return
+      return;
     }
 
-    updateProject(selectedProject.id, title.trim(), description.trim(), budgetNumber)
-    closeEditModal()
-    resetEditForm()
+    updateProject(
+      selectedProject.id,
+      title.trim(),
+      description.trim(),
+      budgetNumber,
+    );
+    closeEditModal();
+    resetEditForm();
   },
-}))
+}));

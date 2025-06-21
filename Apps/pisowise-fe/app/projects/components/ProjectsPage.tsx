@@ -1,18 +1,18 @@
-"use client"
+"use client";
 
-import { Plus, SquarePen } from "lucide-react"
-import { Button } from "@/components/ui/button"
-import ProjectCard from "./cards/ProjectCard"
-import CreateProject from "./cards/CreateProjectCard"
-import { CreateProjectModal } from "./modals/CreateProjectModal"
-import { EditProjectModal } from "./modals/EditprojectModal"
-import { useProjectStore } from "@/app/store/projectsPage/projectStore"
-import { useModalStore } from "@/app/store/projectsPage/modalStore"
-import NoProjectsCard from "./cards/NoProjectsCard"
+import { Plus, SquarePen } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import ProjectCard from "./cards/ProjectCard";
+import CreateProject from "./cards/CreateProjectCard";
+import { CreateProjectModal } from "./modals/CreateProjectModal";
+import { EditProjectModal } from "./modals/EditprojectModal";
+import { useProjectStore } from "@/app/store/projectsPage/projectStore";
+import { useModalStore } from "@/app/store/projectsPage/modalStore";
+import NoProjectsCard from "./cards/NoProjectsCard";
 
 export default function ProjectsPage() {
-  const { projects } = useProjectStore()
-  const { openCreateModal, openEditModal } = useModalStore()
+  const { projects } = useProjectStore();
+  const { openCreateModal, openEditModal } = useModalStore();
 
   return (
     <div className="w-full max-w-7xl mx-auto mt-4 p-4 md:px-8 lg:px-16">
@@ -44,7 +44,10 @@ export default function ProjectsPage() {
                 spent={project.spent}
                 headerAction={
                   <div className="p-1 hover:bg-white rounded-full transition-color hover:text-black">
-                    <SquarePen className="w-5 h-5 cursor-pointer" onClick={() => openEditModal(project)} />
+                    <SquarePen
+                      className="w-5 h-5 cursor-pointer"
+                      onClick={() => openEditModal(project)}
+                    />
                   </div>
                 }
                 className="w-full rounded-xl shadow-lg p-6"
@@ -59,5 +62,5 @@ export default function ProjectsPage() {
 
       <EditProjectModal />
     </div>
-  )
+  );
 }
