@@ -6,7 +6,6 @@ on:
       - '**'
     paths:
       - 'Apps/pisowise-fe/**'
-      - '.github/workflows/build-check.yml'
   pull_request:
     branches:
       - '**'
@@ -23,12 +22,16 @@ jobs:
         with:
           node-version: '20'
           cache: 'npm'
+          cache-dependency-path: Apps/pisowise-fe/package-lock.json
 
       - name: Install dependencies
         run: npm ci
+        working-directory: Apps/pisowise-fe
 
       - name: Run lint check
         run: npm run lint
+        working-directory: Apps/pisowise-fe
 
       - name: Build project
         run: npm run build
+        working-directory: Apps/pisowise-fe

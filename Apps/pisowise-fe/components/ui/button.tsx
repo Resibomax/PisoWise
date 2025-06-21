@@ -33,7 +33,11 @@ const buttonVariants = cva(
       variant: "default",
       size: "default",
     },
+<<<<<<< HEAD
   }
+=======
+  },
+>>>>>>> d7e054e3e9e3a5b93c71f32525a6cd6b9871ac74
 );
 
 function Button({
