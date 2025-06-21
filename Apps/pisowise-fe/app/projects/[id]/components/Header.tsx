@@ -6,7 +6,6 @@ import { Undo2, Trash, SquarePen } from "lucide-react";
 
 interface Project {
   title: string;
- 
 }
 
 interface ProjectHeaderProps {

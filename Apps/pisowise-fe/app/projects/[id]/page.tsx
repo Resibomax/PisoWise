@@ -6,6 +6,8 @@ import { useModalStore } from "@/app/store/projectsPage/modalStore";
 import { EditProjectModal } from "../components/modals/EditprojectModal";
 import { ProjectHeader } from "./components/Header";
 import BudgetCard from "./components/BudgetCard";
+import ReceiptsCard from "./components/ReceiptsCard";
+import InsightsCard from "./components/InsightsCard";
 
 export default function ProjectDetailsPage() {
   const params = useParams();
@@ -29,9 +31,11 @@ export default function ProjectDetailsPage() {
   return (
     <div className="w-full max-w-7xl mx-auto mt-4 p-4 md:px-8 lg:px-16 text-white">
       <ProjectHeader project={project} onEdit={() => openEditModal(project)} />
-
-      <BudgetCard spent={project.spent} budget={project.budget} />
-
+      <div className="space-y-[20px]">
+        <BudgetCard spent={project.spent} budget={project.budget} />
+        <ReceiptsCard projectId={project.id} title={project.title} />
+        <InsightsCard />
+      </div>
       <EditProjectModal />
     </div>
   );

@@ -32,7 +32,7 @@ export default function BudgetCard({
                 Spent:
               </p>
               <p className="text-white font-[Ember] text-[20px]">
-                ${spent.toLocaleString()}
+                ₱{spent.toLocaleString()}
               </p>
             </div>
             <div className="space-y-1">
@@ -40,7 +40,7 @@ export default function BudgetCard({
                 Budget:
               </p>
               <p className="text-white font-[Ember] text-[20px]">
-                ${budget.toLocaleString()}
+                ₱{budget.toLocaleString()}
               </p>
             </div>
           </div>
