@@ -6,7 +6,6 @@ on:
       - '**'
     paths:
       - 'Apps/pisowise-fe/**'
-      - '.github/workflows/build-check.yml'
   pull_request:
     branches:
       - '**'
