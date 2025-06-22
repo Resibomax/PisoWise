@@ -7,7 +7,6 @@ interface ReceiptStore {
   // Actions
   getReceiptsByProjectId: (projectId: string) => ReceiptDetails[];
   getReceiptById: (receiptId: string) => ReceiptDetails | undefined;
-  addReceipt: (receipt: ReceiptDetails) => void;
   updateReceipt: (receiptId: string, updates: Partial<ReceiptDetails>) => void;
   deleteReceipt: (receiptId: string) => void;
 }
@@ -21,12 +20,6 @@ export const useReceiptStore = create<ReceiptStore>((set, get) => ({
 
   getReceiptById: (receiptId: string) => {
     return get().receipts.find((receipt) => receipt.id === receiptId);
-  },
-
-  addReceipt: (receipt: ReceiptDetails) => {
-    set((state) => ({
-      receipts: [...state.receipts, receipt],
-    }));
   },
 
   updateReceipt: (receiptId: string, updates: Partial<ReceiptDetails>) => {
