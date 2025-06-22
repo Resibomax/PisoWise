@@ -19,7 +19,7 @@ class ReceiptUpdate(BaseModel):
 class ReceiptResponse(BaseModel):
     receipt_id: str
     project_id: str
-    total_amount: str
+    total_amount: float
     transaction_date: date
     vendor_name: Optional[str] = None
 
