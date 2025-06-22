@@ -6,8 +6,9 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useAuthStore } from "@/app/store/authStore";
 
-export default function VerificationModal({ onClose }: { onClose: () => void }) {
-  const { verifyAccount, isLoading, error, verificationEmail, switchToLogin } = useAuthStore();
+export default function VerificationModal({}: { onClose: () => void }) {
+  const { verifyAccount, isLoading, error, verificationEmail, switchToLogin } =
+    useAuthStore();
   const [email, setEmail] = useState(verificationEmail);
   const [code, setCode] = useState("");
 
@@ -29,7 +30,7 @@ export default function VerificationModal({ onClose }: { onClose: () => void }) 
         <div className="font-Ember font-medium text-[26px] tracking-[0.48px] text-center mb-4">
           Verify Your Account
         </div>
-        
+
         <p className="text-center mb-4">
           Enter the verification code sent to your email address.
         </p>
@@ -50,7 +51,7 @@ export default function VerificationModal({ onClose }: { onClose: () => void }) 
             required
           />
         </div>
-        
+
         <div className="mt-2">
           <p>Verification Code</p>
           <Input
@@ -60,7 +61,7 @@ export default function VerificationModal({ onClose }: { onClose: () => void }) 
             required
           />
         </div>
-        
+
         <Button
           type="submit"
           className="mt-4 w-full bg-[#246A49] text-white text-[16px] font-normal font-Ember gap-2 rounded-[12px]"
@@ -70,9 +71,9 @@ export default function VerificationModal({ onClose }: { onClose: () => void }) 
         >
           {isLoading ? "Verifying..." : "Verify Account"}
         </Button>
-        
+
         <div className="mt-4 text-center">
-          <button 
+          <button
             type="button"
             onClick={switchToLogin}
             className="text-[#246A49] hover:underline"

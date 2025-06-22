@@ -27,7 +27,7 @@ export default function Landing() {
     isAuthenticated,
     isLoading,
   } = useAuthStore();
-  
+
   const router = useRouter();
 
   useEffect(() => {
@@ -98,10 +98,14 @@ export default function Landing() {
         {isSignupOpen && <SignUpModal onClose={closeSignup} />}
       </Dialog>
       <Dialog open={isVerificationOpen} onOpenChange={closeVerification}>
-        {isVerificationOpen && <VerificationModal onClose={closeVerification} />}
+        {isVerificationOpen && (
+          <VerificationModal onClose={closeVerification} />
+        )}
       </Dialog>
       <Dialog open={isResetPasswordOpen} onOpenChange={closeResetPassword}>
-        {isResetPasswordOpen && <ResetPasswordModal onClose={closeResetPassword} />}
+        {isResetPasswordOpen && (
+          <ResetPasswordModal onClose={closeResetPassword} />
+        )}
       </Dialog>
     </div>
   );

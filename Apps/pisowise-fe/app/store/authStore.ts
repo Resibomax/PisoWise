@@ -1,22 +1,26 @@
 import { create } from "zustand";
-import { 
-  signIn, 
-  signUp, 
-  confirmSignUp, 
-  signOut, 
-  getCurrentUser, 
+import {
+  signIn,
+  signUp,
+  confirmSignUp,
+  signOut,
+  getCurrentUser,
   fetchUserAttributes,
   resetPassword,
   confirmResetPassword,
-  signInWithRedirect
-} from 'aws-amplify/auth';
+  signInWithRedirect,
+} from "aws-amplify/auth";
 import { initializeAmplifyOAuth } from "@/lib/auth/amplify-oauth";
 import { handleOAuthCallback } from "@/lib/auth/oauth-handler";
 
 interface User {
   email: string;
   sub: string;
-  attributes?: any;
+  attributes?: Record<string, string | undefined>;
+}
+
+function isErrorWithMessage(err: unknown): err is { message: string } {
+  return typeof err === "object" && err !== null && "message" in err;
 }
 
 interface AuthStore {
@@ -32,7 +36,6 @@ interface AuthStore {
   verificationEmail: string;
   isPasswordReset: boolean;
 
-  // Modal controls
   openLogin: () => void;
   closeLogin: () => void;
   openSignup: () => void;
@@ -44,13 +47,16 @@ interface AuthStore {
   switchToSignup: () => void;
   switchToLogin: () => void;
 
-  // Auth actions
   signIn: (email: string, password: string) => Promise<void>;
   signInWithGoogle: () => Promise<void>;
   signUp: (email: string, password: string) => Promise<boolean>;
   verifyAccount: (email: string, code: string) => Promise<boolean>;
   forgotPassword: (email: string) => Promise<boolean>;
-  confirmForgotPassword: (email: string, code: string, newPassword: string) => Promise<boolean>;
+  confirmForgotPassword: (
+    email: string,
+    code: string,
+    newPassword: string,
+  ) => Promise<boolean>;
   signOut: () => Promise<void>;
   checkAuthState: () => Promise<void>;
   handleOAuthCallback: () => Promise<void>;
@@ -67,23 +73,65 @@ export const useAuthStore = create<AuthStore>((set, get) => ({
   isAuthenticated: false,
   hasCheckedAuth: false,
   error: null,
-  verificationEmail: '',
+  verificationEmail: "",
   isPasswordReset: false,
 
-  // Modal controls
-  openLogin: () => set({ isLoginOpen: true, isSignupOpen: false, isVerificationOpen: false, isResetPasswordOpen: false, error: null }),
+  openLogin: () =>
+    set({
+      isLoginOpen: true,
+      isSignupOpen: false,
+      isVerificationOpen: false,
+      isResetPasswordOpen: false,
+      error: null,
+    }),
   closeLogin: () => set({ isLoginOpen: false, error: null }),
-  openSignup: () => set({ isSignupOpen: true, isLoginOpen: false, isVerificationOpen: false, isResetPasswordOpen: false, error: null }),
+  openSignup: () =>
+    set({
+      isSignupOpen: true,
+      isLoginOpen: false,
+      isVerificationOpen: false,
+      isResetPasswordOpen: false,
+      error: null,
+    }),
   closeSignup: () => set({ isSignupOpen: false, error: null }),
-  openVerification: (email) => set({ isVerificationOpen: true, isLoginOpen: false, isSignupOpen: false, isResetPasswordOpen: false, error: null, verificationEmail: email }),
+  openVerification: (email) =>
+    set({
+      isVerificationOpen: true,
+      isLoginOpen: false,
+      isSignupOpen: false,
+      isResetPasswordOpen: false,
+      error: null,
+      verificationEmail: email,
+    }),
   closeVerification: () => set({ isVerificationOpen: false, error: null }),
-  openResetPassword: (email) => set({ isResetPasswordOpen: true, isLoginOpen: false, isSignupOpen: false, isVerificationOpen: false, error: null, verificationEmail: email }),
+  openResetPassword: (email) =>
+    set({
+      isResetPasswordOpen: true,
+      isLoginOpen: false,
+      isSignupOpen: false,
+      isVerificationOpen: false,
+      error: null,
+      verificationEmail: email,
+    }),
   closeResetPassword: () => set({ isResetPasswordOpen: false, error: null }),
-  switchToSignup: () => set({ isSignupOpen: true, isLoginOpen: false, isVerificationOpen: false, isResetPasswordOpen: false, error: null }),
-  switchToLogin: () => set({ isLoginOpen: true, isSignupOpen: false, isVerificationOpen: false, isResetPasswordOpen: false, error: null }),
+  switchToSignup: () =>
+    set({
+      isSignupOpen: true,
+      isLoginOpen: false,
+      isVerificationOpen: false,
+      isResetPasswordOpen: false,
+      error: null,
+    }),
+  switchToLogin: () =>
+    set({
+      isLoginOpen: true,
+      isSignupOpen: false,
+      isVerificationOpen: false,
+      isResetPasswordOpen: false,
+      error: null,
+    }),
   clearError: () => set({ error: null }),
 
-  // Auth actions
   signIn: async (email, password) => {
     set({ isLoading: true, error: null });
     try {
@@ -95,34 +143,34 @@ export const useAuthStore = create<AuthStore>((set, get) => ({
           user: {
             email: attributes?.email ?? email,
             sub: currentUser.userId,
-            attributes
+            attributes,
           },
           isAuthenticated: true,
           isLoading: false,
           isLoginOpen: false,
-          hasCheckedAuth: true
+          hasCheckedAuth: true,
         });
       }
-    } catch (error: any) {
-      console.error('Error signing in:', error);
-      set({ error: error.message || 'Failed to sign in', isLoading: false });
+    } catch (err: unknown) {
+      const message = isErrorWithMessage(err)
+        ? err.message
+        : "Failed to sign in";
+      console.error("Error signing in:", err);
+      set({ error: message, isLoading: false });
     }
   },
 
   signInWithGoogle: async () => {
     set({ isLoading: true, error: null });
-
     try {
-      initializeAmplifyOAuth(); 
-
-      await signInWithRedirect({ provider: 'Google' });
-
-    } catch (error: any) {
-      console.error('Error signing in with Google:', error);
-      set({ 
-        error: error.message || 'Failed to sign in with Google', 
-        isLoading: false 
-      });
+      initializeAmplifyOAuth();
+      await signInWithRedirect({ provider: "Google" });
+    } catch (err: unknown) {
+      const message = isErrorWithMessage(err)
+        ? err.message
+        : "Failed to sign in with Google";
+      console.error("Error signing in with Google:", err);
+      set({ error: message, isLoading: false });
     }
   },
 
@@ -132,26 +180,32 @@ export const useAuthStore = create<AuthStore>((set, get) => ({
       await signUp({
         username: email,
         password,
-        options: { userAttributes: { email } }
+        options: { userAttributes: { email } },
       });
       set({ isLoading: false, isSignupOpen: false, verificationEmail: email });
       return true;
-    } catch (error: any) {
-      console.error('Error signing up:', error);
-      set({ error: error.message || 'Failed to sign up', isLoading: false });
+    } catch (err: unknown) {
+      const message = isErrorWithMessage(err)
+        ? err.message
+        : "Failed to sign up";
+      console.error("Error signing up:", err);
+      set({ error: message, isLoading: false });
       return false;
     }
   },
 
-  verifyAccount: async (email, code): Promise<boolean> => {
+  verifyAccount: async (email, code) => {
     set({ isLoading: true, error: null });
     try {
       await confirmSignUp({ username: email, confirmationCode: code });
       set({ isLoading: false, isVerificationOpen: false, isLoginOpen: true });
       return true;
-    } catch (error: any) {
-      console.error('Error verifying account:', error);
-      set({ error: error.message || 'Failed to verify account', isLoading: false });
+    } catch (err: unknown) {
+      const message = isErrorWithMessage(err)
+        ? err.message
+        : "Failed to verify account";
+      console.error("Error verifying account:", err);
+      set({ error: message, isLoading: false });
       return false;
     }
   },
@@ -160,11 +214,18 @@ export const useAuthStore = create<AuthStore>((set, get) => ({
     set({ isLoading: true, error: null });
     try {
       await resetPassword({ username: email });
-      set({ isLoading: false, isPasswordReset: true, verificationEmail: email });
+      set({
+        isLoading: false,
+        isPasswordReset: true,
+        verificationEmail: email,
+      });
       return true;
-    } catch (error: any) {
-      console.error('Error requesting password reset:', error);
-      set({ error: error.message || 'Failed to request password reset', isLoading: false });
+    } catch (err: unknown) {
+      const message = isErrorWithMessage(err)
+        ? err.message
+        : "Failed to request password reset";
+      console.error("Error requesting password reset:", err);
+      set({ error: message, isLoading: false });
       return false;
     }
   },
@@ -172,12 +233,24 @@ export const useAuthStore = create<AuthStore>((set, get) => ({
   confirmForgotPassword: async (email, code, newPassword) => {
     set({ isLoading: true, error: null });
     try {
-      await confirmResetPassword({ username: email, confirmationCode: code, newPassword });
-      set({ isLoading: false, isResetPasswordOpen: false, isLoginOpen: true, isPasswordReset: false });
+      await confirmResetPassword({
+        username: email,
+        confirmationCode: code,
+        newPassword,
+      });
+      set({
+        isLoading: false,
+        isResetPasswordOpen: false,
+        isLoginOpen: true,
+        isPasswordReset: false,
+      });
       return true;
-    } catch (error: any) {
-      console.error('Error confirming password reset:', error);
-      set({ error: error.message || 'Failed to reset password', isLoading: false });
+    } catch (err: unknown) {
+      const message = isErrorWithMessage(err)
+        ? err.message
+        : "Failed to reset password";
+      console.error("Error confirming password reset:", err);
+      set({ error: message, isLoading: false });
       return false;
     }
   },
@@ -186,20 +259,24 @@ export const useAuthStore = create<AuthStore>((set, get) => ({
     set({ isLoading: true });
     try {
       await signOut();
-      set({ user: null, isAuthenticated: false, isLoading: false, hasCheckedAuth: false });
-    } catch (error: any) {
-      console.error('Error signing out:', error);
-      set({ error: error.message || 'Failed to sign out', isLoading: false });
+      set({
+        user: null,
+        isAuthenticated: false,
+        isLoading: false,
+        hasCheckedAuth: false,
+      });
+    } catch (err: unknown) {
+      const message = isErrorWithMessage(err)
+        ? err.message
+        : "Failed to sign out";
+      console.error("Error signing out:", err);
+      set({ error: message, isLoading: false });
     }
   },
 
   checkAuthState: async () => {
     const state = get();
-    
-    // Prevent multiple simultaneous auth checks
-    if (state.isLoading || state.hasCheckedAuth) {
-      return;
-    }
+    if (state.isLoading || state.hasCheckedAuth) return;
 
     set({ isLoading: true });
     try {
@@ -207,52 +284,53 @@ export const useAuthStore = create<AuthStore>((set, get) => ({
       const attributes = await fetchUserAttributes();
       set({
         user: {
-          email: attributes?.email ?? '',
+          email: attributes?.email ?? "",
           sub: currentUser.userId,
-          attributes
+          attributes,
         },
         isAuthenticated: true,
         isLoading: false,
-        hasCheckedAuth: true
+        hasCheckedAuth: true,
       });
-    } catch (error: any) {
-      console.log('Auth check result: User not authenticated');
-      set({ 
-        user: null, 
-        isAuthenticated: false, 
-        isLoading: false, 
-        hasCheckedAuth: true 
+    } catch {
+      console.log("Auth check result: User not authenticated");
+      set({
+        user: null,
+        isAuthenticated: false,
+        isLoading: false,
+        hasCheckedAuth: true,
       });
     }
   },
 
   handleOAuthCallback: async () => {
     set({ isLoading: true, error: null });
-    
     try {
       const result = await handleOAuthCallback();
-      
       if (result.success && result.user) {
         set({
           user: result.user,
           isAuthenticated: true,
           isLoading: false,
           hasCheckedAuth: true,
-          error: null
+          error: null,
         });
       } else {
-        throw new Error(result.error || 'OAuth callback failed');
+        throw new Error(result.error || "OAuth callback failed");
       }
-    } catch (error: any) {
-      console.error('OAuth callback error:', error);
+    } catch (err: unknown) {
+      const message = isErrorWithMessage(err)
+        ? err.message
+        : "Authentication failed";
+      console.error("OAuth callback error:", err);
       set({
         user: null,
         isAuthenticated: false,
         isLoading: false,
         hasCheckedAuth: true,
-        error: error.message || 'Authentication failed'
+        error: message,
       });
-      throw error;
+      throw err;
     }
-  }
+  },
 }));

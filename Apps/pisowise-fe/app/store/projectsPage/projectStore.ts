@@ -40,7 +40,7 @@ export const useProjectStore = create<ProjectStore>((set, get) => ({
           color: "white",
         },
       });
-    } catch (error) {
+    } catch {
       toast.error("Failed to create project", {
         description: "Please try again.",
         style: {
@@ -73,7 +73,7 @@ export const useProjectStore = create<ProjectStore>((set, get) => ({
           color: "white",
         },
       });
-    } catch (error) {
+    } catch {
       toast.error("Failed to update project", {
         description: "Please try again.",
         style: {

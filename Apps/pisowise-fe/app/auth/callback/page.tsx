@@ -4,12 +4,11 @@ import { useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useAuthStore } from "@/app/store/authStore";
 import { initializeAmplifyOAuth } from "@/lib/auth/amplify-oauth";
-import { debugAuthConfig, debugUrlParams } from "@/lib/auth/debug";
+import { debugAuthConfig } from "@/lib/auth/debug";
 import { CheckCircle, XCircle, Loader2 } from "lucide-react";
 
 export default function AuthCallback() {
   const [error, setError] = useState<string | null>(null);
-  const [isProcessing, setIsProcessing] = useState(true);
   const [progress, setProgress] = useState(0);
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -19,11 +18,10 @@ export default function AuthCallback() {
     const handleCallback = async () => {
       try {
         debugAuthConfig();
-        const urlParams = debugUrlParams();
-    
-        const errorParam = searchParams.get('error');
-        const errorDescription = searchParams.get('error_description');
-        
+
+        const errorParam = searchParams.get("error");
+        const errorDescription = searchParams.get("error_description");
+
         if (errorParam) {
           throw new Error(errorDescription || `OAuth error: ${errorParam}`);
         }
@@ -40,10 +38,11 @@ export default function AuthCallback() {
         setTimeout(() => {
           router.push("/projects");
         }, 800);
-      } catch (err: any) {
+      } catch (err: unknown) {
+        const errorMessage =
+          err instanceof Error ? err.message : "Authentication failed";
         console.error("Error during OAuth redirect:", err);
-        setError(err.message || "Authentication failed");
-        setIsProcessing(false);
+        setError(errorMessage);
 
         setTimeout(() => {
           router.push("/");
@@ -86,12 +85,15 @@ export default function AuthCallback() {
             <div className="text-sm text-gray-600">
               Redirecting to homepage in 5 seconds...
             </div>
-            
+
             {/* Progress bar for redirect */}
             <div className="mt-4 w-full bg-gray-200 rounded-full h-1">
-              <div 
+              <div
                 className="bg-red-500 h-1 rounded-full transition-all duration-1000"
-                style={{ width: '100%', animation: 'shrink 5s linear forwards' }}
+                style={{
+                  width: "100%",
+                  animation: "shrink 5s linear forwards",
+                }}
               ></div>
             </div>
           </div>
@@ -111,21 +113,22 @@ export default function AuthCallback() {
                 </div>
               )}
             </div>
-            
+
             <h1 className="font-Ember font-medium text-[24px] tracking-[0.48px] text-[#123524] mb-4">
-              {progress === 100 ? "Authentication Successful!" : "Completing Authentication"}
+              {progress === 100
+                ? "Authentication Successful!"
+                : "Completing Authentication"}
             </h1>
-            
+
             <p className="text-[#123524] text-[16px] mb-6 leading-relaxed">
-              {progress === 100 
+              {progress === 100
                 ? "Welcome to PisoWise! Redirecting you to your dashboard..."
-                : "Please wait while we verify your credentials and set up your account."
-              }
+                : "Please wait while we verify your credentials and set up your account."}
             </p>
 
             {/* Progress bar - hidden on mobile */}
             <div className="hidden md:block w-full bg-gray-200 rounded-full h-2 mb-4">
-              <div 
+              <div
                 className="bg-[#246A49] h-2 rounded-full transition-all duration-500 ease-out"
                 style={{ width: `${progress}%` }}
               ></div>
@@ -133,16 +136,24 @@ export default function AuthCallback() {
 
             {/* Progress steps - hidden on mobile */}
             <div className="hidden md:flex justify-between text-xs text-gray-600 mb-4">
-              <span className={progress >= 25 ? "text-[#246A49] font-medium" : ""}>
+              <span
+                className={progress >= 25 ? "text-[#246A49] font-medium" : ""}
+              >
                 Initializing
               </span>
-              <span className={progress >= 50 ? "text-[#246A49] font-medium" : ""}>
+              <span
+                className={progress >= 50 ? "text-[#246A49] font-medium" : ""}
+              >
                 Verifying
               </span>
-              <span className={progress >= 75 ? "text-[#246A49] font-medium" : ""}>
+              <span
+                className={progress >= 75 ? "text-[#246A49] font-medium" : ""}
+              >
                 Processing
               </span>
-              <span className={progress >= 100 ? "text-[#246A49] font-medium" : ""}>
+              <span
+                className={progress >= 100 ? "text-[#246A49] font-medium" : ""}
+              >
                 Complete
               </span>
             </div>
@@ -158,8 +169,12 @@ export default function AuthCallback() {
 
       <style jsx>{`
         @keyframes shrink {
-          from { width: 100%; }
-          to { width: 0%; }
+          from {
+            width: 100%;
+          }
+          to {
+            width: 0%;
+          }
         }
       `}</style>
     </div>

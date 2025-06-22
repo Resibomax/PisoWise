@@ -5,8 +5,13 @@ import { useAuthStore } from "@/app/store/authStore";
 import { useRouter } from "next/navigation";
 import { initializeAmplifyOAuth } from "@/lib/auth/amplify-oauth";
 
-export default function ProtectedRoute({ children }: { children: React.ReactNode }) {
-  const { isAuthenticated, isLoading, hasCheckedAuth, checkAuthState } = useAuthStore();
+export default function ProtectedRoute({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  const { isAuthenticated, isLoading, hasCheckedAuth, checkAuthState } =
+    useAuthStore();
   const router = useRouter();
 
   useEffect(() => {

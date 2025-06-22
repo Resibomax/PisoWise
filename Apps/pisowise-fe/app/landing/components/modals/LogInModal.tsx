@@ -7,8 +7,15 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useAuthStore } from "@/app/store/authStore";
 
-export default function LogInModal({ onClose }: { onClose: () => void }) {
-  const { signIn, signInWithGoogle, isLoading, error, openResetPassword, switchToSignup } = useAuthStore();
+export default function LogInModal({}: { onClose: () => void }) {
+  const {
+    signIn,
+    signInWithGoogle,
+    isLoading,
+    error,
+    openResetPassword,
+    switchToSignup,
+  } = useAuthStore();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
@@ -44,7 +51,7 @@ export default function LogInModal({ onClose }: { onClose: () => void }) {
         <div className="font-Ember font-medium text-[26px] tracking-[0.48px] text-center">
           Log In to PisoWise
         </div>
-        
+
         <Button
           type="button"
           onClick={handleGoogleSignIn}
@@ -56,15 +63,15 @@ export default function LogInModal({ onClose }: { onClose: () => void }) {
           <GoogleIcon />
           Continue with Google
         </Button>
-        
+
         <hr className="my-4 border-t-1 border-[#8B8483]" />
-        
+
         {error && (
           <div className="bg-red-100 text-red-700 p-2 rounded mb-4">
             {error}
           </div>
         )}
-        
+
         <div>
           <p>Email</p>
           <Input
@@ -76,7 +83,7 @@ export default function LogInModal({ onClose }: { onClose: () => void }) {
             required
           />
         </div>
-        
+
         <div className="mt-2">
           <p>Password</p>
           <Input
@@ -88,9 +95,9 @@ export default function LogInModal({ onClose }: { onClose: () => void }) {
             required
           />
         </div>
-        
+
         <div className="mt-1 text-right">
-          <button 
+          <button
             type="button"
             onClick={handleForgotPassword}
             className="text-sm text-[#246A49] hover:underline"
@@ -98,7 +105,7 @@ export default function LogInModal({ onClose }: { onClose: () => void }) {
             Forgot password?
           </button>
         </div>
-        
+
         <Button
           type="submit"
           className="mt-4 w-full bg-[#246A49] text-white text-[16px] font-normal font-Ember gap-2 rounded-[12px]"
@@ -108,14 +115,14 @@ export default function LogInModal({ onClose }: { onClose: () => void }) {
         >
           {isLoading ? "Logging in..." : "Login"}
         </Button>
-        
+
         <div className="mt-4 text-center">
-          <button 
+          <button
             type="button"
             onClick={switchToSignup}
             className="text-[#246A49] hover:underline"
           >
-            Don't have an account? Sign up
+            Don&rsquo;t have an account? Sign up
           </button>
         </div>
       </form>

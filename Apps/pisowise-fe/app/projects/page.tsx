@@ -6,7 +6,7 @@ import { useAuthStore } from "@/app/store/authStore";
 import { Button } from "@/components/ui/button";
 
 export default function ProjectsPageContainer() {
-  const { user, signOut } = useAuthStore();
+  const { signOut } = useAuthStore();
 
   return (
     <ProtectedRoute>

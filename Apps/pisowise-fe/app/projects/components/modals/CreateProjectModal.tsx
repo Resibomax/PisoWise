@@ -39,7 +39,7 @@ export function CreateProjectModal() {
               Create Project
             </DialogTitle>
             <DialogDescription className="text-left">
-              Ready to proceed? Click "Done" to create your project.
+              Ready to proceed? Click &rdquo;Done&rdquo; to create your project.
             </DialogDescription>
           </DialogHeader>
           <div className="grid gap-4 py-4">

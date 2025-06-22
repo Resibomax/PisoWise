@@ -56,8 +56,8 @@ export function EditProjectModal() {
               Edit Project
             </DialogTitle>
             <DialogDescription className="text-left">
-              Make changes to your project. Click "Save Changes" when you're
-              done.
+              Make changes to your project. Click &rdquo;Save Changes&rdquo;
+              when you&rdquo;re done.
             </DialogDescription>
           </DialogHeader>
           <div className="grid gap-4 py-4">

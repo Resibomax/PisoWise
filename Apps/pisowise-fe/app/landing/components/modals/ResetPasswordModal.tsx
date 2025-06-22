@@ -6,17 +6,17 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useAuthStore } from "@/app/store/authStore";
 
-export default function ResetPasswordModal({ onClose }: { onClose: () => void }) {
-  const { 
-    forgotPassword, 
-    confirmForgotPassword, 
-    isLoading, 
-    error, 
-    verificationEmail, 
+export default function ResetPasswordModal({}: { onClose: () => void }) {
+  const {
+    forgotPassword,
+    confirmForgotPassword,
+    isLoading,
+    error,
+    verificationEmail,
     isPasswordReset,
-    switchToLogin 
+    switchToLogin,
   } = useAuthStore();
-  
+
   const [email, setEmail] = useState(verificationEmail);
   const [code, setCode] = useState("");
   const [newPassword, setNewPassword] = useState("");
@@ -39,7 +39,7 @@ export default function ResetPasswordModal({ onClose }: { onClose: () => void })
   const handleRequestReset = async (e: React.FormEvent) => {
     e.preventDefault();
     setLocalError(null);
-    
+
     const success = await forgotPassword(email);
     if (success) {
       setStep(2);
@@ -49,12 +49,12 @@ export default function ResetPasswordModal({ onClose }: { onClose: () => void })
   const handleConfirmReset = async (e: React.FormEvent) => {
     e.preventDefault();
     setLocalError(null);
-    
+
     if (newPassword !== confirmPassword) {
       setLocalError("Passwords do not match");
       return;
     }
-    
+
     await confirmForgotPassword(email, code, newPassword);
   };
 
@@ -67,9 +67,10 @@ export default function ResetPasswordModal({ onClose }: { onClose: () => void })
           <div className="font-Ember font-medium text-[26px] tracking-[0.48px] text-center mb-4">
             Reset Your Password
           </div>
-          
+
           <p className="text-center mb-4">
-            Enter your email address and we'll send you a code to reset your password.
+            Enter your email address and we&rsquo;ll send you a code to reset
+            your password.
           </p>
 
           {error && (
@@ -88,7 +89,7 @@ export default function ResetPasswordModal({ onClose }: { onClose: () => void })
               required
             />
           </div>
-          
+
           <Button
             type="submit"
             className="mt-4 w-full bg-[#246A49] text-white text-[16px] font-normal font-Ember gap-2 rounded-[12px]"
@@ -98,9 +99,9 @@ export default function ResetPasswordModal({ onClose }: { onClose: () => void })
           >
             {isLoading ? "Sending..." : "Send Reset Code"}
           </Button>
-          
+
           <div className="mt-4 text-center">
-            <button 
+            <button
               type="button"
               onClick={switchToLogin}
               className="text-[#246A49] hover:underline"
@@ -114,9 +115,10 @@ export default function ResetPasswordModal({ onClose }: { onClose: () => void })
           <div className="font-Ember font-medium text-[26px] tracking-[0.48px] text-center mb-4">
             Set New Password
           </div>
-          
+
           <p className="text-center mb-4">
-            Enter the verification code sent to your email and your new password.
+            Enter the verification code sent to your email and your new
+            password.
           </p>
 
           {(error || localError) && (
@@ -136,7 +138,7 @@ export default function ResetPasswordModal({ onClose }: { onClose: () => void })
               readOnly
             />
           </div>
-          
+
           <div className="mt-2">
             <p>Verification Code</p>
             <Input
@@ -146,7 +148,7 @@ export default function ResetPasswordModal({ onClose }: { onClose: () => void })
               required
             />
           </div>
-          
+
           <div className="mt-2">
             <p>New Password</p>
             <Input
@@ -157,7 +159,7 @@ export default function ResetPasswordModal({ onClose }: { onClose: () => void })
               required
             />
           </div>
-          
+
           <div className="mt-2">
             <p>Confirm New Password</p>
             <Input
@@ -168,7 +170,7 @@ export default function ResetPasswordModal({ onClose }: { onClose: () => void })
               required
             />
           </div>
-          
+
           <Button
             type="submit"
             className="mt-4 w-full bg-[#246A49] text-white text-[16px] font-normal font-Ember gap-2 rounded-[12px]"
@@ -178,9 +180,9 @@ export default function ResetPasswordModal({ onClose }: { onClose: () => void })
           >
             {isLoading ? "Resetting..." : "Reset Password"}
           </Button>
-          
+
           <div className="mt-4 text-center">
-            <button 
+            <button
               type="button"
               onClick={switchToLogin}
               className="text-[#246A49] hover:underline"

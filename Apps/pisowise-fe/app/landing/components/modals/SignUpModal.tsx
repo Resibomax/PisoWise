@@ -7,8 +7,15 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useAuthStore } from "@/app/store/authStore";
 
-export default function SignUpModal({ onClose }: { onClose: () => void }) {
-  const { signUp, signInWithGoogle, isLoading, error, openVerification, switchToLogin } = useAuthStore();
+export default function SignUpModal({}: { onClose: () => void }) {
+  const {
+    signUp,
+    signInWithGoogle,
+    isLoading,
+    error,
+    openVerification,
+    switchToLogin,
+  } = useAuthStore();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -17,12 +24,12 @@ export default function SignUpModal({ onClose }: { onClose: () => void }) {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLocalError(null);
-    
+
     if (password !== confirmPassword) {
       setLocalError("Passwords do not match");
       return;
     }
-    
+
     const success = await signUp(email, password);
     if (success) {
       openVerification(email);
@@ -68,7 +75,7 @@ export default function SignUpModal({ onClose }: { onClose: () => void }) {
             required
           />
         </div>
-        
+
         <div className="mt-2">
           <p>Password</p>
           <Input
@@ -80,7 +87,7 @@ export default function SignUpModal({ onClose }: { onClose: () => void }) {
             required
           />
         </div>
-        
+
         <div className="mt-2">
           <p>Confirm Password</p>
           <Input
@@ -92,7 +99,7 @@ export default function SignUpModal({ onClose }: { onClose: () => void }) {
             required
           />
         </div>
-        
+
         <Button
           type="submit"
           className="mt-4 w-full bg-[#246A49] text-white text-[16px] font-normal font-Ember gap-2 rounded-[12px]"
@@ -102,13 +109,13 @@ export default function SignUpModal({ onClose }: { onClose: () => void }) {
         >
           {isLoading ? "Creating Account..." : "Create"}
         </Button>
-        
+
         <div className="flex items-center gap-4 my-1">
           <hr className="flex-grow border-t border-[#8B8483]" />
           <span className="text-[#8B8483] text-[16px] font-medium">or</span>
           <hr className="flex-grow border-t border-[#8B8483]" />
         </div>
-        
+
         <Button
           type="button"
           onClick={handleGoogleSignUp}
@@ -120,9 +127,9 @@ export default function SignUpModal({ onClose }: { onClose: () => void }) {
           <GoogleIcon />
           Create with Google
         </Button>
-        
+
         <div className="mt-4 text-center">
-          <button 
+          <button
             type="button"
             onClick={switchToLogin}
             className="text-[#246A49] hover:underline"

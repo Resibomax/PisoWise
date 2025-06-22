@@ -10,7 +10,8 @@ export default function RedirectIfAuthenticated({
 }: {
   children: React.ReactNode;
 }) {
-  const { isAuthenticated, isLoading, hasCheckedAuth, checkAuthState } = useAuthStore();
+  const { isAuthenticated, isLoading, hasCheckedAuth, checkAuthState } =
+    useAuthStore();
   const router = useRouter();
   const [isInitialized, setIsInitialized] = useState(false);
   const [timeoutReached, setTimeoutReached] = useState(false);
@@ -19,11 +20,11 @@ export default function RedirectIfAuthenticated({
     const initializeAuth = async () => {
       try {
         initializeAmplifyOAuth();
-        await new Promise(resolve => setTimeout(resolve, 50));
+        await new Promise((resolve) => setTimeout(resolve, 50));
         setIsInitialized(true);
         await checkAuthState();
       } catch (error) {
-        console.error('Error initializing auth:', error);
+        console.error("Error initializing auth:", error);
         setIsInitialized(true);
       }
     };
@@ -34,10 +35,11 @@ export default function RedirectIfAuthenticated({
 
     const timeout = setTimeout(() => {
       setTimeoutReached(true);
-      console.warn('Auth check timeout reached, showing content');
+      console.warn("Auth check timeout reached, showing content");
     }, 5000);
 
     return () => clearTimeout(timeout);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
