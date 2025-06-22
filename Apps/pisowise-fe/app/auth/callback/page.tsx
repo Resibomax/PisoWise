@@ -5,10 +5,12 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { useAuthStore } from "@/app/store/authStore";
 import { initializeAmplifyOAuth } from "@/lib/auth/amplify-oauth";
 import { debugAuthConfig, debugUrlParams } from "@/lib/auth/debug";
+import { CheckCircle, XCircle, Loader2 } from "lucide-react";
 
 export default function AuthCallback() {
   const [error, setError] = useState<string | null>(null);
   const [isProcessing, setIsProcessing] = useState(true);
+  const [progress, setProgress] = useState(0);
   const router = useRouter();
   const searchParams = useSearchParams();
   const { handleOAuthCallback } = useAuthStore();
@@ -18,7 +20,7 @@ export default function AuthCallback() {
       try {
         debugAuthConfig();
         const urlParams = debugUrlParams();
-
+    
         const errorParam = searchParams.get('error');
         const errorDescription = searchParams.get('error_description');
         
@@ -27,10 +29,17 @@ export default function AuthCallback() {
         }
 
         initializeAmplifyOAuth();
+        setProgress(25);
+
+        setTimeout(() => setProgress(50), 300);
+        setTimeout(() => setProgress(75), 600);
 
         await handleOAuthCallback();
+        setProgress(100);
 
-        router.push("/projects");
+        setTimeout(() => {
+          router.push("/projects");
+        }, 800);
       } catch (err: any) {
         console.error("Error during OAuth redirect:", err);
         setError(err.message || "Authentication failed");
@@ -46,24 +55,113 @@ export default function AuthCallback() {
   }, [router, handleOAuthCallback, searchParams]);
 
   return (
-    <div className="flex items-center justify-center h-screen">
-      <div className="text-center max-w-md mx-auto p-6">
+    <div
+      className="relative h-screen font-[Ember] flex items-center justify-center"
+      style={{
+        backgroundImage: "url('/assets/bg-lines.svg')",
+        backgroundRepeat: "repeat",
+        backgroundSize: "auto",
+      }}
+    >
+      {/* Logo */}
+      <div className="absolute top-6 left-1/2 transform -translate-x-1/2">
+        <div className="w-16 h-16 font-semibold text-[#FBF5F3] flex items-center justify-center text-xl">
+          Logo
+        </div>
+      </div>
+
+      {/* Main content */}
+      <div className="bg-[#FBF5F3] p-8 rounded-[12px] shadow-lg w-[90%] max-w-md mx-4">
         {error ? (
-          <div>
-            <h1 className="text-2xl font-bold text-red-600 mb-4">
+          <div className="text-center">
+            <div className="flex justify-center mb-4">
+              <XCircle className="w-16 h-16 text-red-500" />
+            </div>
+            <h1 className="font-Ember font-medium text-[24px] tracking-[0.48px] text-[#123524] mb-4">
               Authentication Error
             </h1>
-            <p className="mb-4 text-gray-700">{error}</p>
-            <p className="text-sm text-gray-500">Redirecting to homepage in 5 seconds...</p>
+            <p className="text-[#123524] text-[16px] mb-6 leading-relaxed">
+              {error}
+            </p>
+            <div className="text-sm text-gray-600">
+              Redirecting to homepage in 5 seconds...
+            </div>
+            
+            {/* Progress bar for redirect */}
+            <div className="mt-4 w-full bg-gray-200 rounded-full h-1">
+              <div 
+                className="bg-red-500 h-1 rounded-full transition-all duration-1000"
+                style={{ width: '100%', animation: 'shrink 5s linear forwards' }}
+              ></div>
+            </div>
           </div>
         ) : (
-          <div>
-            <div className="w-16 h-16 border-4 border-t-[#246A49] border-r-[#246A49] border-b-[#246A49] border-l-transparent rounded-full animate-spin mx-auto"></div>
-            <p className="mt-4 text-lg">Completing authentication...</p>
-            <p className="mt-2 text-sm text-gray-500">Please wait while we verify your credentials</p>
+          <div className="text-center">
+            <div className="flex justify-center mb-6">
+              {progress === 100 ? (
+                <CheckCircle className="w-16 h-16 text-green-500" />
+              ) : (
+                <div className="relative">
+                  <Loader2 className="w-16 h-16 text-[#246A49] animate-spin" />
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <span className="text-xs font-medium text-[#246A49]">
+                      {progress}%
+                    </span>
+                  </div>
+                </div>
+              )}
+            </div>
+            
+            <h1 className="font-Ember font-medium text-[24px] tracking-[0.48px] text-[#123524] mb-4">
+              {progress === 100 ? "Authentication Successful!" : "Completing Authentication"}
+            </h1>
+            
+            <p className="text-[#123524] text-[16px] mb-6 leading-relaxed">
+              {progress === 100 
+                ? "Welcome to PisoWise! Redirecting you to your dashboard..."
+                : "Please wait while we verify your credentials and set up your account."
+              }
+            </p>
+
+            {/* Progress bar - hidden on mobile */}
+            <div className="hidden md:block w-full bg-gray-200 rounded-full h-2 mb-4">
+              <div 
+                className="bg-[#246A49] h-2 rounded-full transition-all duration-500 ease-out"
+                style={{ width: `${progress}%` }}
+              ></div>
+            </div>
+
+            {/* Progress steps - hidden on mobile */}
+            <div className="hidden md:flex justify-between text-xs text-gray-600 mb-4">
+              <span className={progress >= 25 ? "text-[#246A49] font-medium" : ""}>
+                Initializing
+              </span>
+              <span className={progress >= 50 ? "text-[#246A49] font-medium" : ""}>
+                Verifying
+              </span>
+              <span className={progress >= 75 ? "text-[#246A49] font-medium" : ""}>
+                Processing
+              </span>
+              <span className={progress >= 100 ? "text-[#246A49] font-medium" : ""}>
+                Complete
+              </span>
+            </div>
+
+            {progress === 100 && (
+              <div className="text-sm text-gray-600">
+                Redirecting in a moment...
+              </div>
+            )}
           </div>
         )}
       </div>
+
+      <style jsx>{`
+        @keyframes shrink {
+          from { width: 100%; }
+          to { width: 0%; }
+        }
+      `}</style>
     </div>
   );
 }
