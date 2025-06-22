@@ -11,6 +11,7 @@ import {
   signInWithRedirect
 } from 'aws-amplify/auth';
 import { initializeAmplifyOAuth } from "@/lib/auth/amplify-oauth";
+import { handleOAuthCallback } from "@/lib/auth/oauth-handler";
 
 interface User {
   email: string;
@@ -26,6 +27,7 @@ interface AuthStore {
   isLoading: boolean;
   user: User | null;
   isAuthenticated: boolean;
+  hasCheckedAuth: boolean;
   error: string | null;
   verificationEmail: string;
   isPasswordReset: boolean;
@@ -51,10 +53,11 @@ interface AuthStore {
   confirmForgotPassword: (email: string, code: string, newPassword: string) => Promise<boolean>;
   signOut: () => Promise<void>;
   checkAuthState: () => Promise<void>;
+  handleOAuthCallback: () => Promise<void>;
   clearError: () => void;
 }
 
-export const useAuthStore = create<AuthStore>((set) => ({
+export const useAuthStore = create<AuthStore>((set, get) => ({
   isLoginOpen: false,
   isSignupOpen: false,
   isVerificationOpen: false,
@@ -62,6 +65,7 @@ export const useAuthStore = create<AuthStore>((set) => ({
   isLoading: false,
   user: null,
   isAuthenticated: false,
+  hasCheckedAuth: false,
   error: null,
   verificationEmail: '',
   isPasswordReset: false,
@@ -95,7 +99,8 @@ export const useAuthStore = create<AuthStore>((set) => ({
           },
           isAuthenticated: true,
           isLoading: false,
-          isLoginOpen: false
+          isLoginOpen: false,
+          hasCheckedAuth: true
         });
       }
     } catch (error: any) {
@@ -104,22 +109,22 @@ export const useAuthStore = create<AuthStore>((set) => ({
     }
   },
 
-signInWithGoogle: async () => {
-  set({ isLoading: true, error: null });
+  signInWithGoogle: async () => {
+    set({ isLoading: true, error: null });
 
-  try {
-    initializeAmplifyOAuth(); 
+    try {
+      initializeAmplifyOAuth(); 
 
-    await signInWithRedirect({ provider: 'Google' });
+      await signInWithRedirect({ provider: 'Google' });
 
-  } catch (error: any) {
-    console.error('Error signing in with Google:', error);
-    set({ 
-      error: error.message || 'Failed to sign in with Google', 
-      isLoading: false 
-    });
-  }
-},
+    } catch (error: any) {
+      console.error('Error signing in with Google:', error);
+      set({ 
+        error: error.message || 'Failed to sign in with Google', 
+        isLoading: false 
+      });
+    }
+  },
 
   signUp: async (email, password) => {
     set({ isLoading: true, error: null });
@@ -181,7 +186,7 @@ signInWithGoogle: async () => {
     set({ isLoading: true });
     try {
       await signOut();
-      set({ user: null, isAuthenticated: false, isLoading: false });
+      set({ user: null, isAuthenticated: false, isLoading: false, hasCheckedAuth: false });
     } catch (error: any) {
       console.error('Error signing out:', error);
       set({ error: error.message || 'Failed to sign out', isLoading: false });
@@ -189,6 +194,13 @@ signInWithGoogle: async () => {
   },
 
   checkAuthState: async () => {
+    const state = get();
+    
+    // Prevent multiple simultaneous auth checks
+    if (state.isLoading || state.hasCheckedAuth) {
+      return;
+    }
+
     set({ isLoading: true });
     try {
       const currentUser = await getCurrentUser();
@@ -200,10 +212,47 @@ signInWithGoogle: async () => {
           attributes
         },
         isAuthenticated: true,
-        isLoading: false
+        isLoading: false,
+        hasCheckedAuth: true
       });
-    } catch {
-      set({ user: null, isAuthenticated: false, isLoading: false });
+    } catch (error: any) {
+      console.log('Auth check result: User not authenticated');
+      set({ 
+        user: null, 
+        isAuthenticated: false, 
+        isLoading: false, 
+        hasCheckedAuth: true 
+      });
+    }
+  },
+
+  handleOAuthCallback: async () => {
+    set({ isLoading: true, error: null });
+    
+    try {
+      const result = await handleOAuthCallback();
+      
+      if (result.success && result.user) {
+        set({
+          user: result.user,
+          isAuthenticated: true,
+          isLoading: false,
+          hasCheckedAuth: true,
+          error: null
+        });
+      } else {
+        throw new Error(result.error || 'OAuth callback failed');
+      }
+    } catch (error: any) {
+      console.error('OAuth callback error:', error);
+      set({
+        user: null,
+        isAuthenticated: false,
+        isLoading: false,
+        hasCheckedAuth: true,
+        error: error.message || 'Authentication failed'
+      });
+      throw error;
     }
   }
 }));

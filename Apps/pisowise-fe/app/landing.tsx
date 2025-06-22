@@ -30,17 +30,14 @@ export default function Landing() {
   
   const router = useRouter();
 
-  // Initialize Amplify
   useEffect(() => {
     initializeAmplifyOAuth();
   }, []);
 
-  // Check authentication state when component mounts
   useEffect(() => {
     checkAuthState();
   }, [checkAuthState]);
 
-  // Redirect authenticated users to projects page
   useEffect(() => {
     if (!isLoading && isAuthenticated) {
       router.push("/projects");
