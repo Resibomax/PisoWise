@@ -1,6 +1,6 @@
 "use client";
 
-import { useParams, useRouter } from "next/navigation";
+import { useParams } from "next/navigation";
 import { useProjectStore } from "@/app/store/projectsPage/projectStore";
 import { useModalStore } from "@/app/store/projectsPage/modalStore";
 import { EditProjectModal } from "../components/modals/EditprojectModal";
@@ -12,21 +12,13 @@ import WarningCard from "./components/cards/WarningCard";
 
 export default function ProjectDetailsPage() {
   const params = useParams();
-  const router = useRouter();
   const { getProjectById } = useProjectStore();
   const { openEditModal } = useModalStore();
 
   const project = params.id ? getProjectById(params.id as string) : null;
 
   if (!project) {
-    return (
-      <div>
-        <h1>Project Not Found</h1>
-        <button onClick={() => router.push("/projects")}>
-          Back to Projects
-        </button>
-      </div>
-    );
+    return null;
   }
 
   const isSpentAboveThreshold = project.spent / project.budget > 0.8;

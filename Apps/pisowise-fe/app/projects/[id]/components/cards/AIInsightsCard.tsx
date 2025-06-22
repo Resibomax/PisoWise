@@ -39,7 +39,7 @@ export default function InsightsCard({ projectId }: AIInsightsDisplayProps) {
           ) : insights.length > 0 ? (
             insights.map((insight) => (
               <div key={insight.id} className=" p-3 ">
-                <p className="text-white text-sm font-roboto-light leading-relaxed">
+                <p className="text-white font-roboto-light text-[14px] md:text-[18px]">
                   {insight.message}
                 </p>
               </div>

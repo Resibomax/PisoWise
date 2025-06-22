@@ -3,6 +3,8 @@
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Undo2, Trash, SquarePen } from "lucide-react";
+import { useModalStore } from "@/app/store/projectsPage/modalStore";
+import { ConfirmationModal } from "./modals/ConfirmationModal";
 
 interface Project {
   title: string;
@@ -14,12 +16,9 @@ interface ProjectHeaderProps {
   onEdit?: () => void;
 }
 
-export function ProjectHeader({
-  project,
-  onDelete,
-  onEdit,
-}: ProjectHeaderProps) {
+export function ProjectHeader({ project, onEdit }: ProjectHeaderProps) {
   const router = useRouter();
+  const { openConfirmDeleteModal } = useModalStore();
 
   return (
     <div className="gap-[20px] flex flex-col">
@@ -35,7 +34,7 @@ export function ProjectHeader({
 
         <Button
           className="flex gap-2 items-center bg-transparent border-1 border-[#E73648] text-[#E73648] hover:bg-[#E73648] hover:text-white rounded-[12px] text-[16px]"
-          onClick={onDelete}
+          onClick={openConfirmDeleteModal}
         >
           <Trash className="cursor-pointer h-6 w-6" />
           <p className="font-roboto-regular text-[16px]">Delete</p>
@@ -55,6 +54,8 @@ export function ProjectHeader({
           Edit
         </Button>
       </div>
+
+      <ConfirmationModal />
     </div>
   );
 }

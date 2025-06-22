@@ -60,7 +60,7 @@ export default function ReceiptsCard({ title, projectId }: ReceiptsCardProps) {
           {isEditing ? (
             <div className="text-white space-y-2">
               <EditReceipt projectId={projectId} />
-              <Button className="text-white bg-[#349868] w-full rounded-[12px]">
+              <Button className="text-white bg-[#349868] w-full rounded-[12px] hover:bg-[#49C187]">
                 Add Receipt
               </Button>
             </div>
@@ -68,7 +68,7 @@ export default function ReceiptsCard({ title, projectId }: ReceiptsCardProps) {
             <Receipt projectId={projectId} />
           ) : (
             <div className="flex items-center justify-center text-[#49C187]">
-              <Button className="text-[#49C187] bg-[#123524] w-full hover:bg-white hover:text-[#123524] cursor-pointer">
+              <Button className="text-[#49C187] bg-[#123524] w-full hover:bg-[#49C187] hover:text-black cursor-pointer">
                 No Receipts
               </Button>
             </div>
