@@ -22,31 +22,40 @@ export default function InsightsCard({ projectId }: AIInsightsDisplayProps) {
   return (
     <Card
       className={cn(
-        "bg-[#1B1212] border-none shadow-lg cursor-pointer hover:shadow-xl transition-shadow",
+        "bg-[#1B1212] border-none shadow-lg hover:shadow-xl transition-shadow lg:h-[275px] lg:flex lg:flex-col",
       )}
     >
-      <CardContent className="p-5">
-        <div className="text-white mb-4">
-          <p className="font-[Ember] text-[24px] md:text[30px]">AI Insights</p>
-          <p className="font-roboto-light text-[14px] md:text-[18px]">
+      <CardContent className="p-5 lg:flex lg:flex-col lg:h-[275px] ">
+        <div className="lg:flex-shrink-0 mb-4">
+          <p className="font-[Ember] text-[24px] md:text-[30px] text-white">
+            AI Insights
+          </p>
+          <p className="font-roboto-light text-[14px] md:text-[18px] text-white">
             AI-generated project analysis
           </p>
         </div>
 
-        <div className="border border-[#349868] rounded-[12px] min-h-[100px] flex items-center justify-center flex-col">
+        {/* Content - Scrollable on large screens only */}
+        <div className="border border-[#349868] rounded-[12px] lg:flex-1 lg:min-h-0 lg:overflow-y-auto custom-scrollbar">
           {loading ? (
-            <div className="text-gray-400 text-sm">Loading insights...</div>
+            <div className="flex items-center justify-center lg:h-full p-4">
+              <div className="text-gray-400 text-sm">Loading insights...</div>
+            </div>
           ) : insights.length > 0 ? (
-            insights.map((insight) => (
-              <div key={insight.id} className=" p-3 ">
-                <p className="text-white font-roboto-light text-[14px] md:text-[18px]">
-                  {insight.message}
-                </p>
-              </div>
-            ))
+            <div className="px-[20px] py-[24px] space-y-3">
+              {insights.map((insight) => (
+                <div key={insight.id}>
+                  <p className="text-white font-roboto-light text-[14px] md:text-[16px] leading-relaxed">
+                    {insight.message}
+                  </p>
+                </div>
+              ))}
+            </div>
           ) : (
-            <div className="text-gray-400 text-sm ">
-              No AI insights available for this project yet.
+            <div className="flex items-center justify-center lg:h-full p-4">
+              <div className="text-gray-400 text-sm text-center">
+                No AI insights available for this project yet.
+              </div>
             </div>
           )}
         </div>

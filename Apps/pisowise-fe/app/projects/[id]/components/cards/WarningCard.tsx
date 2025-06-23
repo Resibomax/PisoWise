@@ -15,7 +15,7 @@ export default function WarningCard({ spent, budget }: WarningCardProps) {
   return (
     <Card
       className={cn(
-        "bg-[#349868] border-none shadow-lg cursor-pointer hover:shadow-xl transition-shadow",
+        "bg-[#349868] border-none shadow-lg hover:shadow-xl transition-shadow",
       )}
     >
       <CardContent className="p-4">

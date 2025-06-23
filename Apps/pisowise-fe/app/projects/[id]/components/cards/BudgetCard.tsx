@@ -20,13 +20,13 @@ export default function BudgetCard({
   return (
     <Card
       className={cn(
-        "bg-[#1B1212] border-none shadow-lg cursor-pointer hover:shadow-xl transition-shadow",
+        "bg-[#1B1212] border-none shadow-lg hover:shadow-xl transition-shadow",
         className,
       )}
     >
       <CardContent className="p-5">
         <div className="space-y-4">
-          <div className="flex justify-between md:justify-center md:gap-[50%] items-center">
+          <div className="flex justify-between md:justify-start md:gap-[30%] items-center">
             <div className="space-y-1">
               <p className="text-white text-[16px] md:text-[20px] font-roboto-regular">
                 Spent:
