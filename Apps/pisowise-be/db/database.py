@@ -1,4 +1,5 @@
 import boto3
+from urllib.parse import urlparse, urlunparse
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
@@ -19,10 +20,6 @@ def get_database_url():
 
         db_url = response["Parameter"]["Value"].strip()
 
-        if db_url.startswith("postgres://"):
-            db_url = db_url.replace("postgres://", "postgresql://", 1)
-
-        print(f"Database URL fetched from SSM: {db_url}")
         return db_url
 
     except Exception as e:
