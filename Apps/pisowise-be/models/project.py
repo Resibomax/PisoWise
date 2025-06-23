@@ -1,5 +1,6 @@
 from pydantic import BaseModel, Field
 from typing import Optional
+from datetime import date
 
 # Project Create Model 
 class ProjectCreate(BaseModel):
@@ -7,7 +8,7 @@ class ProjectCreate(BaseModel):
     name: str
     description: Optional[str] = None
     budget: float
-    creation_date: str
+    creation_date: date
 
     class Config:
         from_attributes = True
@@ -28,7 +29,7 @@ class ProjectResponse(BaseModel):
     name: str
     description: Optional[str] = None
     budget: float 
-    creation_date: str
+    creation_date: date
 
     class Config:
         from_attributes = True
