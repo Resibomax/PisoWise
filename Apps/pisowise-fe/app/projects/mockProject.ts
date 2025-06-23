@@ -67,8 +67,11 @@ export const mockReceipts: ReceiptDetails[] = [
       { id: "1", name: "Printer Paper", price: 20.0, quantity: 2 },
       { id: "2", name: "Pens", price: 5.5, quantity: 10 },
       { id: "3", name: "Stapler", price: 15.0, quantity: 1 },
+      { id: "4", name: "Cat food", price: 15.0, quantity: 1 },
+      { id: "5", name: "Beanstalk Seed", price: 15.0, quantity: 5 },
+      { id: "6", name: "Ember Lily", price: 15.0, quantity: 5 },
     ],
-    totalItems: 13,
+    totalItems: 24,
     receiptImage:
       "https://i.pinimg.com/736x/e5/41/e5/e541e593cf57daea1a657c34dbbe05ea.jpg",
   },
@@ -85,7 +88,8 @@ export const mockReceipts: ReceiptDetails[] = [
       { id: "4", name: "Dildo", price: 169.69, quantity: 1 },
     ],
     totalItems: 5,
-    receiptImage: "",
+    receiptImage:
+      "https://i.ebayimg.com/images/g/J~wAAOSwId1nrmaE/s-l1600.webp",
   },
   {
     id: "3",

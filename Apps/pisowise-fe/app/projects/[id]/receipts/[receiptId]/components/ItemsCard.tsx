@@ -27,7 +27,7 @@ export default function ItemsCard({ receiptId }: ItemsCardProps) {
             Items ({receipt.totalItems})
           </p>
         </div>
-        <div>
+        <div className="h-[230px] overflow-y-auto custom-scrollbar">
           {receipt.items.map((item) => (
             <div key={item.id} className="mb-2">
               <div className="flex items-start justify-between">

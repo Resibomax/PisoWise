@@ -1,7 +1,9 @@
 import { useReceiptStore } from "@/app/store/projectDetails/receiptsStore";
 import { Card, CardContent } from "@/components/ui/card";
+import { useModalStore } from "@/app/store/projectsPage/modalStore";
 import { Calendar, Store } from "lucide-react";
 import Image from "next/image";
+import { ImageModal } from "./ImageModal";
 
 interface PurchaseDeetsProps {
   receiptId: string;
@@ -10,6 +12,7 @@ interface PurchaseDeetsProps {
 export default function DetailsCard({ receiptId }: PurchaseDeetsProps) {
   const { getReceiptById } = useReceiptStore();
   const receipt = getReceiptById(receiptId);
+  const { openImageModal } = useModalStore();
 
   if (!receipt) {
     return (
@@ -23,7 +26,6 @@ export default function DetailsCard({ receiptId }: PurchaseDeetsProps) {
       </Card>
     );
   }
-  console.log(receipt.receiptImage);
 
   return (
     <Card className="bg-[#1B1212] border-none shadow-lg hover:shadow-xl transition-shadow rounded-[12px] text-white">
@@ -40,6 +42,7 @@ export default function DetailsCard({ receiptId }: PurchaseDeetsProps) {
               width={60}
               height={60}
               className="rounded-[12px] shadow-md border-[#349868] border-2"
+              onClick={openImageModal}
             />
           </div>
         ) : (
@@ -59,6 +62,7 @@ export default function DetailsCard({ receiptId }: PurchaseDeetsProps) {
           </div>
         </div>
       </CardContent>
+      <ImageModal receiptId={receiptId} />
     </Card>
   );
 }
