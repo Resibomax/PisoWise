@@ -104,6 +104,7 @@
   /* Roboto font families */
   --font-roboto-light: "Roboto", sans-serif;
   --font-roboto-regular: "Roboto", sans-serif;
+  --font-roboto-bld: "Roboto", sans-serif;
   --radius: 0.625rem;
 
   /* Font utility classes */
@@ -115,6 +116,11 @@
   .font-roboto-regular {
     font-family: var(--font-roboto-regular);
     font-weight: 400;
+  }
+
+  .font-roboto-bld {
+    font-family: var(--font-roboto-bld);
+    font-weight: 700;
   }
   --radius: 0.625rem;
   --background: oklch(1 0 0);

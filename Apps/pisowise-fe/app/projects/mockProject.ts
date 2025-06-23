@@ -46,7 +46,9 @@ export interface ReceiptDetails {
   projectId: string;
   title: string;
   date: string;
+  address?: string;
   totalAmount: number;
+  tax?: number;
   items: ReceiptItem[];
   totalItems: number;
   receiptImage: string;
@@ -59,13 +61,16 @@ export const mockReceipts: ReceiptDetails[] = [
     title: "Receipt 1",
     date: "2023-10-01",
     totalAmount: 150.75,
+    address: "123 Main St, Cityville",
+    tax: 15.0,
     items: [
       { id: "1", name: "Printer Paper", price: 20.0, quantity: 2 },
       { id: "2", name: "Pens", price: 5.5, quantity: 10 },
       { id: "3", name: "Stapler", price: 15.0, quantity: 1 },
     ],
     totalItems: 13,
-    receiptImage: "https://example.com/receipt1.jpg",
+    receiptImage:
+      "https://i.pinimg.com/736x/e5/41/e5/e541e593cf57daea1a657c34dbbe05ea.jpg",
   },
   {
     id: "2",
@@ -80,7 +85,7 @@ export const mockReceipts: ReceiptDetails[] = [
       { id: "4", name: "Dildo", price: 169.69, quantity: 1 },
     ],
     totalItems: 5,
-    receiptImage: "/images/receipt-sample.png",
+    receiptImage: "",
   },
   {
     id: "3",
@@ -92,7 +97,7 @@ export const mockReceipts: ReceiptDetails[] = [
       { id: "1", name: "Adobe Creative Suite", price: 299.99, quantity: 1 },
     ],
     totalItems: 1,
-    receiptImage: "https://example.com/receipt3.jpg",
+    receiptImage: "",
   },
 
   {
@@ -105,8 +110,8 @@ export const mockReceipts: ReceiptDetails[] = [
       { id: "1", name: "Office Chair", price: 150.0, quantity: 1 },
       { id: "2", name: "Desk Lamp", price: 50.0, quantity: 2 },
     ],
-    totalItems: 3, // 1 + 2
-    receiptImage: "https://example.com/receipt3.jpg",
+    totalItems: 3,
+    receiptImage: "",
   },
   {
     id: "6",
