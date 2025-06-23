@@ -19,27 +19,7 @@ def get_database_url():
         response = ssm.get_parameter(Name="/pisowise/db", WithDecryption=True)
 
         db_url = response["Parameter"]["Value"].strip()
-        print(f"Raw Database URL fetched from SSM: {db_url}")
 
-        if db_url.startswith("postgres://"):
-            db_url = db_url.replace("postgres://", "postgresql://", 1)
-
-        db_password = "xJ3tOmgpTwxxm49_E|H|TYhLv41a"
-
-        parsed = urlparse(db_url)
-
-        if not parsed.username:
-            raise ValueError("Database URL must include username")
-
-        new_path = "/pisowisedb" if parsed.path == "/psw-db-staging" else parsed.path
-        # Rebuild netloc with username:password@host:port
-        netloc = f"pisowise:{db_password}@{parsed.hostname}"
-        if parsed.port:
-            netloc += f":{parsed.port}"
-
-        db_url = urlunparse(parsed._replace(netloc=netloc, path=new_path))
-
-        print(f"Database URL fetched from SSM: {db_url}")
         return db_url
 
     except Exception as e:
