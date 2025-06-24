@@ -6,12 +6,16 @@ interface ModalStore {
   isEditModalOpen: boolean;
   isConfirmDeleteModalOpen?: boolean;
   selectedProject: Project | null;
+  isImageModalOpen?: boolean;
+
   openCreateModal: () => void;
   closeCreateModal: () => void;
   openEditModal: (project: Project) => void;
   closeEditModal: () => void;
   openConfirmDeleteModal: () => void;
   closeConfirmDeleteModal: () => void;
+  openImageModal?: () => void;
+  closeImageModal?: () => void;
 }
 
 export const useModalStore = create<ModalStore>((set) => ({
@@ -19,6 +23,7 @@ export const useModalStore = create<ModalStore>((set) => ({
   isEditModalOpen: false,
   isConfirmDeleteModalOpen: false,
   selectedProject: null,
+  isImageModalOpen: false,
 
   openCreateModal: () => set({ isCreateModalOpen: true }),
   closeCreateModal: () => set({ isCreateModalOpen: false }),
@@ -39,4 +44,7 @@ export const useModalStore = create<ModalStore>((set) => ({
       selectedProject: null,
     });
   },
+
+  openImageModal: () => set({ isImageModalOpen: true }),
+  closeImageModal: () => set({ isImageModalOpen: false }),
 }));
