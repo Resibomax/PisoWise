@@ -60,7 +60,7 @@ export const mockReceipts: ReceiptDetails[] = [
     projectId: "1",
     title: "Receipt 1",
     date: "2023-10-01",
-    totalAmount: 150.75,
+    totalAmount: 500,
     address: "123 Main St, Cityville",
     tax: 15.0,
     items: [
@@ -74,7 +74,7 @@ export const mockReceipts: ReceiptDetails[] = [
       { id: "8", name: "Candy Blossom", price: 15.0, quantity: 5 },
       { id: "9", name: "Moon Melon", price: 15.0, quantity: 5 },
     ],
-    totalItems: 24,
+    totalItems: 39,
     receiptImage:
       "https://i.pinimg.com/736x/e5/41/e5/e541e593cf57daea1a657c34dbbe05ea.jpg",
   },

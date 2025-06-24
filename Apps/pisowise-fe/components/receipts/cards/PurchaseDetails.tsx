@@ -24,7 +24,7 @@ export default function DetailsCard({
   if (!receipt) {
     return (
       <Card className="bg-[#1B1212] border-none shadow-lg rounded-[12px] text-white">
-        <CardContent className="p-5 text-cente">
+        <CardContent className="p-5 text-center">
           <h1 className="text-lg font-semibold mb-2">Receipt Not Found</h1>
           <p className="text-gray-400">
             The receipt you are looking for does not exist.
@@ -35,14 +35,14 @@ export default function DetailsCard({
   }
 
   return (
-    <Card className="bg-[#1B1212] border-none shadow-lg hover:shadow-xl transition-shadow rounded-[12px] text-white w-full ">
+    <Card className="bg-[#1B1212] border-none shadow-lg hover:shadow-xl transition-shadow rounded-[12px] text-white w-full">
       <CardContent className="p-5 flex flex-col h-full">
         {/* Header */}
         <div className="flex-shrink-0 mb-4">
           <p className="font-[Ember] text-[24px]">Purchase Details</p>
         </div>
 
-        {/* Image or Placeholder - Centered */}
+        {/* Image */}
         <div className="flex-grow flex justify-center items-center mb-4">
           {receipt.receiptImage && receipt.receiptImage.trim() !== "" ? (
             <Image
@@ -50,7 +50,7 @@ export default function DetailsCard({
               alt="Receipt"
               width={150}
               height={150}
-              className="rounded-[12px] shadow-md border-[#349868] border-3 lg:object-cover"
+              className="rounded-[12px] shadow-md border-[#349868] border-3 lg:object-cover cursor-pointer"
               onClick={openImageModal}
             />
           ) : (
@@ -61,48 +61,30 @@ export default function DetailsCard({
         </div>
 
         {/* Address and Date */}
-        <div className="text-[14px] font-roboto-light space-y-3">
+        <div className="lg:flex text-[14px] font-roboto-light space-y-3 lg:justify-center gap-10">
           <div className="flex items-start gap-2">
             <Store className="h-4 w-4 mt-0.5 flex-shrink-0" />
-            {!isEditMode ? (
-              receipt.address ? (
-                <p className="break-words">{receipt.address}</p>
-              ) : (
-                <p className="text-gray-400">No address provided</p>
-              )
-            ) : (
-              <div className="flex items-center gap-2">
-                {receipt.address ? (
-                  <p className="break-words">{receipt.address}</p>
-                ) : (
-                  <p className="text-gray-400">No address provided</p>
-                )}
-                <Button
-                  size="sm"
-                  className="bg-[#349868] hover:bg-[#2d7a56] text-white text-xs px-3 py-1 h-auto rounded-[8px]"
-                >
-                  Change Store
-                </Button>
-              </div>
-            )}
+            <p className="break-words">
+              {receipt.address || "No address provided"}
+            </p>
           </div>
           <div className="flex items-start gap-2">
             <Calendar className="h-4 w-4 mt-0.5 flex-shrink-0" />
-            {!isEditMode ? (
-              <p>{receipt.date}</p>
-            ) : (
-              <div className="flex items-center gap-2">
-                <p>{receipt.date}</p>
-                <Button
-                  size="sm"
-                  className="bg-[#349868] hover:bg-[#2d7a56] text-white text-xs px-3 py-1 h-auto rounded-[8px]"
-                >
-                  Change Date
-                </Button>
-              </div>
-            )}
+            <p>{receipt.date}</p>
           </div>
         </div>
+
+        {/* Edit Mode Buttons */}
+        {isEditMode && (
+          <div className="flex gap-2 justify-end mt-4">
+            <Button className="bg-[#349868] hover:bg-[#49C187] text-white h-auto rounded-[12px] font-[Ember]">
+              Change Store
+            </Button>
+            <Button className="bg-[#349868] hover:bg-[#49C187] text-white h-auto rounded-[12px] font-[Ember]">
+              Change Date
+            </Button>
+          </div>
+        )}
       </CardContent>
       <ImageModal receiptId={receiptId} />
     </Card>
