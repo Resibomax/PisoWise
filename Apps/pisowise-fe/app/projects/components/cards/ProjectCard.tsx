@@ -1,7 +1,9 @@
 import type React from "react";
 import { Progress } from "@/components/ui/progress";
+import { useRouter } from "next/navigation";
 
 interface ProjectCardProps {
+  id: string;
   title: string;
   description: string;
   budget: number;
@@ -11,6 +13,7 @@ interface ProjectCardProps {
 }
 
 export default function ProjectCard({
+  id,
   title,
   description,
   budget,
@@ -18,11 +21,17 @@ export default function ProjectCard({
   headerAction,
   className = "",
 }: ProjectCardProps) {
+  const router = useRouter();
+
+  const handleViewDetails = () => {
+    router.push(`/projects/${id}`);
+  };
   const percentageUsed = (spent / budget) * 100;
 
   return (
     <div
       className={`relative bg-[#1B1212] rounded-xl px-[20px] py-[16px] shadow-lg w-full h-auto cursor-pointer ${className}`}
+      onClick={handleViewDetails}
     >
       {headerAction && (
         <div className="absolute top-[16px] right-[20px] z-10">
