@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from mangum import Mangum
-from controllers import user_controller, receipt_controller
+from controllers import user_controller, receipt_controller, item_controller
 
 app = FastAPI()
 
@@ -15,6 +15,7 @@ app.add_middleware(
 
 app.include_router(user_controller.user_router)
 app.include_router(receipt_controller.receipt_router)
+app.include_router(item_controller.item_router)
 
 
 @app.get("/")
