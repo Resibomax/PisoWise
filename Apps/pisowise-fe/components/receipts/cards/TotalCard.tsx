@@ -22,15 +22,16 @@ export default function TotalCard({ receiptId }: PurchaseDeetsProps) {
   const Total = (receipt?.tax || 0) + (receipt?.totalAmount || 0);
 
   return (
-    <Card className="bg-[#1B1212] border-none shadow-lg hover:shadow-xl transition-shadow rounded-[12px] text-white">
+    <Card className="bg-[#1B1212] border-none shadow-lg hover:shadow-xl transition-shadow rounded-[12px] text-white h-fit w-full">
       <CardContent className="p-5 flex flex-col font-roboto-light text-[14px]">
+        <p className="font-[Ember] text-[24px] mb-2">Summary</p>
         <div className="flex items-center gap-2 justify-between">
           <p>Subtotal</p>
           <p>₱ {receipt.totalAmount.toLocaleString()}</p>
         </div>
         <div className="flex items-center gap-2 justify-between">
           <p>Tax</p>
-          <p> ₱ {receipt.tax?.toLocaleString()}</p>
+          <p>₱ {(receipt.tax || 0).toLocaleString()}</p>
         </div>
         <Separator className="my-2" />
         <div className="flex items-center gap-2 justify-between font-roboto-bld text-[18px]">

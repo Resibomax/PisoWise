@@ -1,15 +1,22 @@
+"use client";
+
 import { useReceiptStore } from "@/app/store/projectDetails/receiptsStore";
 import { Card, CardContent } from "@/components/ui/card";
 import { useModalStore } from "@/app/store/projectsPage/modalStore";
 import { Calendar, Store } from "lucide-react";
 import Image from "next/image";
 import { ImageModal } from "../modals/ImageModal";
+import { Button } from "@/components/ui/button";
 
 interface PurchaseDeetsProps {
   receiptId: string;
+  isEditMode?: boolean;
 }
 
-export default function DetailsCard({ receiptId }: PurchaseDeetsProps) {
+export default function DetailsCard({
+  receiptId,
+  isEditMode = false,
+}: PurchaseDeetsProps) {
   const { getReceiptById } = useReceiptStore();
   const receipt = getReceiptById(receiptId);
   const { openImageModal } = useModalStore();
@@ -17,7 +24,7 @@ export default function DetailsCard({ receiptId }: PurchaseDeetsProps) {
   if (!receipt) {
     return (
       <Card className="bg-[#1B1212] border-none shadow-lg rounded-[12px] text-white">
-        <CardContent className="p-5 text-center">
+        <CardContent className="p-5 text-cente">
           <h1 className="text-lg font-semibold mb-2">Receipt Not Found</h1>
           <p className="text-gray-400">
             The receipt you are looking for does not exist.
@@ -28,37 +35,72 @@ export default function DetailsCard({ receiptId }: PurchaseDeetsProps) {
   }
 
   return (
-    <Card className="bg-[#1B1212] border-none shadow-lg hover:shadow-xl transition-shadow rounded-[12px] text-white">
-      <CardContent className="p-5 flex flex-col">
+    <Card className="bg-[#1B1212] border-none shadow-lg hover:shadow-xl transition-shadow rounded-[12px] text-white w-full ">
+      <CardContent className="p-5 flex flex-col h-full">
+        {/* Header */}
         <div className="flex-shrink-0 mb-4">
-          <p className="font-[Ember] text-[18px]">Purchase Details</p>
+          <p className="font-[Ember] text-[24px]">Purchase Details</p>
         </div>
 
-        {receipt.receiptImage && receipt.receiptImage.trim() !== "" ? (
-          <div className="flex justify-center mb-4">
+        {/* Image or Placeholder - Centered */}
+        <div className="flex-grow flex justify-center items-center mb-4">
+          {receipt.receiptImage && receipt.receiptImage.trim() !== "" ? (
             <Image
               src={receipt.receiptImage || "/placeholder.svg"}
               alt="Receipt"
-              width={60}
-              height={60}
-              className="rounded-[12px] shadow-md border-[#349868] border-2"
+              width={150}
+              height={150}
+              className="rounded-[12px] shadow-md border-[#349868] border-3 lg:object-cover"
               onClick={openImageModal}
             />
-          </div>
-        ) : (
-          <div className="flex justify-center mb-4 bg-[#123524] text-[#49C187] p-2 rounded-[12px]">
-            <p>Added manually</p>
-          </div>
-        )}
+          ) : (
+            <div className="bg-[#123524] text-[#49C187] flex items-center justify-center p-2 rounded-[12px] h-full w-full">
+              <p>Added manually</p>
+            </div>
+          )}
+        </div>
 
+        {/* Address and Date */}
         <div className="text-[14px] font-roboto-light space-y-3">
           <div className="flex items-start gap-2">
             <Store className="h-4 w-4 mt-0.5 flex-shrink-0" />
-            <p className="break-words">{receipt.address}</p>
+            {!isEditMode ? (
+              receipt.address ? (
+                <p className="break-words">{receipt.address}</p>
+              ) : (
+                <p className="text-gray-400">No address provided</p>
+              )
+            ) : (
+              <div className="flex items-center gap-2">
+                {receipt.address ? (
+                  <p className="break-words">{receipt.address}</p>
+                ) : (
+                  <p className="text-gray-400">No address provided</p>
+                )}
+                <Button
+                  size="sm"
+                  className="bg-[#349868] hover:bg-[#2d7a56] text-white text-xs px-3 py-1 h-auto rounded-[8px]"
+                >
+                  Change Store
+                </Button>
+              </div>
+            )}
           </div>
           <div className="flex items-start gap-2">
             <Calendar className="h-4 w-4 mt-0.5 flex-shrink-0" />
-            <p>{receipt.date}</p>
+            {!isEditMode ? (
+              <p>{receipt.date}</p>
+            ) : (
+              <div className="flex items-center gap-2">
+                <p>{receipt.date}</p>
+                <Button
+                  size="sm"
+                  className="bg-[#349868] hover:bg-[#2d7a56] text-white text-xs px-3 py-1 h-auto rounded-[8px]"
+                >
+                  Change Date
+                </Button>
+              </div>
+            )}
           </div>
         </div>
       </CardContent>

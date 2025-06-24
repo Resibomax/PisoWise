@@ -15,18 +15,6 @@ export default function ProjectReceiptDetailsPage() {
   const receiptIdString = Array.isArray(receiptId) ? receiptId[0] : receiptId;
   const receipt = getReceiptById(receiptIdString || "");
 
-  if (receipt && receipt.projectId !== projectIdString) {
-    return (
-      <div>
-        <h1>Receipt Not Found</h1>
-        <p>This receipt doesn&lsquo;t belong to the current project.</p>
-        <a href={`/projects/${projectIdString}/receipts`}>
-          Back to Project Receipts
-        </a>
-      </div>
-    );
-  }
-
   if (!receipt) {
     return (
       <div>
@@ -42,9 +30,11 @@ export default function ProjectReceiptDetailsPage() {
   return (
     <div className="w-full max-w-[1380px] mx-auto flex flex-col p-4 md:px-8 lg:px-16 text-white gap-[20px]">
       <ReceiptsHeader receipt={receipt} />
-      <DetailsCard receiptId={receiptIdString || ""} />
-      <ItemsCard receiptId={receiptIdString || ""} />
-      <TotalCard receiptId={receiptIdString || ""} />
+      <div className="flex flex-col lg:flex-row gap-[20px]">
+        <DetailsCard receiptId={receiptIdString || ""} />
+        <ItemsCard receiptId={receiptIdString || ""} />
+        <TotalCard receiptId={receiptIdString || ""} />
+      </div>
     </div>
   );
 }

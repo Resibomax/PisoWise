@@ -70,6 +70,9 @@ export const mockReceipts: ReceiptDetails[] = [
       { id: "4", name: "Cat food", price: 15.0, quantity: 1 },
       { id: "5", name: "Beanstalk Seed", price: 15.0, quantity: 5 },
       { id: "6", name: "Ember Lily", price: 15.0, quantity: 5 },
+      { id: "7", name: "Sugar Apple", price: 15.0, quantity: 5 },
+      { id: "8", name: "Candy Blossom", price: 15.0, quantity: 5 },
+      { id: "9", name: "Moon Melon", price: 15.0, quantity: 5 },
     ],
     totalItems: 24,
     receiptImage:

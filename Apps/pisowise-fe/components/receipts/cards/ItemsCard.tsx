@@ -20,14 +20,14 @@ export default function ItemsCard({ receiptId }: ItemsCardProps) {
   }
 
   return (
-    <Card className="bg-[#1B1212] border-none shadow-lg hover:shadow-xl transition-shadow rounded-[12px] text-white">
+    <Card className="bg-[#1B1212] border-none shadow-lg hover:shadow-xl transition-shadow rounded-[12px] text-white w-full">
       <CardContent className="p-5 flex flex-col gap-[20px]">
         <div className="flex-shrink-0">
           <p className="font-[Ember] text-[24px]">
             Items ({receipt.totalItems})
           </p>
         </div>
-        <div className="h-[230px] overflow-y-auto custom-scrollbar">
+        <div className="h-[230px] lg:h-[400px] overflow-y-auto custom-scrollbar px-2">
           {receipt.items.map((item) => (
             <div key={item.id} className="mb-2">
               <div className="flex items-start justify-between">
