@@ -14,7 +14,7 @@ interface ModalStore {
   openConfirmDeleteModal: () => void;
   closeConfirmDeleteModal: () => void;
   openAddReceiptPage: () => void;
-  closeAddReceiptPage: () => void;  
+  closeAddReceiptPage: () => void;
 }
 
 export const useModalStore = create<ModalStore>((set) => ({

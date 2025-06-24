@@ -23,18 +23,18 @@ export default function AddProjectPage() {
   return (
     <div className="flex justify-center w-full px-4 mt-4">
       <div className="w-full max-w-sm flex flex-col gap-6">
-        {/* Back Button aligned with Upload box */}
         <div className="self-start">
           <Button
             className="bg-transparent hover:bg-white hover:text-black rounded-[12px] text-white flex items-center gap-2"
             onClick={() => router.back()}
           >
             <Undo2 className="h-5 w-5" />
-            <span className="font-roboto-regular text-base sm:text-lg">Back</span>
+            <span className="font-roboto-regular text-base sm:text-lg">
+              Back
+            </span>
           </Button>
         </div>
 
-        {/* Hidden File Input */}
         <input
           type="file"
           ref={fileInputRef}
@@ -43,7 +43,6 @@ export default function AddProjectPage() {
           className="hidden"
         />
 
-        {/* Upload Box */}
         <div
           onClick={handleInputBoxClick}
           className="flex flex-col items-center justify-center bg-[#1B1212] h-[294px] w-full rounded-[12px] cursor-pointer hover:bg-[#2a1f1f] transition"
@@ -54,7 +53,6 @@ export default function AddProjectPage() {
           </p>
         </div>
 
-        {/* Action Buttons */}
         <div className="flex flex-col gap-3 w-full">
           <Button className="text-base sm:text-lg font-light text-[#FBF5F3] bg-[#349868] w-full rounded-[12px]">
             Upload

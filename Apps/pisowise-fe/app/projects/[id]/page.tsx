@@ -14,7 +14,8 @@ export default function ProjectDetailsPage() {
   const params = useParams();
   const { getProjectById } = useProjectStore();
   const { openEditModal } = useModalStore();
-  const {  isAddReceiptButtonPressed, openAddReceiptPage, closeAddReceiptPage } = useModalStore();
+  const { isAddReceiptButtonPressed, openAddReceiptPage, closeAddReceiptPage } =
+    useModalStore();
 
   const project = params.id ? getProjectById(params.id as string) : null;
 
