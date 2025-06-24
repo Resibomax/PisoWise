@@ -263,7 +263,7 @@ export const useAuthStore = create<AuthStore>((set, get) => ({
         user: null,
         isAuthenticated: false,
         isLoading: false,
-        hasCheckedAuth: false,
+        hasCheckedAuth: true, // Keep this as true to prevent loading loop
       });
     } catch (err: unknown) {
       const message = isErrorWithMessage(err)
