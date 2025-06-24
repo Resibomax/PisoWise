@@ -3,7 +3,6 @@
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Undo2, Trash, SquarePen } from "lucide-react";
-import { useModalStore } from "@/app/store/projectsPage/modalStore";
 
 interface Receipt {
   title: string;
@@ -17,7 +16,6 @@ interface ProjectHeaderProps {
 
 export function ReceiptsHeader({ receipt, onEdit }: ProjectHeaderProps) {
   const router = useRouter();
-  const { openConfirmDeleteModal } = useModalStore();
 
   return (
     <div className="gap-[20px] flex flex-col">
@@ -31,10 +29,7 @@ export function ReceiptsHeader({ receipt, onEdit }: ProjectHeaderProps) {
           <p className="font-roboto-regular text-[16px]">Back</p>
         </Button>
 
-        <Button
-          className="lg:hidden flex gap-2 items-center bg-transparent border-1 border-[#E73648] text-[#E73648] hover:bg-[#E73648] hover:text-white rounded-[12px] text-[16px]"
-          onClick={openConfirmDeleteModal}
-        >
+        <Button className="lg:hidden flex gap-2 items-center bg-transparent border-1 border-[#E73648] text-[#E73648] hover:bg-[#E73648] hover:text-white rounded-[12px] text-[16px]">
           <Trash className="cursor-pointer h-6 w-6" />
           <p className="font-roboto-regular text-[16px]">Delete</p>
         </Button>
@@ -52,10 +47,7 @@ export function ReceiptsHeader({ receipt, onEdit }: ProjectHeaderProps) {
           <SquarePen className="w-5 h-5" />
           Edit
         </Button>
-        <Button
-          className="flex gap-2 items-center bg-transparent border-1 border-[#E73648] text-[#E73648] hover:bg-[#E73648] hover:text-white rounded-[12px] text-[16px]"
-          onClick={openConfirmDeleteModal}
-        >
+        <Button className="flex gap-2 items-center bg-transparent border-1 border-[#E73648] text-[#E73648] hover:bg-[#E73648] hover:text-white rounded-[12px] text-[16px]">
           <Trash className="cursor-pointer h-6 w-6" />
           <p className="font-roboto-regular text-[16px]">Delete</p>
         </Button>
