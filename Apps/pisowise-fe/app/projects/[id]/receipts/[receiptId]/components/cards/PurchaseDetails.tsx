@@ -3,7 +3,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { useModalStore } from "@/app/store/projectsPage/modalStore";
 import { Calendar, Store } from "lucide-react";
 import Image from "next/image";
-import { ImageModal } from "./ImageModal";
+import { ImageModal } from "../modals/ImageModal";
 
 interface PurchaseDeetsProps {
   receiptId: string;

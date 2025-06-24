@@ -2,10 +2,10 @@
 
 import { useParams } from "next/navigation";
 import { useReceiptStore } from "@/app/store/projectDetails/receiptsStore";
-import ItemsCard from "./components/ItemsCard";
+import ItemsCard from "./components/cards/ItemsCard";
 import { ReceiptsHeader } from "./components/Header";
-import DetailsCard from "./components/PurchaseDetails";
-import TotalCard from "./components/TotalCard";
+import DetailsCard from "./components/cards/PurchaseDetails";
+import TotalCard from "./components/cards/TotalCard";
 
 export default function ProjectReceiptDetailsPage() {
   const { id: projectId, receiptId } = useParams();
