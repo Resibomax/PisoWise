@@ -13,3 +13,7 @@ class AIInsightUseCase:
 
     def get_all_insights_usecase(self) -> List[AIInsight]:
         return self.repo.get_all_insights()
+
+    def get_latest_insight_usecase(self, project_id: str):
+        return self.repo.get_latest_insight_by_project_id(project_id)
+    

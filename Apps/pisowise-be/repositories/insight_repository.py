@@ -17,3 +17,11 @@ class AIInsightRepository:
 
     def get_all_insights(self) -> List[AIInsight]:
         return self.db.query(AIInsight).all()
+
+    def get_latest_insight_by_project_id(self, project_id: str) -> AIInsight:
+        return (
+            self.db.query(AIInsight)
+            .filter(AIInsight.project_id == project_id)
+            .order_by(AIInsight.created_at.desc())
+            .first()
+        )
