@@ -45,7 +45,7 @@ export default function ProjectsPage() {
                 headerAction={
                   <div className="p-1 hover:bg-white rounded-full transition-color hover:text-black">
                     <SquarePen
-                      className="w-5 h-5 cursor-pointer"
+                      className="w-5 h-5 cursor-pointer text-[#FBF5F3]"
                       onClick={() => openEditModal(project)}
                     />
                   </div>
