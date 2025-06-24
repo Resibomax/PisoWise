@@ -15,7 +15,7 @@ export default function ProjectsPage() {
   const { openCreateModal, openEditModal } = useModalStore();
 
   return (
-    <div className="w-full max-w-7xl mx-auto mt-4 p-4 md:px-8 lg:px-16">
+    <div className="w-full max-w-[1380px] mx-auto mt-4 p-4 md:px-8 lg:px-16">
       <div className="flex flex-row items-center justify-between md:justify-start gap-6 w-full mb-6">
         <p className="text-3xl font-[Ember] text-white">Projects</p>
         <Button
@@ -38,16 +38,20 @@ export default function ProjectsPage() {
             {projects.map((project) => (
               <ProjectCard
                 key={project.id}
+                id={project.id}
                 title={project.title}
                 description={project.description}
                 budget={project.budget}
                 spent={project.spent}
                 headerAction={
-                  <div className="p-1 hover:bg-white rounded-full transition-color hover:text-black">
-                    <SquarePen
-                      className="w-5 h-5 cursor-pointer"
-                      onClick={() => openEditModal(project)}
-                    />
+                  <div
+                    className="p-1 hover:bg-white rounded-[12px] transition-color hover:text-black"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      openEditModal(project);
+                    }}
+                  >
+                    <SquarePen className="w-5 h-5 cursor-pointer" />
                   </div>
                 }
                 className="w-full rounded-xl shadow-lg p-6"
