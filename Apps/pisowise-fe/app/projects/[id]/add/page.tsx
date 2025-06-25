@@ -6,12 +6,16 @@ import { useModalStore } from "@/app/store/projectsPage/modalStore";
 import { useRouter } from "next/navigation";
 import { Dialog } from "@/components/ui/dialog";
 import PurchaseDetailsCard from "@/app/projects/[id]/components/cards/PurchaseDetailsCard";
+import ItemsCard from "../components/cards/ItemsCard";
 import AddStoreModal from "@/app/projects/[id]/components/modals/AddStoreModal";
 import AddDateModal from "@/app/projects/[id]/components/modals/AddDateModal";
+import AddItemModal from "@/app/projects/[id]/components/modals/AddItemModal";
+import ReceiptTotalCard from "@/app/projects/[id]/components/cards/ReceiptTotalCard";
 
 export default function AddReceipt() {
   const { isAddStoreModalOpen, closeAddStoreModal } = useModalStore();
   const { isAddDateModalOpen, closeAddDateModal } = useModalStore();
+  const { isAddItemModalOpen, closeAddItemModal } = useModalStore();
   const router = useRouter();
 
   return (
@@ -31,6 +35,8 @@ export default function AddReceipt() {
       </div>
 
       <PurchaseDetailsCard />
+      <ItemsCard />
+      <ReceiptTotalCard />
 
       <Dialog open={isAddStoreModalOpen} onOpenChange={closeAddStoreModal}>
         <AddStoreModal />
@@ -38,6 +44,10 @@ export default function AddReceipt() {
 
       <Dialog open={isAddDateModalOpen} onOpenChange={closeAddDateModal}>
         <AddDateModal />
+      </Dialog>
+
+      <Dialog open={isAddItemModalOpen} onOpenChange={closeAddItemModal}>
+        <AddItemModal />
       </Dialog>
     </div>
   );

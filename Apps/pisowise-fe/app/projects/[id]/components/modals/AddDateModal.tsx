@@ -5,27 +5,28 @@ import { DialogContent, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { useModalStore } from "@/app/store/projectsPage/modalStore";
 import { Calendar } from "@/components/ui/calendar";
+import { usePurchaseStore } from "@/app/store/receiptsDetails/purchaseStore";
 
 export default function AddDateModal() {
-  const [storeDate, setStoreDate] = useState<Date | undefined>(undefined);
   const { closeAddDateModal } = useModalStore();
-  const [selectedDate, setSelectedDate] = useState<Date | undefined>(
-    new Date(2025, 2, 27)
-  );
+  const { setDate } = usePurchaseStore();
+
+  const [selectedDate, setSelectedDate] = useState<Date>(new Date());
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (storeDate) {
-      const formatted = storeDate.toISOString().split("T")[0];
+    if (selectedDate) {
+      const formatted = selectedDate.toISOString().split("T")[0];
+      setDate(formatted);
       console.log("Selected Date:", formatted);
     }
     closeAddDateModal();
-    setStoreDate(undefined);
+    setSelectedDate(new Date());
   };
 
   return (
     <DialogContent className="bg-[#FBF5F3] text-[#1B1212] rounded-[12px]">
-      <DialogTitle className="font-Ember font-medium text-[24px] tracking-[0.48px] text-left ">
+      <DialogTitle className="font-Ember font-medium text-[24px] tracking-[0.48px] text-left">
         Add Date
       </DialogTitle>
 
@@ -34,8 +35,9 @@ export default function AddDateModal() {
           mode="single"
           selected={selectedDate}
           onSelect={setSelectedDate}
-          defaultMonth={new Date(2025, 2)}
+          defaultMonth={new Date()}
           className="w-full bg-transparent border-2 border-[#246A49] rounded-[6px]"
+          required
         />
 
         <div className="flex flex-col gap-2 justify-end">

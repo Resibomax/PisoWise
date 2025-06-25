@@ -1,25 +1,24 @@
 "use client";
 
-import { useState } from "react";
 import { DialogContent, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useModalStore } from "@/app/store/projectsPage/modalStore";
+import { usePurchaseStore } from "@/app/store/receiptsDetails/purchaseStore";
 
 export default function AddStoreModal() {
-  const [storeName, setStoreName] = useState("");
   const { closeAddStoreModal } = useModalStore();
+  const { storeName, setStoreName } = usePurchaseStore();
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     console.log("Store name:", storeName);
     closeAddStoreModal();
-    setStoreName("");
   };
 
   return (
     <DialogContent className="bg-[#FBF5F3] text-[#1B1212] rounded-[12px]">
-      <DialogTitle className="font-Ember font-medium text-[24px] tracking-[0.48px] text-left ">
+      <DialogTitle className="font-Ember font-medium text-[24px] tracking-[0.48px] text-left">
         Add Store
       </DialogTitle>
 
