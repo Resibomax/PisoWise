@@ -11,6 +11,8 @@ interface ProjectStore {
     description: string,
     budget: number,
   ) => void;
+  deleteProject: (id: string, onSuccess?: () => void) => void;
+  getProjectById: (id: string) => Project | undefined;
 }
 
 export const useProjectStore = create<ProjectStore>((set, get) => ({
@@ -82,5 +84,40 @@ export const useProjectStore = create<ProjectStore>((set, get) => ({
         },
       });
     }
+  },
+
+  deleteProject: (id: string, onSuccess?: () => void) => {
+    try {
+      set((state) => ({
+        projects: state.projects.filter(
+          (project: Project) => project.id !== id,
+        ),
+      }));
+
+      toast.success("Project deleted successfully", {
+        description: `The project has been removed.`,
+        style: {
+          backgroundColor: "#349868",
+          color: "white",
+        },
+      });
+
+      if (onSuccess) {
+        onSuccess();
+      }
+    } catch {
+      toast.error("Failed to delete project", {
+        description: "Please try again.",
+        style: {
+          backgroundColor: "#E73648",
+          color: "white",
+        },
+      });
+    }
+  },
+
+  getProjectById(id) {
+    const { projects } = get();
+    return projects.find((project) => project.id === id);
   },
 }));
