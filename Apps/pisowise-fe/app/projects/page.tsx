@@ -10,9 +10,6 @@ export default function ProjectsPageContainer() {
 
   return (
     <ProtectedRoute>
-      <Button onClick={signOut} variant="outline">
-        Sign Out
-      </Button>
       <ProjectsPageComponent />
     </ProtectedRoute>
   );
