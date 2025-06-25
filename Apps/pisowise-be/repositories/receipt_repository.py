@@ -21,6 +21,9 @@ class ReceiptRepository:
 
     def get_receipts_by_project_id(self, project_id: str) -> List[Receipt]:
         return self.db.query(Receipt).filter(Receipt.project_id == project_id).all()
+    
+    def get_receipt_by_id(self, receipt_id: str) -> Receipt | None:
+        return self.db.query(Receipt).filter(Receipt.receipt_id == receipt_id).first()
 
     def update_receipt(self, receipt_id: str, updates: ReceiptUpdate) -> Receipt:
         receipt = (
