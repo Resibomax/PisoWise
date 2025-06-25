@@ -9,10 +9,19 @@ import { EditProjectModal } from "./modal/EditprojectModal";
 import { useProjectStore } from "@/app/store/projectsPage/projectStore";
 import { useModalStore } from "@/app/store/projectsPage/modalStore";
 import NoProjectsCard from "./cards/NoProjectsCard";
+import Loader from "@/components/ui/loader"; // Assuming you have a Loader component
 
 export default function ProjectsPage() {
-  const { projects } = useProjectStore();
+  const { projects } = useProjectStore(); // Assuming `projects` is managed in the store
   const { openCreateModal, openEditModal } = useModalStore();
+
+  if (!projects) {
+    return (
+      <div className="flex justify-center items-center h-[300px]">
+        <Loader /> {/* Display the Loader component */}
+      </div>
+    );
+  }
 
   return (
     <div className="w-full max-w-[1380px] mx-auto mt-4 p-4 md:px-8 lg:px-16">
@@ -27,7 +36,6 @@ export default function ProjectsPage() {
         </Button>
       </div>
 
-      {/* Projects Grid */}
       <div className="w-full">
         {projects.length === 0 ? (
           <div className="flex justify-center md:justify-start">
