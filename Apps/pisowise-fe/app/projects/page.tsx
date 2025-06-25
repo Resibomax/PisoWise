@@ -8,4 +8,5 @@ export default function ProjectsPageContainer() {
     <ProtectedRoute>
       <ProjectsPageComponent />
     </ProtectedRoute>
+  );
 }
