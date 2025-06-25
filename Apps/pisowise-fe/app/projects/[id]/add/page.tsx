@@ -1,7 +1,7 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { Undo2 } from "lucide-react";
+import { Undo2, Plus } from "lucide-react";
 import { useModalStore } from "@/app/store/projectsPage/modalStore";
 import { useRouter } from "next/navigation";
 import { Dialog } from "@/components/ui/dialog";
@@ -37,6 +37,14 @@ export default function AddReceipt() {
       <PurchaseDetailsCard />
       <ItemsCard />
       <ReceiptTotalCard />
+
+      <Button
+        className="flex flex-row m-3 bg-[#349868] text-[#FBF5F3] rounded-[12px]"
+        onClick={() => {}}
+      >
+        <Plus className="h-5 w-5" />
+        <span className="text-[16px]">Create Receipt</span>
+      </Button>
 
       <Dialog open={isAddStoreModalOpen} onOpenChange={closeAddStoreModal}>
         <AddStoreModal />

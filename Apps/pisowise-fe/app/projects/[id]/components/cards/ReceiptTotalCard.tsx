@@ -1,8 +1,6 @@
 "use client";
 
 import { Card, CardContent } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { useModalStore } from "@/app/store/projectsPage/modalStore";
 import { usePurchaseStore } from "@/app/store/receiptsDetails/purchaseStore";
 
 export default function ItemsCard() {
@@ -38,7 +36,6 @@ export default function ItemsCard() {
             <span>₱{total.toFixed(2)}</span>
           </div>
         </div>
-
       </CardContent>
     </Card>
   );
