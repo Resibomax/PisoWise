@@ -7,6 +7,7 @@ import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import Receipt from "../Receipt";
 import { useReceiptStore } from "@/app/store/projectDetails/receiptsStore";
+import { useModalStore } from "@/app/store/projectsPage/modalStore";
 import { useState } from "react";
 import EditReceipt from "../EditReceipt";
 
@@ -17,6 +18,7 @@ interface ReceiptsCardProps {
 
 export default function ReceiptsCard({ title, projectId }: ReceiptsCardProps) {
   const { getReceiptsByProjectId } = useReceiptStore();
+  const { openAddReceiptPage } = useModalStore();
   const receipts = getReceiptsByProjectId(projectId);
   const hasReceipts = receipts.length > 0;
 
@@ -49,7 +51,10 @@ export default function ReceiptsCard({ title, projectId }: ReceiptsCardProps) {
                 <Pen className="h-6 w-6" />
               </div>
             ) : (
-              <div className="p-1 hover:bg-white hover:text-black rounded-[12px] transition-color text-white">
+              <div
+                className="p-1 hover:bg-white hover:text-black rounded-[12px] transition-color text-white cursor-pointer"
+                onClick={openAddReceiptPage}
+              >
                 <Plus className="h-6 w-6" />
               </div>
             )}
@@ -65,7 +70,10 @@ export default function ReceiptsCard({ title, projectId }: ReceiptsCardProps) {
             <div className="text-white space-y-2 h-full flex flex-col">
               <EditReceipt projectId={projectId} />
 
-              <Button className="text-white bg-[#349868] w-full rounded-[12px] hover:bg-[#49C187] flex-shrink-0">
+              <Button
+                className="text-white bg-[#349868] w-full rounded-[12px] hover:bg-[#49C187] flex-shrink-0"
+                onClick={openAddReceiptPage}
+              >
                 Add Receipt
               </Button>
             </div>
@@ -73,7 +81,10 @@ export default function ReceiptsCard({ title, projectId }: ReceiptsCardProps) {
             <Receipt projectId={projectId} />
           ) : (
             <div className="flex items-center justify-center h-full">
-              <Button className="text-[#49C187] bg-[#123524] w-full hover:bg-[#49C187] hover:text-black cursor-pointer lg:h-[320px]">
+              <Button
+                className="text-[#49C187] bg-[#123524] w-full hover:bg-[#49C187] hover:text-black cursor-pointer lg:h-[320px]"
+                onClick={openAddReceiptPage}
+              >
                 No Receipts
               </Button>
             </div>
