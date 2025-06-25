@@ -1,9 +1,19 @@
-import ProjectsPage from "@/components/projects/ProjectsPage";
+"use client";
 
-export default function Projects() {
+import ProtectedRoute from "@/components/auth/ProtectedRoute";
+import ProjectsPageComponent from "./components/ProjectsPage";
+import { useAuthStore } from "@/app/store/authStore";
+import { Button } from "@/components/ui/button";
+
+export default function ProjectsPageContainer() {
+  const { signOut } = useAuthStore();
+
   return (
-    <div className="flex flex-col items-center justify-start h-screen font-[Ember] text-white">
-      <ProjectsPage />
-    </div>
+    <ProtectedRoute>
+      <Button onClick={signOut} variant="outline">
+        Sign Out
+      </Button>
+      <ProjectsPageComponent />
+    </ProtectedRoute>
   );
 }

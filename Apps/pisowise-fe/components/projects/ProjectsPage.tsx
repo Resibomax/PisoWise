@@ -45,7 +45,7 @@ export default function ProjectsPage() {
                 spent={project.spent}
                 headerAction={
                   <div
-                    className="p-1 hover:bg-white rounded-[12px] transition-color hover:text-black"
+                    className="p-1 hover:bg-white rounded-[12px] transition-color hover:text-black text-white"
                     onClick={(e) => {
                       e.stopPropagation();
                       openEditModal(project);
