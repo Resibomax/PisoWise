@@ -27,6 +27,9 @@ interface ModalStore {
   closeAddDateModal: () => void;
   openAddItemModal?: () => void;
   closeAddItemModal?: () => void;
+  openManualReceipt?: () => void;
+  closeManualReceipt?: () => void;
+  setManualInput: (value: boolean) => void;
 }
 
 export const useModalStore = create<ModalStore>((set) => ({
@@ -59,6 +62,11 @@ export const useModalStore = create<ModalStore>((set) => ({
   openAddItemModal: () => set({ isAddItemModalOpen: true }),
   closeAddItemModal: () => set({ isAddItemModalOpen: false }),
 
+  openManualReceipt: () => set({ isManualReceiptButtonPressed: true }),
+  closeManualReceipt: () => set({ isManualReceiptButtonPressed: false }),
+
+  setManualInput: (value) => set({ isManualReceiptButtonPressed: value }),
+  
   openEditModal: (project: Project) => {
     set({
       selectedProject: project,
