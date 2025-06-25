@@ -5,6 +5,7 @@ interface ModalStore {
   isCreateModalOpen: boolean;
   isEditModalOpen: boolean;
   isConfirmDeleteModalOpen?: boolean;
+  isAddReceiptButtonPressed: boolean;
   selectedProject: Project | null;
   openCreateModal: () => void;
   closeCreateModal: () => void;
@@ -12,12 +13,15 @@ interface ModalStore {
   closeEditModal: () => void;
   openConfirmDeleteModal: () => void;
   closeConfirmDeleteModal: () => void;
+  openAddReceiptPage: () => void;
+  closeAddReceiptPage: () => void;
 }
 
 export const useModalStore = create<ModalStore>((set) => ({
   isCreateModalOpen: false,
   isEditModalOpen: false,
   isConfirmDeleteModalOpen: false,
+  isAddReceiptButtonPressed: false,
   selectedProject: null,
 
   openCreateModal: () => set({ isCreateModalOpen: true }),
@@ -25,6 +29,9 @@ export const useModalStore = create<ModalStore>((set) => ({
 
   openConfirmDeleteModal: () => set({ isConfirmDeleteModalOpen: true }),
   closeConfirmDeleteModal: () => set({ isConfirmDeleteModalOpen: false }),
+
+  openAddReceiptPage: () => set({ isAddReceiptButtonPressed: true }),
+  closeAddReceiptPage: () => set({ isAddReceiptButtonPressed: false }),
 
   openEditModal: (project: Project) => {
     set({
