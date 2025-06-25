@@ -3,37 +3,40 @@
 import { useState } from "react";
 import { DialogContent, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { useModalStore } from "@/app/store/projectsPage/modalStore";
+import { Calendar } from "@/components/ui/calendar";
 
-export default function AddStoreModal() {
-  const [storeName, setStoreName] = useState("");
-  const { closeAddStoreModal } = useModalStore();
+export default function AddDateModal() {
+  const [storeDate, setStoreDate] = useState<Date | undefined>(undefined);
+  const { closeAddDateModal } = useModalStore();
+  const [selectedDate, setSelectedDate] = useState<Date | undefined>(
+    new Date(2025, 2, 27)
+  );
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Store name:", storeName);
-    closeAddStoreModal();
-    setStoreName("");
+    if (storeDate) {
+      const formatted = storeDate.toISOString().split("T")[0];
+      console.log("Selected Date:", formatted);
+    }
+    closeAddDateModal();
+    setStoreDate(undefined);
   };
 
   return (
     <DialogContent className="bg-[#FBF5F3] text-[#1B1212] rounded-[12px]">
       <DialogTitle className="font-Ember font-medium text-[24px] tracking-[0.48px] text-left ">
-        Add Store
+        Add Date
       </DialogTitle>
 
       <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-        <div>
-          <p className="mb-1.5">Name</p>
-          <Input
-            className="w-full bg-white"
-            type="text"
-            value={storeName}
-            onChange={(e) => setStoreName(e.target.value)}
-            required
-          />
-        </div>
+        <Calendar
+          mode="single"
+          selected={selectedDate}
+          onSelect={setSelectedDate}
+          defaultMonth={new Date(2025, 2)}
+          className="w-full bg-transparent border-2 border-[#246A49] rounded-[6px]"
+        />
 
         <div className="flex flex-col gap-2 justify-end">
           <Button
@@ -41,7 +44,7 @@ export default function AddStoreModal() {
             className="bg-[#246A49] text-white text-[16px] font-normal font-Ember rounded-[12px]"
             variant="outline"
           >
-            Done
+            Save
           </Button>
         </div>
       </form>

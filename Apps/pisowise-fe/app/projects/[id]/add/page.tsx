@@ -6,8 +6,13 @@ import { useModalStore } from "@/app/store/projectsPage/modalStore";
 import { useRouter } from "next/navigation";
 import { Dialog } from "@/components/ui/dialog";
 import PurchaseDetailsCard from "@/app/projects/[id]/components/cards/PurchaseDetailsCard";
+import AddStoreModal from "@/app/projects/[id]/components/modals/AddStoreModal";
+import AddDateModal from "@/app/projects/[id]/components/modals/AddDateModal";
 
 export default function AddReceipt() {
+  const { isAddStoreModalOpen, closeAddStoreModal } = useModalStore();
+  const { isAddDateModalOpen, closeAddDateModal } = useModalStore();
+  const router = useRouter();
 
   return (
     <div className="flex flex-col mt-2">
@@ -26,6 +31,14 @@ export default function AddReceipt() {
       </div>
 
       <PurchaseDetailsCard />
+
+      <Dialog open={isAddStoreModalOpen} onOpenChange={closeAddStoreModal}>
+        <AddStoreModal />
+      </Dialog>
+
+      <Dialog open={isAddDateModalOpen} onOpenChange={closeAddDateModal}>
+        <AddDateModal />
+      </Dialog>
     </div>
   );
 }

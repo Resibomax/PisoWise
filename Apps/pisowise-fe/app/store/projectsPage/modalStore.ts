@@ -7,6 +7,8 @@ interface ModalStore {
   isConfirmDeleteModalOpen?: boolean;
   isAddReceiptButtonPressed: boolean;
   isManualReceiptButtonPressed?: boolean;
+  isAddStoreModalOpen: boolean;
+  isAddDateModalOpen: boolean;
   selectedProject: Project | null;
   isImageModalOpen?: boolean;
 
@@ -18,6 +20,10 @@ interface ModalStore {
   closeConfirmDeleteModal: () => void;
   openAddReceiptPage: () => void;
   closeAddReceiptPage: () => void;
+  openAddStoreModal: () => void;
+  closeAddStoreModal: () => void;
+  openAddDateModal: () => void;
+  closeAddDateModal: () => void;
 }
 
 export const useModalStore = create<ModalStore>((set) => ({
@@ -26,6 +32,8 @@ export const useModalStore = create<ModalStore>((set) => ({
   isConfirmDeleteModalOpen: false,
   isAddReceiptButtonPressed: false,
   isManualReceiptButtonPressed: false,
+  isAddStoreModalOpen: false,
+  isAddDateModalOpen: false,
   selectedProject: null,
   isImageModalOpen: false,
 
@@ -37,6 +45,12 @@ export const useModalStore = create<ModalStore>((set) => ({
 
   openAddReceiptPage: () => set({ isAddReceiptButtonPressed: true }),
   closeAddReceiptPage: () => set({ isAddReceiptButtonPressed: false }),
+
+  openAddStoreModal: () => set({ isAddStoreModalOpen: true }),
+  closeAddStoreModal: () => set({ isAddStoreModalOpen: false }),
+
+  openAddDateModal: () => set({ isAddDateModalOpen: true }),
+  closeAddDateModal: () => set({ isAddDateModalOpen: false }),
 
   openEditModal: (project: Project) => {
     set({
