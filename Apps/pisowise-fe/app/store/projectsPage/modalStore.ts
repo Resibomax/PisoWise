@@ -6,6 +6,7 @@ interface ModalStore {
   isEditModalOpen: boolean;
   isConfirmDeleteModalOpen?: boolean;
   isAddReceiptButtonPressed: boolean;
+  isManualReceiptButtonPressed?: boolean;
   selectedProject: Project | null;
   isImageModalOpen?: boolean;
 
@@ -24,6 +25,7 @@ export const useModalStore = create<ModalStore>((set) => ({
   isEditModalOpen: false,
   isConfirmDeleteModalOpen: false,
   isAddReceiptButtonPressed: false,
+  isManualReceiptButtonPressed: false,
   selectedProject: null,
   isImageModalOpen: false,
 
