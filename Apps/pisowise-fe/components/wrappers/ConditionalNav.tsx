@@ -8,7 +8,7 @@ import Navbar from "@/app/navbar";
 export default function ConditionalNavbar() {
   const pathname = usePathname();
   // does not render the Navbar if the pathname is the root (landing page)
-  if (pathname === "/") {
+  if (pathname === "/" || pathname == "/auth/callback") {
     return null;
   }
 
