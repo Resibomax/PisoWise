@@ -38,9 +38,13 @@ export default function AddReceipt() {
       // Simulate upload
       await new Promise((resolve, reject) =>
         setTimeout(() => {
-          const fail = Math.random() < 0.3; // Simulate 30% failure
-          fail ? reject(new Error("OCR failed")) : resolve("Success");
-        }, 2000)
+          const fail = Math.random() < 0.3;
+          if (fail) {
+            reject(new Error("OCR failed"));
+          } else {
+            resolve("Success");
+          }
+        }, 2000),
       );
 
       console.log("File uploaded successfully:", selectedFile.name);
