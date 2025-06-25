@@ -3,7 +3,8 @@
 import { Button } from "@/components/ui/button";
 import { useModalStore } from "@/app/store/projectsPage/modalStore";
 import { Undo2, Image as ImageIcon, Loader, XCircle } from "lucide-react";
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect } from "react";
+import Image from "next/image";
 
 export default function AddReceipt() {
   const { closeAddReceiptPage } = useModalStore();
@@ -11,20 +12,19 @@ export default function AddReceipt() {
 
   const [isUploading, setIsUploading] = useState(false);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
-  const [error, setError] = useState<string | null>(null); // ← Error state
+  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(null);
 
   const handleInputBoxClick = () => {
-    if (!isUploading) {
-      fileInputRef.current?.click();
-    }
+    if (!isUploading) fileInputRef.current?.click();
   };
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
       setSelectedFile(file);
-      setError(null); // Reset error on new file select
-      console.log("Selected file:", file.name);
+      setPreviewUrl(URL.createObjectURL(file));
+      setError(null);
     }
   };
 
@@ -35,7 +35,6 @@ export default function AddReceipt() {
     setError(null);
 
     try {
-      // Simulate upload
       await new Promise((resolve, reject) =>
         setTimeout(() => {
           const fail = Math.random() < 0.3;
@@ -56,30 +55,36 @@ export default function AddReceipt() {
     }
   };
 
+  useEffect(() => {
+    return () => {
+      if (previewUrl) URL.revokeObjectURL(previewUrl);
+    };
+  }, [previewUrl]);
+
   return (
-    <div className="relative flex justify-center w-full">
+    <div className="relative flex flex-col w-full items-center px-4">
       {isUploading && (
         <div className="fixed inset-0 bg-black/30 backdrop-blur-sm z-20" />
       )}
 
+      <div className="w-full flex items-start px-4 mb-6">
+        <Button
+          className="flex gap-2 items-center bg-transparent hover:bg-white hover:text-black rounded-[12px] text-white"
+          onClick={closeAddReceiptPage}
+          disabled={isUploading}
+        >
+          <Undo2 className="h-5 w-5" />
+          <span className="font-roboto-regular text-[16px]">Back</span>
+        </Button>
+      </div>
+
+      {/* Centered content */}
       <div
-        className={`w-full max-w-sm flex flex-col gap-6 relative z-10 ${
+        className={`w-full max-w-sm md:max-w-md flex flex-col items-center gap-6 relative z-10 ${
           isUploading ? "pointer-events-none select-none" : ""
         }`}
       >
-        <div className="self-start">
-          <Button
-            className="bg-transparent hover:bg-white hover:text-black rounded-[12px] text-white flex items-center gap-2"
-            onClick={closeAddReceiptPage}
-            disabled={isUploading}
-          >
-            <Undo2 className="h-5 w-5" />
-            <span className="font-roboto-regular text-base sm:text-lg">
-              Back
-            </span>
-          </Button>
-        </div>
-
+        {/* Error message */}
         {error && (
           <div className="flex justify-center items-center bg-[#1B1212] border-2 border-[#E73648] rounded-[12px] p-4">
             <div className="flex flex-row items-center text-center gap-3">
@@ -91,6 +96,7 @@ export default function AddReceipt() {
           </div>
         )}
 
+        {/* File input */}
         <input
           type="file"
           ref={fileInputRef}
@@ -100,29 +106,41 @@ export default function AddReceipt() {
           disabled={isUploading}
         />
 
+        {/* Upload area */}
         <div
           onClick={handleInputBoxClick}
-          className={`flex flex-col items-center justify-center bg-[#1B1212] h-[294px] w-full rounded-[12px] border-2 border-[#349868] transition ${
+          className={`flex items-center justify-center bg-[#1B1212] h-[294px] w-full md:w-[640px] md:h-[455px] rounded-[12px] border-2 border-[#349868] transition ${
             isUploading ? "cursor-not-allowed" : "cursor-pointer"
           }`}
         >
-          <ImageIcon className="text-[#FBF5F3] w-[100px] h-[100px]" />
-          <p className="text-[#FBF5F3] font-roboto-regular text-base sm:text-lg mt-4 text-center">
-            {selectedFile
-              ? selectedFile.name
-              : "Upload a picture of the receipt"}
-          </p>
+          {previewUrl ? (
+            <Image
+              src={previewUrl}
+              alt="Preview"
+              width={640}
+              height={455}
+              className="max-h-full max-w-full object-contain rounded-[12px] p-2"
+            />
+          ) : (
+            <div className="flex flex-col items-center justify-center text-center">
+              <ImageIcon className="text-[#FBF5F3] w-[100px] h-[100px]" />
+              <p className="text-[#FBF5F3] font-roboto-regular text-base sm:text-lg mt-4">
+                Upload a picture of the receipt
+              </p>
+            </div>
+          )}
         </div>
 
         <div className="text-[#FBF5F3] font-roboto-regular text-center">
           <p>
-            Supported formats: JPG, PNG, PDF <br /> Max size: 4MB
+            Supported formats: JPG, PNG, PDF •<br className="md:hidden" /> Max
+            size: 4MB
           </p>
         </div>
 
-        <div className="flex flex-col gap-3 w-full">
+        <div className="flex flex-col gap-3 items-center w-full">
           <Button
-            className="text-base sm:text-lg font-normal text-[#FBF5F3] bg-[#349868] w-full rounded-[12px] hover:bg-[#49C187] disabled:opacity-50"
+            className="text-base sm:text-lg font-normal text-[#FBF5F3] bg-[#349868] w-full rounded-[12px] hover:bg-[#49C187] disabled:opacity-50 md:w-[640px]"
             onClick={handleUpload}
             disabled={!selectedFile || isUploading}
           >
@@ -136,7 +154,7 @@ export default function AddReceipt() {
             )}
           </Button>
           <Button
-            className="text-base sm:text-lg font-light border bg-transparent text-[#FBF5F3] w-full rounded-[12px] hover:bg-white hover:text-black"
+            className="text-base sm:text-lg font-light border bg-transparent text-[#FBF5F3] w-full rounded-[12px] hover:bg-white hover:text-black md:w-[640px]"
             disabled={isUploading}
           >
             Manual Input
