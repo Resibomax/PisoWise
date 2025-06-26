@@ -11,7 +11,7 @@ export default function PurchaseDetailsCard() {
   const { storeName, date } = usePurchaseStore();
 
   return (
-    <Card className="m-3 mt-0 p-6 bg-[#1B1212] text-[#FBF5F3] rounded-[12px]">
+    <Card className="mb-4 p-6 bg-[#1B1212] text-[#FBF5F3] rounded-[12px]">
       <CardContent className="flex flex-col gap-4">
         <CardHeader className="flex flex-col items-start">
           <h2 className="text-lg font-roboto-bld">Purchase Details</h2>

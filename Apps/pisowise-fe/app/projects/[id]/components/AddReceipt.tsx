@@ -66,17 +66,19 @@ export default function AddReceipt() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <Button
-          className="flex gap-2 items-center bg-transparent hover:bg-white hover:text-black rounded-[12px] text-white"
-          onClick={closeAddReceiptPage}
+          className="flex gap-2 mb-4 items-center bg-transparent hover:bg-white hover:text-black rounded-[12px] text-white"
+          onClick={() => {
+            closeAddReceiptPage();
+          }}
           disabled={isUploading}
         >
           <Undo2 className="h-5 w-5" />
           <span className="font-roboto-regular text-[16px]">Back</span>
         </Button>
       </div>
-      
+
       {/* Content */}
-      <div className="relative flex flex-col w-full items-center px-4">
+      <div className="relative flex flex-col w-full items-center">
         {isUploading && (
           <div className="fixed inset-0 bg-black/30 backdrop-blur-sm z-20" />
         )}

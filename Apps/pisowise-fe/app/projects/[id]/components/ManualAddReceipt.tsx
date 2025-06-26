@@ -18,36 +18,38 @@ export default function AddReceipt() {
   const { closeAddReceiptPage, closeManualReceipt } = useModalStore();
 
   return (
-    <div className="flex flex-col mt-2">
+    <div className="flex flex-col">
       {/*Header*/}
-      <div className="flex items-center justify-between">
-        <Button
-          className="flex gap-2 items-center bg-transparent hover:bg-white hover:text-black rounded-[12px] text-white"
-          onClick={() => {
-            closeManualReceipt?.();
-            closeAddReceiptPage();
-          }}
-        >
-          <Undo2 className="h-5 w-5" />
-          <span className="font-roboto-regular text-[16px]">Back</span>
-        </Button>
-      </div>
-      <div className="flex flex-row justify-between items-center p-2 text-white m-2">
-        <h1 className="text-2xl font-bold font-roboto-regular">Receipt</h1>
-        <Button
-          className="flex bg-[#1B1212] font-Ember font-normal tracking-[0.48px]"
-          onClick={() => {
-            useModalStore.getState().setManualInput(false);
-          }}
-        >
-          Cancel
-        </Button>
+      <div>
+        <div className="flex items-center justify-between">
+          <Button
+            className="flex gap-2 mb-4 items-center bg-transparent hover:bg-white hover:text-black rounded-[12px] text-white"
+            onClick={() => {
+              closeManualReceipt?.();
+              closeAddReceiptPage();
+            }}
+          >
+            <Undo2 className="h-5 w-5" />
+            <span className="font-roboto-regular text-[16px]">Back</span>
+          </Button>
+        </div>
+        <div className="flex flex-row justify-between items-center mb-4 text-white">
+          <h1 className="text-2xl font-bold font-roboto-semibld">Receipt</h1>
+          <Button
+            className="flex bg-[#1B1212] font-Ember font-normal tracking-[0.48px]"
+            onClick={() => {
+              useModalStore.getState().setManualInput(false);
+            }}
+          >
+            Cancel
+          </Button>
+        </div>
       </div>
       <PurchaseDetailsCard />
       <ItemsCard />
       <ReceiptTotalCard />
       <Button
-        className="flex flex-row m-3 bg-[#349868] text-[#FBF5F3] rounded-[12px]"
+        className="flex flex-row bg-[#349868] text-[#FBF5F3] rounded-[12px]"
         onClick={() => {}}
       >
         <Plus className="h-5 w-5" />

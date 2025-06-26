@@ -19,7 +19,7 @@ export default function ItemsCard() {
   const tax = total - subtotal;
 
   return (
-    <Card className="m-3 mt-0 p-6 bg-[#1B1212] text-[#FBF5F3] rounded-[12px]">
+    <Card className="mb-4 p-6 bg-[#1B1212] text-[#FBF5F3] rounded-[12px]">
       <CardContent className="flex flex-col gap-4">
         <div className="space-y-2 font-roboto-light text-[14px]">
           <div className="flex items-center justify-between">
