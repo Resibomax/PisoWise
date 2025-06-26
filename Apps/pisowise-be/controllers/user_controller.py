@@ -17,9 +17,7 @@ def get_users(db: Session = Depends(get_db)):
     uc = UserUseCase(db)
     return uc.get_all_users_usecase()
 
-@user_router.get("/users", response_model=List[UserResponse] | UserResponse)
-def get_users(email: str = None, db: Session = Depends(get_db)):
+@user_router.get("/user", response_model=UserResponse)
+def get_user_by_email(email: str, db: Session = Depends(get_db)):
     uc = UserUseCase(db)
-    if email:
-        return uc.get_user_by_email_usecase(email)
-    return uc.get_all_users_usecase()
+    return uc.get_user_by_email_usecase(email)
