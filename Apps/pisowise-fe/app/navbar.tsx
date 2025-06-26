@@ -49,7 +49,13 @@ export default function Navbar() {
               className="border-none shadow-lg bg-opacity-90"
               align="end"
             >
-              <DropdownMenuItem className="cursor-pointer text-white flex justify-center py-2 logout-item">
+              <DropdownMenuItem
+                className="cursor-pointer text-white flex justify-center py-2 px-4 rounded-md transition-all duration-500 hover:brightness-120 cursor-pointer"
+                style={{
+                  background:
+                    "linear-gradient(355deg, rgba(105, 105, 105, 1) 0%, rgba(207, 207, 207, 0.55) 50%, rgba(235, 232, 232, 1) 100%)",
+                }}
+              >
                 <button
                   onClick={signOut}
                   className="flex items-center gap-2 justify-center"
