@@ -10,13 +10,15 @@ import BudgetCard from "@/components/projects/details/cards/BudgetCard";
 import ReceiptsCard from "@/components/projects/details/cards/ReceiptsCard";
 import InsightsCard from "@/components/projects/details/cards/AIInsightsCard";
 import WarningCard from "@/components/projects/details/cards/WarningCard";
+import ManualAddReceipt from "@/components/projects/details/ManualAddReceipt";
 import Loader from "@/components/ui/loader";
 
 export default function ProjectDetailsPage() {
   const params = useParams();
   const { getProjectById } = useProjectStore();
   const { openEditModal } = useModalStore();
-  const { isAddReceiptButtonPressed } = useModalStore();
+  const { isAddReceiptButtonPressed, isManualReceiptButtonPressed } =
+    useModalStore();
 
   const project = params.id ? getProjectById(params.id as string) : null;
 
@@ -78,6 +80,8 @@ export default function ProjectDetailsPage() {
 
           <EditProjectModal />
         </>
+      ) : isManualReceiptButtonPressed ? (
+        <ManualAddReceipt />
       ) : (
         <AddReceipt />
       )}
