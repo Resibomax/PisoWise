@@ -4,7 +4,6 @@ from models.base import Receipt
 from models.receipt import ReceiptCreate, ReceiptUpdate, ReceiptResponse
 from typing import List
 
-
 class ReceiptUseCase:
     def __init__(self, db: Session):
         self.repo = ReceiptRepository(db)

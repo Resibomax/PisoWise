@@ -1,11 +1,9 @@
 from pydantic import BaseModel, EmailStr
 
-
 # User Create Model
 class UserCreate(BaseModel):
     email: EmailStr
     username: str
-
 
 # User Response Model
 class UserResponse(BaseModel):

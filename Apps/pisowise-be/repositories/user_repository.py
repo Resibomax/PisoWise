@@ -3,7 +3,6 @@ from models.base import User  # SQLAlchemy model defined here
 from models.user import UserCreate
 from typing import List
 
-
 class UserRepository:
     def __init__(self, db: Session):
         self.db = db
