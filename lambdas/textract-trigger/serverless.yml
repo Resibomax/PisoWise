@@ -1,0 +1,38 @@
+service: pisowise-s3-trigger-function
+
+provider:
+  name: aws
+  runtime: python3.11
+  region: ap-southeast-1
+  role: arn:aws:iam::699475917025:role/pisowise-s3-trigger-role
+
+plugins:
+  - serverless-python-requirements
+
+custom:
+  bucketName: pisowise-textract-input-bucket-dev
+  pythonRequirements:
+    dockerizePip: true
+    useStaticCache: false
+
+functions:
+  processS3Event:
+    handler: handler.lambda_handler
+    timeout: 30
+    memorySize: 256
+    description: |
+      Processes newly uploaded documents (PDF, JPG, PNG, TIFF) in S3,
+      validates file types, and logs metadata for future Textract analysis.
+    events:
+      - s3:
+          bucket: ${self:custom.bucketName}
+          event: s3:ObjectCreated:*
+          existing: true
+
+package:
+  exclude:
+    - node_modules/**
+    - .venv/**
+    - tests/**
+    - __pycache__/**
+    - .pytest_cache/**
