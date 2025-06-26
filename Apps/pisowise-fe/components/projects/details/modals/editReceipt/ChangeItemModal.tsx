@@ -33,7 +33,7 @@ export default function AddStoreModal() {
   return (
     <DialogContent className="bg-[#FBF5F3] text-[#1B1212] rounded-[12px]">
       <DialogTitle className="font-Ember font-medium text-[24px] tracking-[0.48px] text-left">
-        Add Item
+        Edit Item
       </DialogTitle>
 
       <form onSubmit={handleSubmit} className="flex flex-col gap-4">
@@ -44,18 +44,6 @@ export default function AddStoreModal() {
             type="text"
             value={itemName}
             onChange={(e) => setItemName(e.target.value)}
-            required
-          />
-        </div>
-
-        <div>
-          <p className="mb-1.5">Quantity</p>
-          <Input
-            className="w-full bg-white"
-            type="number"
-            min={1}
-            value={quantity}
-            onChange={(e) => setQuantity(e.target.value)}
             required
           />
         </div>
