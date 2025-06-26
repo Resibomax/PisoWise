@@ -31,6 +31,7 @@ interface ModalStore {
   closeManualReceipt?: () => void;
   setManualInput: (value: boolean) => void;
   openImageModal?: () => void;
+  closeImageModal?: () => void;
 }
 
 export const useModalStore = create<ModalStore>((set) => ({
