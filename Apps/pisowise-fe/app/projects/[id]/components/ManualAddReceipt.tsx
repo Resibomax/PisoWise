@@ -45,16 +45,26 @@ export default function AddReceipt() {
           </Button>
         </div>
       </div>
-      <PurchaseDetailsCard />
-      <ItemsCard />
-      <ReceiptTotalCard />
-      <Button
-        className="flex flex-row bg-[#349868] text-[#FBF5F3] rounded-[12px]"
-        onClick={() => {}}
-      >
-        <Plus className="h-5 w-5" />
-        <span className="text-[16px]">Create Receipt</span>
-      </Button>
+
+      <div className="flex flex-col space-y-4 lg:flex-row lg:space-x-4 lg:space-y-0">
+        <div className="lg:w-3/10">
+          <PurchaseDetailsCard />
+        </div>
+        <div className="lg:w-4/10">
+          <ItemsCard />
+        </div>
+        <div className="lg:w-3/10">
+          <ReceiptTotalCard />
+          <Button
+            className="flex flex-row bg-[#349868] text-[#FBF5F3] rounded-[12px] w-full"
+            onClick={() => {}}
+          >
+            <Plus className="h-5 w-5" />
+            <span className="text-[16px]">Create Receipt</span>
+          </Button>
+        </div>
+      </div>
+
       <Dialog open={isAddStoreModalOpen} onOpenChange={closeAddStoreModal}>
         <AddStoreModal />
       </Dialog>
