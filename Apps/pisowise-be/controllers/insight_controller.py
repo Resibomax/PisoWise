@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 from models.insight import AIInsightCreate, AIInsightResponse
 from usecases.insight_usecase import AIInsightUseCase
@@ -19,10 +19,5 @@ def get_insights(db: Session = Depends(get_db)):
 
 @insight_router.get("/insights/latest", response_model=AIInsightResponse)
 def get_latest_insight(project_id: str = None, db: Session = Depends(get_db)):
-    if project_id is None:
-        raise HTTPException(status_code=400, detail="project_id is required")
     uc = AIInsightUseCase(db)
-    insight = uc.get_latest_insight_usecase(project_id)
-    if not insight:
-        raise HTTPException(status_code=404, detail="No insight found for this project")
-    return insight
+    return uc.get_latest_insight_usecase(project_id)
