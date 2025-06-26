@@ -43,7 +43,7 @@ export default function AddReceipt() {
           } else {
             resolve("Success");
           }
-        }, 2000)
+        }, 2000),
       );
 
       console.log("File uploaded successfully:", selectedFile.name);

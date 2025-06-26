@@ -66,7 +66,7 @@ export const useModalStore = create<ModalStore>((set) => ({
   closeManualReceipt: () => set({ isManualReceiptButtonPressed: false }),
 
   setManualInput: (value) => set({ isManualReceiptButtonPressed: value }),
-  
+
   openEditModal: (project: Project) => {
     set({
       selectedProject: project,

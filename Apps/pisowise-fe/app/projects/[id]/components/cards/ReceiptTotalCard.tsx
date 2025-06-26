@@ -1,6 +1,6 @@
 "use client";
 
-import { Card, CardContent } from "@/components/ui/card";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { usePurchaseStore } from "@/app/store/receiptsDetails/purchaseStore";
 
 export default function ItemsCard() {
@@ -8,12 +8,12 @@ export default function ItemsCard() {
 
   const subtotal = items.reduce(
     (acc, item) => acc + (item.price / 1.12) * item.quantity,
-    0
+    0,
   );
 
   const total = items.reduce(
     (acc, item) => acc + item.price * item.quantity,
-    0
+    0,
   );
 
   const tax = total - subtotal;
@@ -21,6 +21,9 @@ export default function ItemsCard() {
   return (
     <Card className="mb-4 p-6 bg-[#1B1212] text-[#FBF5F3] rounded-[12px]">
       <CardContent className="flex flex-col gap-4">
+        <CardHeader className="hidden md:flex flex-col items-start">
+          <h1 className="text-2xl font-roboto-bld">Summary</h1>
+        </CardHeader>
         <div className="space-y-2 font-roboto-light text-[14px]">
           <div className="flex items-center justify-between">
             <span>Subtotal</span>

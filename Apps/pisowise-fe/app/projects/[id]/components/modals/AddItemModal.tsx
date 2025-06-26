@@ -9,7 +9,7 @@ import { usePurchaseStore } from "@/app/store/receiptsDetails/purchaseStore";
 
 export default function AddStoreModal() {
   const { closeAddItemModal } = useModalStore();
-  const { addItem } = usePurchaseStore(); 
+  const { addItem } = usePurchaseStore();
 
   const [itemName, setItemName] = useState("");
   const [quantity, setQuantity] = useState("");

@@ -22,7 +22,6 @@ export const usePurchaseStore = create<PurchaseState>((set) => ({
   items: [],
   setStoreName: (name) => set({ storeName: name }),
   setDate: (date) => set({ date }),
-  addItem: (item) =>
-    set((state) => ({ items: [...state.items, item] })),
-clear: () => set({ storeName: "", date: "", items: [] }),
+  addItem: (item) => set((state) => ({ items: [...state.items, item] })),
+  clear: () => set({ items: [] }),
 }));
