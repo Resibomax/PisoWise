@@ -5,6 +5,7 @@ interface OAuthResult {
   user?: {
     email: string;
     sub: string;
+    profile?: string;
     attributes: Record<string, string | undefined>;
   };
   error?: string;
@@ -39,6 +40,7 @@ export async function handleOAuthCallback(): Promise<OAuthResult> {
       user: {
         email: attributes?.email ?? "",
         sub: currentUser.userId,
+        profile: attributes?.profile ?? "",
         attributes,
       },
     };
