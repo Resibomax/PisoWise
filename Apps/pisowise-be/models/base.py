@@ -5,19 +5,15 @@ import uuid
 
 Base = declarative_base()
 
-
 # User Model
 class User(Base):
     __tablename__ = "User"
-    user_id = Column(
-        String, primary_key=True, index=True, default=lambda: str(uuid.uuid4())
-    )
+    user_id = Column(String, primary_key=True, index=True, default=lambda: str(uuid.uuid4()))
     email = Column(String, nullable=False, unique=True, index=True)
     username = Column(String, nullable=False)
 
     # relationship to the Project model
     projects = relationship("Project", back_populates="user")
-
 
 # Project Model
 class Project(Base):
@@ -80,7 +76,6 @@ class AIInsight(Base):
 
     # relationship to the Project Model
     project = relationship("Project", back_populates="ai_insights")
-
 
 """
 OPTIONAL: Uncomment the following code to add a ProjectStats model

@@ -23,7 +23,6 @@ def update_project(project_id: str, project_update: ProjectUpdate, db: Session =
     uc = ProjectUseCase(db)
     return uc.update_project_usecase(project_id, project_update)
 
-
 @project_router.delete("/projects/{project_id}", response_model=bool)
 def delete_project(project_id: str, db: Session = Depends(get_db)):
     uc = ProjectUseCase(db)
