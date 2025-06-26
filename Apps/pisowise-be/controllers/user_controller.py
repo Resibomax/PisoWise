@@ -18,3 +18,8 @@ def create_user(user: UserCreate, db: Session = Depends(get_db)):
 def get_users(db: Session = Depends(get_db)):
     uc = UserUseCase(db)
     return uc.get_all_users_usecase()
+
+@user_router.get("/user", response_model=UserResponse)
+def get_user_by_email(email: str, db: Session = Depends(get_db)):
+    uc = UserUseCase(db)
+    return uc.get_user_by_email_usecase(email)
