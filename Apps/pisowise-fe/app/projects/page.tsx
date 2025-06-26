@@ -1,7 +1,7 @@
 "use client";
 
 import ProtectedRoute from "@/components/auth/ProtectedRoute";
-import ProjectsPageComponent from "./components/ProjectsPage";
+import ProjectsPageComponent from "@/components/projects/ProjectsPage";
 
 export default function ProjectsPageContainer() {
   return (

@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { useAuthStore } from "@/app/store/authStore";
 import { useRouter } from "next/navigation";
 import { initializeAmplifyOAuth } from "@/lib/auth/amplify-oauth";
+import Loader from "@/components/ui/loader";
 
 export default function RedirectIfAuthenticated({
   children,
@@ -49,14 +50,7 @@ export default function RedirectIfAuthenticated({
   }, [hasCheckedAuth, isAuthenticated, router]);
 
   if ((!isInitialized || isLoading || !hasCheckedAuth) && !timeoutReached) {
-    return (
-      <div className="flex items-center justify-center h-screen">
-        <div className="text-center">
-          <div className="w-16 h-16 border-4 border-t-[#FBF5F3] border-r-[#FBF5F3] border-b-[#FBF5F3] border-l-transparent rounded-full animate-spin mx-auto text-white"></div>
-          <p className="mt-4 text-lg text-[#FBF5F3]">Loading...</p>
-        </div>
-      </div>
-    );
+    return <Loader />;
   }
 
   return !isAuthenticated ? <>{children}</> : null;

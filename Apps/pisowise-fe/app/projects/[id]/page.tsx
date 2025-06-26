@@ -3,13 +3,14 @@
 import { useParams } from "next/navigation";
 import { useProjectStore } from "@/app/store/projectsPage/projectStore";
 import { useModalStore } from "@/app/store/projectsPage/modalStore";
-import { EditProjectModal } from "../components/modals/EditprojectModal";
-import { ProjectHeader } from "./components/Header";
-import AddReceipt from "@/app/projects/[id]/components/AddReceipt";
-import BudgetCard from "./components/cards/BudgetCard";
-import ReceiptsCard from "./components/cards/ReceiptsCard";
-import InsightsCard from "./components/cards/AIInsightsCard";
-import WarningCard from "./components/cards/WarningCard";
+import { EditProjectModal } from "@/components/projects/modal/EditprojectModal";
+import { ProjectHeader } from "@/components/projects/details/Header";
+import AddReceipt from "@/components/projects/details/AddReceipt";
+import BudgetCard from "@/components/projects/details/cards/BudgetCard";
+import ReceiptsCard from "@/components/projects/details/cards/ReceiptsCard";
+import InsightsCard from "@/components/projects/details/cards/AIInsightsCard";
+import WarningCard from "@/components/projects/details/cards/WarningCard";
+import Loader from "@/components/ui/loader";
 
 export default function ProjectDetailsPage() {
   const params = useParams();
@@ -20,7 +21,11 @@ export default function ProjectDetailsPage() {
   const project = params.id ? getProjectById(params.id as string) : null;
 
   if (!project) {
-    return null;
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <Loader />
+      </div>
+    );
   }
 
   const isSpentAboveThreshold = project.spent / project.budget > 0.8;
