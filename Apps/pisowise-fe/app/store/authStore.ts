@@ -16,6 +16,7 @@ import { handleOAuthCallback } from "@/lib/auth/oauth-handler";
 interface User {
   email: string;
   sub: string;
+  picture?: string;
   attributes?: Record<string, string | undefined>;
 }
 

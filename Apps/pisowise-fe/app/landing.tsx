@@ -10,6 +10,8 @@ import ResetPasswordModal from "./landing/components/modals/ResetPasswordModal";
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { initializeAmplifyOAuth } from "@/lib/auth/amplify-oauth";
+import logo from "@/public/assets/pisowise.svg";
+import Image from "next/image";
 
 export default function Landing() {
   const {
@@ -56,7 +58,7 @@ export default function Landing() {
       {/* Logo placeholder */}
       <div className="absolute top-6 left-1/2 transform -translate-x-1/2">
         <div className="w-16 h-16 font-semibold text-[#FBF5F3] flex items-center justify-center">
-          Logo
+          <Image src={logo} alt="Pisowise Logo" width={64} height={64} />
         </div>
       </div>
 
