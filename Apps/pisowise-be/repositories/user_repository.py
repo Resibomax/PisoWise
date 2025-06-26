@@ -18,3 +18,7 @@ class UserRepository:
 
     def get_all_users(self) -> List[User]:
         return self.db.query(User).all()
+
+    def get_user_by_email(self, email: str) -> User:
+        return self.db.query(User).filter(User.email == email).first()
+
