@@ -19,6 +19,16 @@ interface PurchaseState {
   setEditingIndex: (index: number | null) => void;
   editingIndex: number | null;
   removeItem: (index: number) => void;
+  initializeFromReceipt: (receipt: {
+    address?: string;
+    date?: string;
+    items?: Array<{
+      id?: string;
+      name?: string;
+      quantity?: number;
+      price?: number;
+    }>;
+  }) => void;
 }
 
 export const usePurchaseStore = create<PurchaseState>((set) => ({
@@ -50,4 +60,15 @@ export const usePurchaseStore = create<PurchaseState>((set) => ({
     set((state) => ({
       items: state.items.filter((_, i) => i !== index),
     })),
+  initializeFromReceipt: (receipt) =>
+    set({
+      storeName: receipt.address || "",
+      date: receipt.date || "",
+      items:
+        receipt.items?.map((item) => ({
+          itemName: item.name || "",
+          quantity: item.quantity || 1,
+          price: item.price || 0,
+        })) || [],
+    }),
 }));

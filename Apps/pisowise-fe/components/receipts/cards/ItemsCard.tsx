@@ -17,18 +17,13 @@ export default function ItemsCard({ receiptId }: ItemsCardProps) {
 
   const { items, clear, addItem, updateItemQuantity, removeItem } =
     usePurchaseStore();
-  const { setEditingIndex, editingIndex } = usePurchaseStore();
+  const { setEditingIndex } = usePurchaseStore();
 
-  const {
-    openAddItemModal,
-    openChangeItemModal,
-    closeChangeItemModal,
-    isChangeItemModalOpen,
-  } = useModalStore();
+  const { openAddItemModal, openChangeItemModal } = useModalStore();
 
   useEffect(() => {
     if (isInEditMode && receipt) {
-      clear(); // clear previous items
+      clear();
       receipt.items.forEach((item) => {
         addItem({
           itemName: item.name,
@@ -37,7 +32,7 @@ export default function ItemsCard({ receiptId }: ItemsCardProps) {
         });
       });
     }
-  }, [isInEditMode, receipt]);
+  }, [isInEditMode, receipt, clear, addItem]);
 
   if (!receipt) {
     return (
@@ -75,8 +70,8 @@ export default function ItemsCard({ receiptId }: ItemsCardProps) {
                   <div className="flex space-x-2">
                     <button
                       onClick={() => {
-                        setEditingIndex(index); // this will store which item to edit
-                        openChangeItemModal?.(); // open modal
+                        setEditingIndex(index);
+                        openChangeItemModal?.();
                       }}
                     >
                       <Pencil className="w-5 h-5 text-white" />

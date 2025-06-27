@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useModalStore } from "@/app/store/projectsPage/modalStore";
 import { useReceiptStore } from "@/app/store/projectDetails/receiptsStore";
+import { usePurchaseStore } from "@/app/store/receiptDetails/purchaseStore";
 import { useState } from "react";
 
 interface ChangeStoreModalProps {
@@ -12,15 +13,24 @@ interface ChangeStoreModalProps {
 }
 
 export default function ChangeStoreModal({ receiptId }: ChangeStoreModalProps) {
-  const { closeChangeStoreModal } = useModalStore();
+  const { closeChangeStoreModal, isInEditMode } = useModalStore();
   const receipt = useReceiptStore((state) => state.getReceiptById(receiptId));
   const updateReceipt = useReceiptStore((state) => state.updateReceipt);
+  const { setStoreName } = usePurchaseStore();
 
-  const [storeName, setStoreName] = useState(receipt?.address || "");
+  const [storeName, setLocalStoreName] = useState(receipt?.address || "");
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+
+    // Update the receipt store
     updateReceipt(receiptId, { address: storeName });
+
+    // If in edit mode, also update the purchase store
+    if (isInEditMode) {
+      setStoreName(storeName);
+    }
+
     closeChangeStoreModal?.();
   };
 
@@ -37,7 +47,7 @@ export default function ChangeStoreModal({ receiptId }: ChangeStoreModalProps) {
             className="w-full bg-white"
             type="text"
             value={storeName}
-            onChange={(e) => setStoreName(e.target.value)}
+            onChange={(e) => setLocalStoreName(e.target.value)}
             required
           />
         </div>

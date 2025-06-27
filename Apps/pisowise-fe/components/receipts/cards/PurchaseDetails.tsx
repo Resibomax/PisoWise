@@ -14,10 +14,7 @@ interface PurchaseDeetsProps {
   isEditMode?: boolean;
 }
 
-export default function DetailsCard({
-  receiptId,
-  isEditMode = false,
-}: PurchaseDeetsProps) {
+export default function DetailsCard({ receiptId }: PurchaseDeetsProps) {
   const { getReceiptById } = useReceiptStore();
   const receipt = getReceiptById(receiptId);
   const { openImageModal, openChangeStoreModal, openChangeDateModal } =
@@ -70,22 +67,20 @@ export default function DetailsCard({
             <div className="flex flex-col gap-4">
               <div className="flex items-center gap-2">
                 <Store className="h-4 w-4" />
-                <p className="text-sm">
-                  {receipt.address || "No address provided"}
-                </p>
+                <p className="text-sm">{storeName || "No address provided"}</p>
               </div>
               <div className="flex items-center gap-2">
                 <Calendar className="h-4 w-4" />
-                <p className="text-sm">{receipt.date}</p>
+                <p className="text-sm">{date || "No date provided"}</p>
               </div>
             </div>
 
             <div className="flex flex-row gap-2 justify-end w-full">
               <Button className="bg-[#349868]" onClick={openChangeStoreModal}>
-                {receipt.address ? "Change Store" : "Add Store"}
+                {storeName ? "Change Store" : "Add Store"}
               </Button>
               <Button className="bg-[#349868]" onClick={openChangeDateModal}>
-                {receipt.date ? "Change Date" : "Add Date"}
+                {date ? "Change Date" : "Add Date"}
               </Button>
             </div>
           </div>

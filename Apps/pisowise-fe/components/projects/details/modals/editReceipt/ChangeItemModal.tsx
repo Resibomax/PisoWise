@@ -9,7 +9,6 @@ import { usePurchaseStore } from "@/app/store/receiptDetails/purchaseStore";
 
 export default function ChangeStoreModal() {
   const { closeChangeItemModal } = useModalStore();
-  const { addItem } = usePurchaseStore();
   const { items, editingIndex, editItem, setEditingIndex } = usePurchaseStore();
 
   const itemToEdit = editingIndex !== null ? items[editingIndex] : null;
@@ -43,29 +42,41 @@ export default function ChangeStoreModal() {
 
   return (
     <DialogContent className="bg-[#FBF5F3] text-[#1B1212] rounded-[12px]">
-      <DialogTitle>Edit Item</DialogTitle>
+      <DialogTitle className="font-Ember font-medium text-[24px] tracking-[0.48px] text-left">
+        {editingIndex !== null ? `Edit Item ${editingIndex + 1}` : "Edit Item"}
+      </DialogTitle>
       <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-        <Input
-          value={itemName}
-          onChange={(e) => setItemName(e.target.value)}
-          placeholder="Item name"
-          required
-        />
-        <Input
-          type="number"
-          value={price}
-          onChange={(e) => setPrice(e.target.value)}
-          placeholder="Price"
-          required
-        />
-        <Input
-          type="number"
-          value={quantity}
-          onChange={(e) => setQuantity(e.target.value)}
-          placeholder="Quantity"
-          required
-        />
-        <Button type="submit">Save</Button>
+        <div>
+          <Input
+            className="w-full bg-white"
+            type="text"
+            value={itemName}
+            onChange={(e) => setItemName(e.target.value)}
+            required
+          />
+        </div>
+
+        <div>
+          <p className="mb-1.5">Quantity</p>
+          <Input
+            className="w-full bg-white"
+            type="number"
+            min={1}
+            value={quantity}
+            onChange={(e) => setQuantity(e.target.value)}
+            required
+          />
+        </div>
+
+        <div className="flex flex-col gap-2 justify-end">
+          <Button
+            type="submit"
+            className="bg-[#246A49] text-white text-[16px] font-normal font-Ember rounded-[12px]"
+            variant="outline"
+          >
+            Save
+          </Button>
+        </div>
       </form>
     </DialogContent>
   );

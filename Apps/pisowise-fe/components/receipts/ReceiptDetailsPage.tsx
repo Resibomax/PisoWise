@@ -14,6 +14,8 @@ import ChangeStoreModal from "@/components/projects/details/modals/editReceipt/C
 import ChangeDateModal from "@/components/projects/details/modals/editReceipt/ChangeDateModal";
 import ChangeItemModal from "@/components/projects/details/modals/editReceipt/ChangeItemModal";
 import AddItemModal from "@/components/projects/details/modals/AddItemModal";
+import { usePurchaseStore } from "@/app/store/receiptDetails/purchaseStore";
+import { useEffect } from "react";
 
 export default function ProjectReceiptDetailsPage() {
   const { id: projectId, receiptId } = useParams();
@@ -25,9 +27,20 @@ export default function ProjectReceiptDetailsPage() {
   const { isChangeItemModalOpen, closeChangeItemModal } = useModalStore();
   const { isAddItemModalOpen, closeAddItemModal } = useModalStore();
 
+  const updateReceipt = useReceiptStore((state) => state.updateReceipt);
+  const toggleEditModeOff = useModalStore((state) => state.toggleEditModeOff);
+  const { storeName, date, items, initializeFromReceipt } = usePurchaseStore();
+
   const projectIdString = Array.isArray(projectId) ? projectId[0] : projectId;
   const receiptIdString = Array.isArray(receiptId) ? receiptId[0] : receiptId;
   const receipt = getReceiptById(receiptIdString || "");
+
+  // Initialize purchase store when entering edit mode
+  useEffect(() => {
+    if (isInEditMode && receipt) {
+      initializeFromReceipt(receipt);
+    }
+  }, [isInEditMode, receipt, initializeFromReceipt]);
 
   if (!receipt) {
     return (
@@ -57,7 +70,22 @@ export default function ProjectReceiptDetailsPage() {
           {isInEditMode && (
             <Button
               className="flex flex-row bg-[#349868] text-[#FBF5F3] rounded-[12px] w-full mt-4"
-              onClick={() => {}}
+              onClick={() => {
+                if (!receiptIdString) return;
+
+                updateReceipt(receiptIdString, {
+                  address: storeName,
+                  date,
+                  items: items.map((item) => ({
+                    id: crypto.randomUUID(),
+                    name: item.itemName,
+                    quantity: item.quantity,
+                    price: item.price,
+                  })),
+                });
+
+                toggleEditModeOff();
+              }}
             >
               <Check className="h-5 w-5" />
               <span className="text-[16px]">Save Edit</span>
