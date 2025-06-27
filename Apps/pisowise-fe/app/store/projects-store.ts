@@ -22,6 +22,7 @@ interface ProjectsState {
   updateProject: (projectId: string, updates: Partial<Project>) => void;
   deleteProject: (projectId: string) => void;
   clearProjects: () => void;
+  getProjectById: (projectId: string) => Project | null;
 }
 
 const API_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
@@ -84,5 +85,12 @@ export const useProjectsStore = create<ProjectsState>((set, get) => ({
 
   clearProjects: () => {
     set({ projects: [], error: null, isLoading: false });
+  },
+
+  getProjectById: (projectId: string): Project | null => {
+    const state = get();
+    return (
+      state.projects.find((project) => project.project_id === projectId) || null
+    );
   },
 }));
