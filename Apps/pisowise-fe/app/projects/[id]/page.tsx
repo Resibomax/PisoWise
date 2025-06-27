@@ -16,7 +16,6 @@ import Loader from "@/components/ui/loader";
 export default function ProjectDetailsPage() {
   const params = useParams();
   const { getProjectById } = useProjectsStore();
-  const { openEditModal } = useModalStore();
   const { isAddReceiptButtonPressed, isManualReceiptButtonPressed } =
     useModalStore();
 
