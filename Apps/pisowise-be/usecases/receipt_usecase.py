@@ -1,3 +1,4 @@
+from fastapi import HTTPException
 from sqlalchemy.orm import Session
 from repositories.receipt_repository import ReceiptRepository
 from models.base import Receipt
@@ -15,7 +16,14 @@ class ReceiptUseCase:
         return self.repo.get_all_receipts()
 
     def get_receipts_by_project_id_usecase(self, project_id: str) -> List[Receipt]:
-        return self.repo.get_receipts_by_project_id(project_id)
+        if project_id is None:
+            raise HTTPException(status_code=400, detail="project_id is required")
+
+        receipt = self.repo.get_receipts_by_project_id(project_id)
+        if not receipt:
+            raise HTTPException(status_code=404, detail="No receipts found for this project")
+
+        return receipt
 
     def update_receipt_usecase(
         self, receipt_id: str, updates: ReceiptUpdate

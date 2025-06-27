@@ -27,6 +27,8 @@ class ItemUseCase:
 
     def get_items_by_receipt_id_usecase(self, receipt_id: str) -> List[ItemResponse]:
         items = self.repo.get_items_by_receipt_id(receipt_id)
+        if not items:
+            raise HTTPException(status_code=404, detail=f"No items found in receipt {receipt_id}")
         return [ItemResponse.model_validate(i) for i in items]
 
     def update_item_usecase(self, item_id: str, updates: ItemUpdate) -> ItemResponse:
