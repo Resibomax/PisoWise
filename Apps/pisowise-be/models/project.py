@@ -8,6 +8,7 @@ class ProjectCreate(BaseModel):
     name: str
     description: Optional[str] = None
     budget: float
+    amount_spent: float
     creation_date: date
 
     class Config:
@@ -18,6 +19,7 @@ class ProjectUpdate(BaseModel):
     name: Optional[str] = None
     description: Optional[str] = None
     budget: Optional[float] = None
+    amount_spent: float
 
     class Config:
         from_attributes = True
@@ -29,6 +31,7 @@ class ProjectResponse(BaseModel):
     name: str
     description: Optional[str] = None
     budget: float 
+    amount_spent: float
     creation_date: date
 
     class Config:
