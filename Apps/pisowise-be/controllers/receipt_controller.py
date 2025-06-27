@@ -1,8 +1,8 @@
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, Query
 from sqlalchemy.orm import Session
 from models.receipt import ReceiptCreate, ReceiptUpdate, ReceiptResponse
 from usecases.receipt_usecase import ReceiptUseCase
-from typing import List
+from typing import List, Optional
 from db.database import get_db
 
 receipt_router = APIRouter()
@@ -13,14 +13,11 @@ def create_receipt_usecase(receipt: ReceiptCreate, db: Session = Depends(get_db)
     return uc.create_receipt_usecase(receipt)
 
 @receipt_router.get("/receipts", response_model=List[ReceiptResponse])
-def get_all_receipts_usecase(db: Session = Depends(get_db)):
+def get_all_receipts_usecase(project_id: Optional[str] = Query(default=None), db: Session = Depends(get_db)):
     uc = ReceiptUseCase(db)
+    if project_id:
+        return uc.get_receipts_by_project_id_usecase(project_id)
     return uc.get_all_receipts_usecase()
-
-@receipt_router.get("/receipts/{project_id}", response_model=List[ReceiptResponse])
-def get_all_receipts_usecase(project_id: str, db: Session = Depends(get_db)):
-    uc = ReceiptUseCase(db)
-    return uc.get_receipts_by_project_id_usecase(project_id)
 
 @receipt_router.put("/receipts/{receipt_id}", response_model=ReceiptResponse)
 def update_receipt_usecase(
