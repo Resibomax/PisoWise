@@ -23,6 +23,7 @@ class Project(Base):
     name = Column(String, nullable=False)
     description = Column(String, nullable=True)
     budget = Column(Float, nullable=False)
+    amount_spent = Column(Float, nullable=False)
     creation_date = Column(Date, nullable=False)
 
     # relationship to the User model
