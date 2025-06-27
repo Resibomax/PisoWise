@@ -6,19 +6,81 @@ import ProjectCard from "./cards/ProjectCard";
 import CreateProject from "./cards/CreateProjectCard";
 import { CreateProjectModal } from "./modal/CreateProjectModal";
 import { EditProjectModal } from "./modal/EditprojectModal";
-import { useProjectStore } from "@/app/store/projectsPage/projectStore";
 import { useModalStore } from "@/app/store/projectsPage/modalStore";
 import NoProjectsCard from "./cards/NoProjectsCard";
-import Loader from "@/components/ui/loader"; // Assuming you have a Loader component
+import Loader from "@/components/ui/loader";
+import { useEffect, useState } from "react";
+
+interface Project {
+  id: string;
+  name: string;
+  description: string;
+  budget: number;
+  spent?: number;
+}
 
 export default function ProjectsPage() {
-  const { projects } = useProjectStore(); // Assuming `projects` is managed in the store
-  const { openCreateModal, openEditModal } = useModalStore();
+  const [projects, setProjects] = useState<Project[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const { openCreateModal } = useModalStore();
 
-  if (!projects) {
+  const API_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
+
+  useEffect(() => {
+    const fetchProjects = async () => {
+      try {
+        setIsLoading(true);
+        setError(null);
+
+        const response = await fetch(`${API_URL}/projects`, {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const data = await response.json();
+        console.log("Projects fetched:", data);
+
+        setProjects(data);
+
+        data.forEach((project: Project, index: number) => {
+          console.log(`Project ${index}:`, project);
+        });
+      } catch (error) {
+        console.error("Error fetching projects:", error);
+        setError(
+          error instanceof Error ? error.message : "Failed to fetch projects",
+        );
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchProjects();
+  }, [API_URL]);
+
+  if (isLoading) {
     return (
       <div className="flex justify-center items-center h-[300px]">
-        <Loader /> {/* Display the Loader component */}
+        <Loader />
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="flex justify-center items-center h-[300px]">
+        <div className="text-center">
+          <p className="text-red-500 mb-4">Error loading projects: {error}</p>
+          <Button onClick={() => window.location.reload()} variant="outline">
+            Retry
+          </Button>
+        </div>
       </div>
     );
   }
@@ -47,18 +109,12 @@ export default function ProjectsPage() {
               <ProjectCard
                 key={project.id}
                 id={project.id}
-                title={project.title}
+                title={project.name}
                 description={project.description}
                 budget={project.budget}
-                spent={project.spent}
+                spent={project.spent || 0}
                 headerAction={
-                  <div
-                    className="p-1 hover:bg-white rounded-[12px] transition-color hover:text-black text-white"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      openEditModal(project);
-                    }}
-                  >
+                  <div className="p-1 hover:bg-white rounded-[12px] transition-color hover:text-black text-white">
                     <SquarePen className="w-5 h-5 cursor-pointer" />
                   </div>
                 }
@@ -71,7 +127,6 @@ export default function ProjectsPage() {
       </div>
 
       <CreateProjectModal />
-
       <EditProjectModal />
     </div>
   );
