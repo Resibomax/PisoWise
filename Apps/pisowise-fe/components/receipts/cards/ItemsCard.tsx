@@ -1,6 +1,10 @@
+import { useEffect } from "react";
+import { useModalStore } from "@/app/store/projectsPage/modalStore";
 import { useReceiptStore } from "@/app/store/projectDetails/receiptsStore";
-import { Card, CardContent } from "@/components/ui/card";
-import { Separator } from "@/components/ui/separator";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { Pencil, Trash2, PlusSquare, MinusSquare } from "lucide-react";
+import { usePurchaseStore } from "@/app/store/receiptDetails/purchaseStore";
+import { Button } from "@/components/ui/button";
 
 interface ItemsCardProps {
   receiptId: string;
@@ -8,8 +12,28 @@ interface ItemsCardProps {
 
 export default function ItemsCard({ receiptId }: ItemsCardProps) {
   const { getReceiptById } = useReceiptStore();
-
   const receipt = getReceiptById(receiptId);
+  const isInEditMode = useModalStore((state) => state.isInEditMode);
+
+  const { items, clear, addItem, updateItemQuantity, removeItem } =
+    usePurchaseStore();
+  const { setEditingIndex } = usePurchaseStore();
+
+  const { openAddItemModal, openChangeItemModal } = useModalStore();
+
+  useEffect(() => {
+    if (isInEditMode && receipt) {
+      clear();
+      receipt.items.forEach((item) => {
+        addItem({
+          itemName: item.name,
+          quantity: item.quantity,
+          price: item.price,
+        });
+      });
+    }
+  }, [isInEditMode, receipt, clear, addItem]);
+
   if (!receipt) {
     return (
       <div>
@@ -19,34 +43,96 @@ export default function ItemsCard({ receiptId }: ItemsCardProps) {
     );
   }
 
+  const itemsToRender = isInEditMode ? items : receipt.items;
+
   return (
-    <Card className="bg-[#1B1212] border-none shadow-lg hover:shadow-xl transition-shadow rounded-[12px] text-white w-full">
-      <CardContent className="p-5 flex flex-col gap-[20px]">
-        <div className="flex-shrink-0">
-          <p className="font-[Ember] text-[24px]">
-            Items ({receipt.totalItems})
-          </p>
-        </div>
-        <div className="h-[230px] lg:h-[400px] overflow-y-auto custom-scrollbar px-3 lg:px-4">
-          {receipt.items.map((item) => (
-            <div key={item.id} className="mb-2">
-              <div className="flex items-start justify-between">
-                <div className="mb-2">
-                  <p className="font-roboto-bld text-[14px] ">{item.name}</p>
-                  <p className="font-roboto-light text-[14px] text-[#8B8483]">
-                    Qty: {item.quantity}
-                  </p>
-                </div>
-                <p className="font-roboto-bld text-[14px]">
-                  {" "}
-                  ₱{item.price.toLocaleString()}
-                </p>
+    <Card className="p-6 bg-[#1B1212] text-[#FBF5F3] rounded-[12px] md:h-[480px] h-auto flex flex-col">
+      <CardHeader className="flex flex-col items-start mb-4">
+        <h2 className="text-lg font-roboto-bld">
+          Items ({itemsToRender.length})
+        </h2>
+      </CardHeader>
+
+      <CardContent className="flex-1 overflow-y-auto space-y-4 pr-2 custom-scrollbar">
+        {itemsToRender.length === 0 ? (
+          <div className="hidden justify-center items-center bg-[#123524] rounded-[12px] h-full md:flex">
+            <p className="text-[#49C187]">No items added</p>
+          </div>
+        ) : (
+          itemsToRender.map((item, index) => (
+            <div
+              key={index}
+              className="flex flex-col justify-between text-sm bg-[#1B1212]"
+            >
+              <div className="flex justify-between items-center text-[#8B8483] font-roboto-bld text-[20px] mb-1">
+                <span>#{index + 1}</span>
+                {isInEditMode && (
+                  <div className="flex space-x-2">
+                    <button
+                      onClick={() => {
+                        setEditingIndex(index);
+                        openChangeItemModal?.();
+                      }}
+                    >
+                      <Pencil className="w-5 h-5 text-white" />
+                    </button>
+                    <button onClick={() => removeItem(index)}>
+                      <Trash2 className="w-5 h-5 text-red-500" />
+                    </button>
+                  </div>
+                )}
               </div>
-              <Separator />
+
+              <div className="flex flex-row justify-between items-center font-roboto-bld">
+                <span>
+                  {("itemName" in item ? item.itemName : item.name) ??
+                    "Unnamed item"}
+                </span>
+                <span>₱{(item.price * item.quantity).toFixed(2)}</span>
+              </div>
+
+              {isInEditMode ? (
+                <div className="flex items-center space-x-2 mt-1">
+                  <span className="text-[#C4C4C4]">Qty:</span>
+                  <button
+                    onClick={() => updateItemQuantity(index, item.quantity - 1)}
+                  >
+                    <MinusSquare className="w-5 h-5 text-white cursor-pointer" />
+                  </button>
+                  <span className="text-[#49C187] font-bold">
+                    {item.quantity}
+                  </span>
+                  <button
+                    onClick={() => updateItemQuantity(index, item.quantity + 1)}
+                  >
+                    <PlusSquare className="w-5 h-5 text-white cursor-pointer" />
+                  </button>
+                </div>
+              ) : (
+                <span className="font-roboto-light text-[#C4C4C4]">
+                  Qty: {item.quantity}
+                </span>
+              )}
+
+              <hr className="mt-4 mb-2 border-t border-[#349868]" />
             </div>
-          ))}
-        </div>
+          ))
+        )}
       </CardContent>
+
+      {isInEditMode && (
+        <div className="flex flex-row gap-2 justify-end mt-4">
+          <Button
+            className="border border-[#349868] bg-transparent"
+            onClick={clear}
+          >
+            Reset
+          </Button>
+          <Button className="bg-[#349868]" onClick={openAddItemModal}>
+            Add Item
+          </Button>
+        </div>
+      )}
     </Card>
   );
 }

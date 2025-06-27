@@ -1,11 +1,20 @@
 import { create } from "zustand";
 import type { Project } from "@/app/projects/mockProject";
+import { usePurchaseStore } from "@/app/store/receiptDetails/purchaseStore";
 
 interface ModalStore {
   isCreateModalOpen: boolean;
   isEditModalOpen: boolean;
   isConfirmDeleteModalOpen?: boolean;
   isAddReceiptButtonPressed: boolean;
+  isManualReceiptButtonPressed?: boolean;
+  isAddStoreModalOpen: boolean;
+  isAddDateModalOpen: boolean;
+  isAddItemModalOpen?: boolean;
+  isChangeStoreModalOpen: boolean;
+  isChangeDateModalOpen: boolean;
+  isChangeItemModalOpen?: boolean;
+  isInEditMode: boolean;
   selectedProject: Project | null;
   isImageModalOpen?: boolean;
 
@@ -17,8 +26,25 @@ interface ModalStore {
   closeConfirmDeleteModal: () => void;
   openAddReceiptPage: () => void;
   closeAddReceiptPage: () => void;
+  openAddStoreModal: () => void;
+  closeAddStoreModal: () => void;
+  openAddDateModal: () => void;
+  closeAddDateModal: () => void;
+  openAddItemModal?: () => void;
+  closeAddItemModal?: () => void;
+  openChangeStoreModal?: () => void;
+  closeChangeStoreModal?: () => void;
+  openChangeDateModal?: () => void;
+  closeChangeDateModal?: () => void;
+  openChangeItemModal?: () => void;
+  closeChangeItemModal?: () => void;
+  openManualReceipt?: () => void;
+  closeManualReceipt?: () => void;
+  setManualInput: (value: boolean) => void;
   openImageModal?: () => void;
   closeImageModal?: () => void;
+  toggleEditModeOn: () => void;
+  toggleEditModeOff: () => void;
 }
 
 export const useModalStore = create<ModalStore>((set) => ({
@@ -26,8 +52,16 @@ export const useModalStore = create<ModalStore>((set) => ({
   isEditModalOpen: false,
   isConfirmDeleteModalOpen: false,
   isAddReceiptButtonPressed: false,
+  isManualReceiptButtonPressed: false,
+  isAddStoreModalOpen: false,
+  isAddDateModalOpen: false,
+  isAddItemModalOpen: false,
+  isChangeStoreModalOpen: false,
+  isChangeDateModalOpen: false,
+  isChangeItemModalOpen: false,
   selectedProject: null,
   isImageModalOpen: false,
+  isInEditMode: false,
 
   openCreateModal: () => set({ isCreateModalOpen: true }),
   closeCreateModal: () => set({ isCreateModalOpen: false }),
@@ -37,6 +71,35 @@ export const useModalStore = create<ModalStore>((set) => ({
 
   openAddReceiptPage: () => set({ isAddReceiptButtonPressed: true }),
   closeAddReceiptPage: () => set({ isAddReceiptButtonPressed: false }),
+
+  openAddStoreModal: () => set({ isAddStoreModalOpen: true }),
+  closeAddStoreModal: () => set({ isAddStoreModalOpen: false }),
+
+  openAddDateModal: () => set({ isAddDateModalOpen: true }),
+  closeAddDateModal: () => set({ isAddDateModalOpen: false }),
+
+  openAddItemModal: () => set({ isAddItemModalOpen: true }),
+  closeAddItemModal: () => set({ isAddItemModalOpen: false }),
+
+  openChangeStoreModal: () => set({ isChangeStoreModalOpen: true }),
+  closeChangeStoreModal: () => set({ isChangeStoreModalOpen: false }),
+
+  openChangeDateModal: () => set({ isChangeDateModalOpen: true }),
+  closeChangeDateModal: () => set({ isChangeDateModalOpen: false }),
+
+  openChangeItemModal: () => set({ isChangeItemModalOpen: true }),
+  closeChangeItemModal: () => {
+    usePurchaseStore.getState().setEditingIndex(null);
+    set({ isChangeItemModalOpen: false });
+  },
+
+  openManualReceipt: () => set({ isManualReceiptButtonPressed: true }),
+  closeManualReceipt: () => set({ isManualReceiptButtonPressed: false }),
+
+  setManualInput: (value) => set({ isManualReceiptButtonPressed: value }),
+
+  toggleEditModeOn: () => set({ isInEditMode: true }),
+  toggleEditModeOff: () => set({ isInEditMode: false }),
 
   openEditModal: (project: Project) => {
     set({

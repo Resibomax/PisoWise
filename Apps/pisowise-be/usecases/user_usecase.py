@@ -5,7 +5,6 @@ from models.base import User
 from models.user import UserCreate, UserResponse
 from typing import List
 
-
 class UserUseCase:
     def __init__(self, db: Session):
         self.repo = UserRepository(db)

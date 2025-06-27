@@ -1,31 +1,17 @@
 "use client";
 
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
-import { useReceiptStore } from "@/app/store/projectDetails/receiptsStore";
+import { usePurchaseStore } from "@/app/store/receiptDetails/purchaseStore";
 
-interface ItemsCardProps {
-  receiptId: string;
-}
+export default function ItemsCard() {
+  const { items } = usePurchaseStore();
 
-export default function ItemsCard({ receiptId }: ItemsCardProps) {
-  const { getReceiptById } = useReceiptStore();
-  const receipt = getReceiptById(receiptId);
-
-  if (!receipt) {
-    return (
-      <div>
-        <h1>Receipt Not Found</h1>
-        <p>The receipt you are looking for does not exist.</p>
-      </div>
-    );
-  }
-
-  const subtotal = receipt.items.reduce(
+  const subtotal = items.reduce(
     (acc, item) => acc + (item.price / 1.12) * item.quantity,
     0,
   );
 
-  const total = receipt.items.reduce(
+  const total = items.reduce(
     (acc, item) => acc + item.price * item.quantity,
     0,
   );

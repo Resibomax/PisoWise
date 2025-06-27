@@ -6,7 +6,6 @@ from models.base import Item
 from models.item import ItemCreate, ItemUpdate, ItemResponse
 from typing import List
 
-
 class ItemUseCase:
     def __init__(self, db: Session):
         self.repo = ItemRepository(db)
