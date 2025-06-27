@@ -7,7 +7,7 @@ interface Project {
   name: string;
   description: string;
   budget: number;
-  spent?: number;
+  amount_spent: number;
 }
 
 interface ProjectsState {
@@ -36,7 +36,7 @@ export const useProjectsStore = create<ProjectsState>((set, get) => ({
       set({ isLoading: true, error: null });
 
       const headers = await useAuthStore.getState().getAuthHeaders();
-      const url = `${API_URL}/projects/${userId}`;
+      const url = `${API_URL}/projects?user_id=${userId}`;
 
       const response = await fetch(url, { headers });
 
