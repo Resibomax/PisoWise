@@ -8,25 +8,25 @@ from db.database import get_db
 receipt_router = APIRouter()
 
 @receipt_router.post("/receipts", response_model=ReceiptResponse)
-def create_receipt_usecase(receipt: ReceiptCreate, db: Session = Depends(get_db)):
+def create_receipt(receipt: ReceiptCreate, db: Session = Depends(get_db)):
     uc = ReceiptUseCase(db)
     return uc.create_receipt_usecase(receipt)
 
 @receipt_router.get("/receipts", response_model=List[ReceiptResponse])
-def get_all_receipts_usecase(project_id: Optional[str] = Query(default=None), db: Session = Depends(get_db)):
+def get_receipts(project_id: Optional[str] = Query(default=None), db: Session = Depends(get_db)):
     uc = ReceiptUseCase(db)
     if project_id:
         return uc.get_receipts_by_project_id_usecase(project_id)
     return uc.get_all_receipts_usecase()
 
 @receipt_router.put("/receipts/{receipt_id}", response_model=ReceiptResponse)
-def update_receipt_usecase(
+def update_receipt(
     receipt_id: str, updates: ReceiptUpdate, db: Session = Depends(get_db)
 ):
     uc = ReceiptUseCase(db)
     return uc.update_receipt_usecase(receipt_id, updates)
 
 @receipt_router.delete("/receipts/{receipt_id}", response_model=bool)
-def delete_receipt_usecase(receipt_id: str, db: Session = Depends(get_db)):
+def delete_receipt(receipt_id: str, db: Session = Depends(get_db)):
     uc = ReceiptUseCase(db)
     return uc.delete_receipt_usecase(receipt_id)
