@@ -5,8 +5,6 @@ import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Pencil, Trash2, PlusSquare, MinusSquare } from "lucide-react";
 import { usePurchaseStore } from "@/app/store/receiptDetails/purchaseStore";
 import { Button } from "@/components/ui/button";
-import { Dialog } from "@/components/ui/dialog";
-import ChangeItemModal from "@/components/projects/details/modals/editReceipt/ChangeItemModal";
 
 interface ItemsCardProps {
   receiptId: string;
@@ -17,7 +15,9 @@ export default function ItemsCard({ receiptId }: ItemsCardProps) {
   const receipt = getReceiptById(receiptId);
   const isInEditMode = useModalStore((state) => state.isInEditMode);
 
-  const { items, clear, addItem, updateItemQuantity } = usePurchaseStore();
+  const { items, clear, addItem, updateItemQuantity, removeItem } =
+    usePurchaseStore();
+  const { setEditingIndex, editingIndex } = usePurchaseStore();
 
   const {
     openAddItemModal,
@@ -73,10 +73,17 @@ export default function ItemsCard({ receiptId }: ItemsCardProps) {
                 <span>#{index + 1}</span>
                 {isInEditMode && (
                   <div className="flex space-x-2">
-                    <button onClick={openChangeItemModal}>
+                    <button
+                      onClick={() => {
+                        setEditingIndex(index); // this will store which item to edit
+                        openChangeItemModal?.(); // open modal
+                      }}
+                    >
                       <Pencil className="w-5 h-5 text-white" />
                     </button>
-                    <Trash2 className="w-5 h-5 text-red-500" />
+                    <button onClick={() => removeItem(index)}>
+                      <Trash2 className="w-5 h-5 text-red-500" />
+                    </button>
                   </div>
                 )}
               </div>

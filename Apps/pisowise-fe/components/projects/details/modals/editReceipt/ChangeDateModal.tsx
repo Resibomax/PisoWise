@@ -5,23 +5,28 @@ import { DialogContent, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { useModalStore } from "@/app/store/projectsPage/modalStore";
 import { Calendar } from "@/components/ui/calendar";
-import { usePurchaseStore } from "@/app/store/receiptDetails/purchaseStore";
+import { useReceiptStore } from "@/app/store/projectDetails/receiptsStore";
 
-export default function AddDateModal() {
-  const { closeAddDateModal } = useModalStore();
-  const { setDate } = usePurchaseStore();
+interface ChangeDateModalProps {
+  receiptId: string;
+}
 
-  const [selectedDate, setSelectedDate] = useState<Date>(new Date());
+export default function ChangeDateModal({ receiptId }: ChangeDateModalProps) {
+  const { closeChangeDateModal } = useModalStore();
+  const receipt = useReceiptStore((state) => state.getReceiptById(receiptId));
+  const updateReceipt = useReceiptStore((state) => state.updateReceipt);
+
+  const [selectedDate, setSelectedDate] = useState<Date>(
+    receipt?.date ? new Date(receipt.date) : new Date(),
+  );
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (selectedDate) {
-      const formatted = selectedDate.toISOString().split("T")[0];
-      setDate(formatted);
-      console.log("Selected Date:", formatted);
+      const formatted = selectedDate.toLocaleDateString("en-CA");
+      updateReceipt(receiptId, { date: formatted });
     }
-    closeAddDateModal();
-    setSelectedDate(new Date());
+    closeChangeDateModal?.();
   };
 
   return (
@@ -34,17 +39,15 @@ export default function AddDateModal() {
         <Calendar
           mode="single"
           selected={selectedDate}
-          onSelect={setSelectedDate}
+          onSelect={(date) => date && setSelectedDate(date)}
           defaultMonth={new Date()}
           className="w-full bg-transparent border-2 border-[#246A49] rounded-[6px]"
-          required
         />
 
         <div className="flex flex-col gap-2 justify-end">
           <Button
             type="submit"
             className="bg-[#246A49] text-white text-[16px] font-normal font-Ember rounded-[12px]"
-            variant="outline"
           >
             Save
           </Button>

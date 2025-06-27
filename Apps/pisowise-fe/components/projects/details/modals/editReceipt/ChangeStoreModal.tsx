@@ -4,15 +4,23 @@ import { DialogContent, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useModalStore } from "@/app/store/projectsPage/modalStore";
-import { usePurchaseStore } from "@/app/store/receiptDetails/purchaseStore";
+import { useReceiptStore } from "@/app/store/projectDetails/receiptsStore";
+import { useState } from "react";
 
-export default function AddStoreModal() {
+interface ChangeStoreModalProps {
+  receiptId: string;
+}
+
+export default function ChangeStoreModal({ receiptId }: ChangeStoreModalProps) {
   const { closeChangeStoreModal } = useModalStore();
-  const { storeName, setStoreName } = usePurchaseStore();
+  const receipt = useReceiptStore((state) => state.getReceiptById(receiptId));
+  const updateReceipt = useReceiptStore((state) => state.updateReceipt);
+
+  const [storeName, setStoreName] = useState(receipt?.address || "");
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Store name:", storeName);
+    updateReceipt(receiptId, { address: storeName });
     closeChangeStoreModal?.();
   };
 
@@ -38,7 +46,6 @@ export default function AddStoreModal() {
           <Button
             type="submit"
             className="bg-[#246A49] text-white text-[16px] font-normal font-Ember rounded-[12px]"
-            variant="outline"
           >
             Done
           </Button>

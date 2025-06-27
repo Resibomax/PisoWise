@@ -70,10 +70,10 @@ export default function ProjectReceiptDetailsPage() {
         open={isChangeStoreModalOpen}
         onOpenChange={closeChangeStoreModal}
       >
-        <ChangeStoreModal />
+        <ChangeStoreModal receiptId={receiptIdString || ""} />
       </Dialog>
       <Dialog open={isChangeDateModalOpen} onOpenChange={closeChangeDateModal}>
-        <ChangeDateModal />
+        <ChangeDateModal receiptId={receiptIdString || ""} />
       </Dialog>
       <Dialog open={isChangeItemModalOpen} onOpenChange={closeChangeItemModal}>
         <ChangeItemModal />

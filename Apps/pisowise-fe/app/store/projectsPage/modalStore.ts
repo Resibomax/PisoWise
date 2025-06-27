@@ -1,5 +1,6 @@
 import { create } from "zustand";
 import type { Project } from "@/app/projects/mockProject";
+import { usePurchaseStore } from "@/app/store/receiptDetails/purchaseStore";
 
 interface ModalStore {
   isCreateModalOpen: boolean;
@@ -87,7 +88,10 @@ export const useModalStore = create<ModalStore>((set) => ({
   closeChangeDateModal: () => set({ isChangeDateModalOpen: false }),
 
   openChangeItemModal: () => set({ isChangeItemModalOpen: true }),
-  closeChangeItemModal: () => set({ isChangeItemModalOpen: false }),
+  closeChangeItemModal: () => {
+    usePurchaseStore.getState().setEditingIndex(null);
+    set({ isChangeItemModalOpen: false });
+  },
 
   openManualReceipt: () => set({ isManualReceiptButtonPressed: true }),
   closeManualReceipt: () => set({ isManualReceiptButtonPressed: false }),

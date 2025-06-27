@@ -22,12 +22,12 @@ export default function ItemsCard({ receiptId }: ItemsCardProps) {
 
   const subtotal = receipt.items.reduce(
     (acc, item) => acc + (item.price / 1.12) * item.quantity,
-    0
+    0,
   );
 
   const total = receipt.items.reduce(
     (acc, item) => acc + item.price * item.quantity,
-    0
+    0,
   );
 
   const tax = total - subtotal;
