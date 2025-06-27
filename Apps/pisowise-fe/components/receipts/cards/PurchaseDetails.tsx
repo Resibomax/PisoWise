@@ -80,7 +80,7 @@ export default function DetailsCard({
               </div>
             </div>
 
-            <div className="flex flex-row gap-2">
+            <div className="flex flex-row gap-2 justify-end w-full">
               <Button className="bg-[#349868]" onClick={openChangeStoreModal}>
                 {receipt.address ? "Change Store" : "Add Store"}
               </Button>

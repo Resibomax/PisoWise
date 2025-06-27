@@ -14,6 +14,7 @@ interface PurchaseState {
   setDate: (date: string) => void;
   addItem: (item: Item) => void;
   clear: () => void;
+  updateItemQuantity: (index: number, quantity: number) => void;
 }
 
 export const usePurchaseStore = create<PurchaseState>((set) => ({
@@ -24,4 +25,13 @@ export const usePurchaseStore = create<PurchaseState>((set) => ({
   setDate: (date) => set({ date }),
   addItem: (item) => set((state) => ({ items: [...state.items, item] })),
   clear: () => set({ items: [] }),
+  updateItemQuantity: (index: number, quantity: number) =>
+  set((state) => {
+    const updatedItems = [...state.items];
+    updatedItems[index] = {
+      ...updatedItems[index],
+      quantity: Math.max(1, quantity),
+    };
+    return { items: updatedItems };
+  }),
 }));
