@@ -17,6 +17,11 @@ def get_all_receipts_usecase(db: Session = Depends(get_db)):
     uc = ReceiptUseCase(db)
     return uc.get_all_receipts_usecase()
 
+@receipt_router.get("/receipts/{project_id}", response_model=List[ReceiptResponse])
+def get_all_receipts_usecase(project_id: str, db: Session = Depends(get_db)):
+    uc = ReceiptUseCase(db)
+    return uc.get_receipts_by_project_id_usecase(project_id)
+
 @receipt_router.put("/receipts/{receipt_id}", response_model=ReceiptResponse)
 def update_receipt_usecase(
     receipt_id: str, updates: ReceiptUpdate, db: Session = Depends(get_db)
