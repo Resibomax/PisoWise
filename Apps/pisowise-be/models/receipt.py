@@ -1,6 +1,7 @@
 from pydantic import BaseModel
-from typing import Optional
+from typing import Optional, List
 from datetime import date
+from models.item import ItemResponse
 
 class ReceiptCreate(BaseModel):
     project_id: str
@@ -19,6 +20,7 @@ class ReceiptResponse(BaseModel):
     total_amount: float
     transaction_date: date
     vendor_name: Optional[str] = None
+    items: Optional[List[ItemResponse]] = None
 
     class Config:
         from_attributes = True
