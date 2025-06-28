@@ -7,7 +7,7 @@ import { useModalStore } from "@/app/store/projectsPage/modalStore";
 import { ConfirmationModal } from "./modals/ConfirmationModal";
 
 interface Project {
-  title: string;
+  name: string;
 }
 
 interface ProjectHeaderProps {
@@ -44,7 +44,7 @@ export function ProjectHeader({ project, onEdit }: ProjectHeaderProps) {
       {/* Mobile-Tablet Header */}
       <div className="hidden flex-row items-center justify-between md:justify-start gap-6 w-full lg:flex">
         <p className="text-[24px] font-[Ember] text-white md:text-3xl">
-          {project.title}
+          {project.name}
         </p>
         <Button
           className="bg-[#1B1212] hover:bg-[#FBF5F3] hover:text-black text-white font-[Ember] rounded-[12px] text-[16px] cursor-pointer"
@@ -65,7 +65,7 @@ export function ProjectHeader({ project, onEdit }: ProjectHeaderProps) {
       {/*Desktop Header*/}
       <div className="flex flex-row items-center justify-between md:justify-start gap-6 w-full lg:hidden">
         <p className="text-[24px] font-[Ember] text-white md:text-3xl">
-          {project.title}
+          {project.name}
         </p>
         <Button
           className="bg-[#1B1212] hover:bg-[#FBF5F3] hover:text-black text-white font-[Ember] rounded-[12px] text-[16px] cursor-pointer"
