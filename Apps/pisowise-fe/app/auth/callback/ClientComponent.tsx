@@ -42,9 +42,9 @@ export default function AuthCallback() {
         const token = session.tokens?.idToken?.toString();
 
         const email =
-          (user as any)?.attributes?.email ||
+          (user as { attributes?: { email?: string } })?.attributes?.email ||
           user.signInDetails?.loginId ||
-          (session.tokens?.idToken as any)?.payload?.email;
+          (session.tokens?.idToken as { payload?: { email?: string } })?.payload?.email;
 
         if (!email) {
           throw new Error("User email is missing from all known sources.");
@@ -63,7 +63,7 @@ export default function AuthCallback() {
             headers: {
               Authorization: `Bearer ${token}`,
             },
-          }
+          },
         );
 
         const users = checkRes.data as Array<{ email: string }>;
@@ -82,7 +82,7 @@ export default function AuthCallback() {
                 "Content-Type": "application/json",
                 Authorization: `Bearer ${token}`,
               },
-            }
+            },
           );
           console.log("User created:", response.data);
         }
@@ -90,7 +90,7 @@ export default function AuthCallback() {
         setTimeout(() => {
           router.push("/projects");
         }, 800);
-      } catch (err: any) {
+      } catch (err: unknown) {
         let errorMessage = "Authentication failed";
 
         if (axios.isAxiosError(err)) {
