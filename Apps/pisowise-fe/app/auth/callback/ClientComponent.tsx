@@ -44,7 +44,8 @@ export default function AuthCallback() {
         const email =
           (user as { attributes?: { email?: string } })?.attributes?.email ||
           user.signInDetails?.loginId ||
-          (session.tokens?.idToken as { payload?: { email?: string } })?.payload?.email;
+          (session.tokens?.idToken as { payload?: { email?: string } })?.payload
+            ?.email;
 
         if (!email) {
           throw new Error("User email is missing from all known sources.");
@@ -137,13 +138,6 @@ export default function AuthCallback() {
         backgroundSize: "auto",
       }}
     >
-      {/* Logo */}
-      <div className="absolute top-6 left-1/2 transform -translate-x-1/2">
-        <div className="w-16 h-16 font-semibold text-[#FBF5F3] flex items-center justify-center text-xl">
-          Logo
-        </div>
-      </div>
-
       {/* Main content */}
       <div className="bg-[#FBF5F3] p-8 rounded-[12px] shadow-lg w-[90%] max-w-md mx-4">
         {error ? (
