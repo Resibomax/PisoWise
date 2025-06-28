@@ -12,6 +12,8 @@ import {
 } from "aws-amplify/auth";
 import { initializeAmplifyOAuth } from "@/lib/auth/amplify-oauth";
 import { handleOAuthCallback } from "@/lib/auth/oauth-handler";
+import { fetchAuthSession } from "@aws-amplify/core";
+import axios from "axios";
 
 interface User {
   email: string;
@@ -134,32 +136,61 @@ export const useAuthStore = create<AuthStore>((set, get) => ({
   clearError: () => set({ error: null }),
 
   signIn: async (email, password) => {
-    set({ isLoading: true, error: null });
-    try {
-      const { isSignedIn } = await signIn({ username: email, password });
-      if (isSignedIn) {
-        const currentUser = await getCurrentUser();
-        const attributes = await fetchUserAttributes();
-        set({
-          user: {
-            email: attributes?.email ?? email,
-            sub: currentUser.userId,
-            attributes,
-          },
-          isAuthenticated: true,
-          isLoading: false,
-          isLoginOpen: false,
-          hasCheckedAuth: true,
-        });
+  set({ isLoading: true, error: null });
+  try {
+    const { isSignedIn } = await signIn({ username: email, password });
+
+    if (isSignedIn) {
+      const currentUser = await getCurrentUser();
+      const attributes = await fetchUserAttributes();
+      const idToken = (await fetchAuthSession()).tokens?.idToken?.toString();
+
+      // Prepare payload
+      const userPayload = {
+        email: attributes?.email ?? email,
+        username: (attributes?.email ?? email).split("@")[0],
+      };
+
+      try {
+        await axios.post(
+          "https://8x7vhw6k4m.execute-api.ap-southeast-1.amazonaws.com/users",
+          userPayload,
+          {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${idToken}`,
+            },
+          }
+        );
+        console.log("Internal user pushed to DB");
+      } catch (pushErr: any) {
+        if (axios.isAxiosError(pushErr) && pushErr.response?.status === 409) {
+          console.log("User already exists in DB, skipping POST");
+        } else {
+          console.error("Error pushing user to DB:", pushErr);
+        }
       }
-    } catch (err: unknown) {
-      const message = isErrorWithMessage(err)
-        ? err.message
-        : "Failed to sign in";
-      console.error("Error signing in:", err);
-      set({ error: message, isLoading: false });
+
+      set({
+        user: {
+          email: userPayload.email,
+          sub: currentUser.userId,
+          attributes,
+        },
+        isAuthenticated: true,
+        isLoading: false,
+        isLoginOpen: false,
+        hasCheckedAuth: true,
+      });
     }
-  },
+  } catch (err: unknown) {
+    const message = isErrorWithMessage(err)
+      ? err.message
+      : "Failed to sign in";
+    console.error("Error signing in:", err);
+    set({ error: message, isLoading: false });
+  }
+},
 
   signInWithGoogle: async () => {
     set({ isLoading: true, error: null });
@@ -264,7 +295,7 @@ export const useAuthStore = create<AuthStore>((set, get) => ({
         user: null,
         isAuthenticated: false,
         isLoading: false,
-        hasCheckedAuth: true, // Keep this as true to prevent loading loop
+        hasCheckedAuth: true, 
       });
     } catch (err: unknown) {
       const message = isErrorWithMessage(err)
