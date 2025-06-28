@@ -1,0 +1,20 @@
+service: rds-ai-trigger-function
+
+provider:
+  name: aws
+  runtime: python3.11
+  region: ap-southeast-1
+  environment:
+    DB_SECRET_ID: rds!db-bac458ea-60cd-4434-904d-b7758b35c204
+
+plugins:
+  - serverless-python-requirements
+
+functions:
+  processRDSEvent:
+    handler: handler.lambda_handler
+
+custom:
+  pythonRequirements:
+    dockerizePip: true
+    useStaticCache: false

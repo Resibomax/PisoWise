@@ -1,0 +1,4 @@
+{
+  "project_id": "atm-monitoring",
+  "message": "ATM failed to dispense but money was deducted"
+}
