@@ -7,7 +7,7 @@ import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import Receipt from "../Receipt";
 import { useReceiptStore } from "@/app/store/receipt-store";
-import { useModalStore } from "@/app/store/projectsPage/modalStore";
+import { useModalStore } from "@/app/store/modal-store";
 import { useState, useEffect } from "react";
 import EditReceipt from "../EditReceipt";
 

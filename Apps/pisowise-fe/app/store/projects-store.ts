@@ -1,6 +1,7 @@
 import { create } from "zustand";
 import { useAuthStore } from "./auth-store";
 import axios from "axios";
+import { toast } from "sonner";
 
 interface Project {
   user_id: string;
@@ -15,11 +16,12 @@ interface ProjectsState {
   projects: Project[];
   isLoading: boolean;
   error: string | null;
-
-  // Actions
   fetchProjects: (userId: string) => Promise<void>;
   refetchProjects: (userId: string) => Promise<void>;
-  addProject: (project: Project) => void;
+  addProject: (
+    project: Omit<Project, "user_id" | "project_id">,
+    userId: string,
+  ) => Promise<void>;
   updateProject: (projectId: string, updates: Partial<Project>) => void;
   deleteProject: (projectId: string) => void;
   clearProjects: () => void;
@@ -36,28 +38,17 @@ export const useProjectsStore = create<ProjectsState>((set, get) => ({
   fetchProjects: async (userId: string) => {
     try {
       set({ isLoading: true, error: null });
-
       const headers = await useAuthStore.getState().getAuthHeaders();
-      const url = `${API_URL}/projects?user_id=${userId}`;
-
-      const response = await axios.get(url, { headers });
-
+      const response = await axios.get(
+        `${API_URL}/projects?user_id=${userId}`,
+        { headers },
+      );
       set({ projects: response.data, isLoading: false });
     } catch (error) {
-      console.error("Error fetching projects:", error);
-
-      let errorMessage = "Failed to fetch projects";
-
-      if (axios.isAxiosError(error)) {
-        errorMessage = error.response?.data?.message || error.message;
-      } else if (error instanceof Error) {
-        errorMessage = error.message;
-      }
-
-      set({
-        error: errorMessage,
-        isLoading: false,
-      });
+      const errorMessage = axios.isAxiosError(error)
+        ? error.response?.data?.message || error.message
+        : "Failed to fetch projects";
+      set({ error: errorMessage, isLoading: false });
     }
   },
 
@@ -65,13 +56,45 @@ export const useProjectsStore = create<ProjectsState>((set, get) => ({
     await get().fetchProjects(userId);
   },
 
-  addProject: (project: Project) => {
-    set((state) => ({
-      projects: [...state.projects, project],
-    }));
+  addProject: async (project, userId) => {
+    try {
+      set({ isLoading: true, error: null });
+      const headers = await useAuthStore.getState().getAuthHeaders();
+
+      const projectData = {
+        ...project,
+        user_id: userId,
+        amount_spent: 0,
+        creation_date: new Date().toISOString().split("T")[0],
+      };
+
+      const response = await axios.post(`${API_URL}/projects`, projectData, {
+        headers,
+      });
+
+      set((state) => ({
+        projects: [...state.projects, response.data],
+        isLoading: false,
+      }));
+
+      toast.success("Project created successfully", {
+        description: `"${project.name}" has been added to your projects.`,
+        style: { backgroundColor: "#349868", color: "white" },
+      });
+    } catch (error) {
+      const errorMessage = axios.isAxiosError(error)
+        ? error.response?.data?.message || error.message
+        : "Failed to create project";
+
+      set({ error: errorMessage, isLoading: false });
+      toast.error("Failed to create project", {
+        description: errorMessage,
+        style: { backgroundColor: "#E73648", color: "white" },
+      });
+    }
   },
 
-  updateProject: (projectId: string, updates: Partial<Project>) => {
+  updateProject: (projectId, updates) => {
     set((state) => ({
       projects: state.projects.map((project) =>
         project.project_id === projectId ? { ...project, ...updates } : project,
@@ -79,7 +102,7 @@ export const useProjectsStore = create<ProjectsState>((set, get) => ({
     }));
   },
 
-  deleteProject: (projectId: string) => {
+  deleteProject: (projectId) => {
     set((state) => ({
       projects: state.projects.filter(
         (project) => project.project_id !== projectId,
@@ -91,10 +114,9 @@ export const useProjectsStore = create<ProjectsState>((set, get) => ({
     set({ projects: [], error: null, isLoading: false });
   },
 
-  getProjectById: (projectId: string): Project | null => {
-    const state = get();
+  getProjectById: (projectId) => {
     return (
-      state.projects.find((project) => project.project_id === projectId) || null
+      get().projects.find((project) => project.project_id === projectId) || null
     );
   },
 }));

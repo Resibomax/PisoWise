@@ -4,10 +4,11 @@ import { Plus, SquarePen } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import ProjectCard from "./cards/ProjectCard";
 import CreateProject from "./cards/CreateProjectCard";
-import { useModalStore } from "@/app/store/projectsPage/modalStore";
+import { useModalStore } from "@/app/store/modal-store";
 import NoProjectsCard from "./cards/NoProjectsCard";
 import Loader from "@/components/ui/loader";
 import { useProjectsPage } from "@/app/hooks/use-projects-page";
+import { CreateProjectModal } from "./modal/CreateProjectModal";
 
 export default function ProjectsPage() {
   const { openCreateModal } = useModalStore();
@@ -100,6 +101,7 @@ export default function ProjectsPage() {
           </div>
         )}
       </div>
+      <CreateProjectModal />
     </div>
   );
 }

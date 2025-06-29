@@ -2,7 +2,7 @@
 
 import { useParams } from "next/navigation";
 import { useProjectsStore } from "@/app/store/projects-store";
-import { useModalStore } from "@/app/store/projectsPage/modalStore";
+import { useModalStore } from "@/app/store/modal-store";
 import { EditProjectModal } from "@/components/projects/modal/EditprojectModal";
 import { ProjectHeader } from "@/components/projects/details/Header";
 import AddReceipt from "@/components/projects/details/AddReceipt";

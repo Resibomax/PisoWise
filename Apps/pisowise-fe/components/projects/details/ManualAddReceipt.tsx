@@ -2,7 +2,7 @@
 
 import { Button } from "@/components/ui/button";
 import { Undo2, Plus } from "lucide-react";
-import { useModalStore } from "@/app/store/projectsPage/modalStore";
+import { useModalStore } from "@/app/store/modal-store";
 import { Dialog } from "@/components/ui/dialog";
 import PurchaseDetailsCard from "@/components/receipts/cards/addReceipt/PurchaseDetailsCard";
 import ItemsCard from "@/components/receipts/cards/addReceipt/ItemsCard";

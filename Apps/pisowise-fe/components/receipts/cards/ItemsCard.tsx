@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { useModalStore } from "@/app/store/projectsPage/modalStore";
+import { useModalStore } from "@/app/store/modal-store";
 import { useReceiptStore } from "@/app/store/projectDetails/receiptsStore";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Pencil, Trash2, PlusSquare, MinusSquare } from "lucide-react";

@@ -1,5 +1,5 @@
 import { useReceiptStore } from "@/app/store/projectDetails/receiptsStore";
-import { useModalStore } from "@/app/store/projectsPage/modalStore";
+import { useModalStore } from "@/app/store/modal-store";
 import Image from "next/image";
 
 import { Dialog, DialogContent } from "@/components/ui/dialog";

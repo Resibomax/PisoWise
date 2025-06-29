@@ -3,7 +3,7 @@
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Store, Calendar as CalendarIcon } from "lucide-react";
-import { useModalStore } from "@/app/store/projectsPage/modalStore";
+import { useModalStore } from "@/app/store/modal-store";
 import { usePurchaseStore } from "@/app/store/receiptDetails/purchaseStore";
 
 export default function PurchaseDetailsCard() {

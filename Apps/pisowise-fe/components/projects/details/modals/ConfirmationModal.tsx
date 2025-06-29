@@ -1,4 +1,4 @@
-import { useModalStore } from "@/app/store/projectsPage/modalStore";
+import { useModalStore } from "@/app/store/modal-store";
 import { useProjectStore } from "@/app/store/projectsPage/projectStore";
 import { Button } from "@/components/ui/button";
 import {
