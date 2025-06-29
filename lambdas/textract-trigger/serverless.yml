@@ -13,7 +13,9 @@ custom:
   bucketName: pisowise-textract-input-bucket-dev
   pythonRequirements:
     dockerizePip: true
+    useDownloadCache: false
     useStaticCache: false
+    pipCmdExtraArgs: --no-cache-dir
 
 functions:
   processS3Event:

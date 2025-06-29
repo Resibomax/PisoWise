@@ -3,10 +3,20 @@
 import json
 import urllib.parse
 import boto3
+import io
+from textract_functions.analyze_receipt import analyze_receipt
 
 print('Loading function')
 
-s3 = boto3.client('s3')
+# AWS Client
+try:
+    session = boto3.Session(region_name='ap-southeast-1')
+    s3_client = session.client('s3')
+    textract_client = session.client('textract')
+    rds_client = session.client('rds')
+except Exception as e:
+    print(f"Error creating AWS clients: {e}")
+
 
 
 def lambda_handler(event, context):
@@ -25,14 +35,23 @@ def lambda_handler(event, context):
         }
 
     try:
-        response = s3.get_object(Bucket=bucket, Key=key)
-        print("CONTENT TYPE: " + response['ContentType'])
+        document = s3_client.get_object(Bucket=bucket, Key=key)
+        textract_handler(bucket, key)
+        print("CONTENT TYPE: " + document['ContentType'])
         return {
             'statusCode': 200,
-            'body': json.dumps({'ContentType': response['ContentType']})
+            'body': json.dumps('Successfully extracted the receipt!')
         }
     except Exception as e:
         print(e)
-        print(f'Error getting object {key} from bucket {bucket}. Make sure they exist and your bucket is in the same region as this function.')
+        print(f'Error getting object {document} from bucket {bucket}. Make sure they exist and your bucket is in the same region as this function.')
         raise e
+
+def textract_handler(bucket, document_key):
+    print("Analyzing receipt...")
+    try:
+        analyze_receipt(s3_client, textract_client, bucket, document_key)
+    except Exception as e:
+        print(f"Error analyzing receipt: {e}")
+
 
