@@ -16,8 +16,11 @@ import Loader from "@/components/ui/loader";
 export default function ProjectDetailsPage() {
   const params = useParams();
   const { getProjectById } = useProjectsStore();
-  const { isAddReceiptButtonPressed, isManualReceiptButtonPressed } =
-    useModalStore();
+  const {
+    isAddReceiptButtonPressed,
+    isManualReceiptButtonPressed,
+    openEditModal,
+  } = useModalStore();
 
   const project = params.id ? getProjectById(params.id as string) : null;
 
@@ -36,7 +39,10 @@ export default function ProjectDetailsPage() {
       {!isAddReceiptButtonPressed ? (
         <>
           <div className="flex-shrink-0">
-            <ProjectHeader project={project} />
+            <ProjectHeader
+              project={project}
+              onEdit={() => openEditModal(project)}
+            />
           </div>
 
           {/* Mobile-Tablet layout */}

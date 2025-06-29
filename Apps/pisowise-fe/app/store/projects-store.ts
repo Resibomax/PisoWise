@@ -3,7 +3,7 @@ import { useAuthStore } from "./auth-store";
 import axios from "axios";
 import { toast } from "sonner";
 
-export interface Project {
+interface Project {
   user_id: string;
   project_id: string;
   name: string;
@@ -22,13 +22,22 @@ interface ProjectsState {
     project: Omit<Project, "user_id" | "project_id">,
     userId: string,
   ) => Promise<void>;
-  updateProject: (projectId: string, updates: Partial<Project>) => void;
-  deleteProject: (projectId: string) => void;
+  updateProject: (
+    projectId: string,
+    updates: Partial<Project>,
+  ) => Promise<void>;
+  deleteProject: (projectId: string) => Promise<void>;
   clearProjects: () => void;
   getProjectById: (projectId: string) => Project | null;
 }
 
 const API_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
+
+const handleError = (error: unknown): string => {
+  return axios.isAxiosError(error)
+    ? error.response?.data?.message || error.message
+    : "An unexpected error occurred";
+};
 
 export const useProjectsStore = create<ProjectsState>((set, get) => ({
   projects: [],
@@ -45,10 +54,7 @@ export const useProjectsStore = create<ProjectsState>((set, get) => ({
       );
       set({ projects: response.data, isLoading: false });
     } catch (error) {
-      const errorMessage = axios.isAxiosError(error)
-        ? error.response?.data?.message || error.message
-        : "Failed to fetch projects";
-      set({ error: errorMessage, isLoading: false });
+      set({ error: handleError(error), isLoading: false });
     }
   },
 
@@ -82,10 +88,7 @@ export const useProjectsStore = create<ProjectsState>((set, get) => ({
         style: { backgroundColor: "#349868", color: "white" },
       });
     } catch (error) {
-      const errorMessage = axios.isAxiosError(error)
-        ? error.response?.data?.message || error.message
-        : "Failed to create project";
-
+      const errorMessage = handleError(error);
       set({ error: errorMessage, isLoading: false });
       toast.error("Failed to create project", {
         description: errorMessage,
@@ -107,8 +110,9 @@ export const useProjectsStore = create<ProjectsState>((set, get) => ({
 
     try {
       set({ isLoading: true, error: null });
-      const authHeaders = await useAuthStore.getState().getAuthHeaders();
+      const headers = await useAuthStore.getState().getAuthHeaders();
 
+      // Optimistic update
       set((state) => ({
         projects: state.projects.map((project) =>
           project.project_id === projectId
@@ -124,14 +128,13 @@ export const useProjectsStore = create<ProjectsState>((set, get) => ({
         user_id: currentProject.user_id,
         project_id: projectId,
         amount_spent: currentProject.amount_spent,
+        creation_date: new Date().toISOString().split("T")[0],
       };
-
-      console.log("Updating project with full data:", updateData);
 
       const response = await axios.put(
         `${API_URL}/projects/${projectId}`,
         updateData,
-        { headers: authHeaders },
+        { headers },
       );
 
       set((state) => ({
@@ -146,14 +149,9 @@ export const useProjectsStore = create<ProjectsState>((set, get) => ({
         style: { backgroundColor: "#349868", color: "white" },
       });
     } catch (error) {
-      console.error("Update project error:", error);
-
+      // Revert optimistic update on error
       set({ projects: originalProjects, isLoading: false });
-
-      const errorMessage = axios.isAxiosError(error)
-        ? error.response?.data?.message || error.message
-        : "Failed to update project";
-
+      const errorMessage = handleError(error);
       set({ error: errorMessage });
       toast.error("Failed to update project", {
         description: errorMessage,
@@ -175,22 +173,16 @@ export const useProjectsStore = create<ProjectsState>((set, get) => ({
 
     try {
       set({ isLoading: true, error: null });
-      const authHeaders = await useAuthStore.getState().getAuthHeaders();
+      const headers = await useAuthStore.getState().getAuthHeaders();
 
-      // Optimistic update - remove from UI immediately
+      // Optimistic update
       set((state) => ({
         projects: state.projects.filter(
           (project) => project.project_id !== projectId,
         ),
       }));
 
-      console.log("Deleting project:", projectId);
-      console.log("Delete URL:", `${API_URL}/projects/${projectId}`);
-
-      // Make API call to delete from backend
-      await axios.delete(`${API_URL}/projects/${projectId}`, {
-        headers: authHeaders,
-      });
+      await axios.delete(`${API_URL}/projects/${projectId}`, { headers });
 
       set({ isLoading: false });
 
@@ -199,15 +191,9 @@ export const useProjectsStore = create<ProjectsState>((set, get) => ({
         style: { backgroundColor: "#349868", color: "white" },
       });
     } catch (error) {
-      console.error("Delete project error:", error);
-
-      // Revert optimistic update on error - restore the project
+      // Revert optimistic update on error
       set({ projects: originalProjects, isLoading: false });
-
-      const errorMessage = axios.isAxiosError(error)
-        ? error.response?.data?.message || error.message
-        : "Failed to delete project";
-
+      const errorMessage = handleError(error);
       set({ error: errorMessage });
       toast.error("Failed to delete project", {
         description: errorMessage,
