@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
-import { useAuthStore } from "../store/auth-store";
+import { useAuthStore } from "../store/session-store";
 import { useUserStore } from "../store/user-store";
 import { useProjectsStore } from "../store/project/projects-store";
 
