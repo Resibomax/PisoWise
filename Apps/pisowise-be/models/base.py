@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, Date, DateTime, ForeignKey, Float
+from sqlalchemy import Column, Integer, String, Date, DateTime, ForeignKey, Float, Text
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship
 import uuid
@@ -71,7 +71,7 @@ class AIInsight(Base):
     __tablename__ = "AIInsight"
     insight_id = Column(String, primary_key=True, default=lambda: str(uuid.uuid4()))
     project_id = Column(String, ForeignKey("Project.project_id"), nullable=False)
-    generated_text = Column(String, nullable=False)
+    generated_text = Column(Text, nullable=False)
     ai_model = Column(String, nullable=False)
     created_at = Column(DateTime, nullable=False)
 

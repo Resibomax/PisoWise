@@ -1,6 +1,10 @@
 from datetime import datetime
 from pydantic import BaseModel, EmailStr
 
+class TriggerInsightRequest(BaseModel):
+    project_id: str
+    message: str
+
 class AIInsightCreate(BaseModel):
     project_id: str
     generated_text: str

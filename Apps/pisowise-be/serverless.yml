@@ -1,11 +1,17 @@
-
 service: pisowise-be
+
 frameworkVersion: '3'
 
 provider:
   name: aws
   runtime: python3.11
   region: ap-southeast-1
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - lambda:InvokeFunction
+      Resource: 
+        - "arn:aws:lambda:ap-southeast-1:*:function:rds-ai-trigger-function-*"
 
 functions:
   api:
