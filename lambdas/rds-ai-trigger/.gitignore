@@ -200,3 +200,7 @@ pyrightconfig.json
 # End of https://www.toptal.com/developers/gitignore/api/python
 # Node.js dependencies
 node_modules/
+
+.dockerignore
+.env
+.env.example
