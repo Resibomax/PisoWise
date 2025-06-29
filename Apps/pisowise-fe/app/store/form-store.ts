@@ -13,12 +13,13 @@ interface FormData {
 interface FormStore {
   createForm: FormData;
   editForm: FormData;
+  isSubmitting: boolean;
   setCreateFormField: (field: keyof FormData, value: string) => void;
   setEditFormField: (field: keyof FormData, value: string) => void;
   resetCreateForm: () => void;
   resetEditForm: () => void;
   submitCreateForm: () => Promise<void>;
-  submitEditForm: () => void;
+  submitEditForm: () => Promise<void>;
   initializeEditForm: (
     title: string,
     description: string,
@@ -28,9 +29,27 @@ interface FormStore {
 
 const initialForm: FormData = { title: "", description: "", budget: "" };
 
+const validateForm = (form: FormData) => {
+  const { title, description, budget } = form;
+
+  if (!title.trim() || !description.trim() || !budget.trim()) {
+    toast.error("Please fill in all fields");
+    return false;
+  }
+
+  const budgetNumber = Number.parseFloat(budget);
+  if (isNaN(budgetNumber) || budgetNumber <= 0) {
+    toast.error("Please enter a valid budget amount");
+    return false;
+  }
+
+  return { budgetNumber };
+};
+
 export const useFormStore = create<FormStore>((set, get) => ({
   createForm: initialForm,
   editForm: initialForm,
+  isSubmitting: false,
 
   setCreateFormField: (field, value) =>
     set((state) => ({
@@ -52,74 +71,66 @@ export const useFormStore = create<FormStore>((set, get) => ({
 
   submitCreateForm: async () => {
     const { createForm, resetCreateForm } = get();
-    const { title, description, budget } = createForm;
+    const validation = validateForm(createForm);
 
-    // Validation
-    if (!title.trim() || !description.trim() || !budget.trim()) {
-      toast.error("Please fill in all fields");
-      return;
-    }
+    if (!validation) return;
 
-    const budgetNumber = Number.parseFloat(budget);
-    if (isNaN(budgetNumber) || budgetNumber <= 0) {
-      toast.error("Please enter a valid budget amount");
-      return;
-    }
-
-    // Get required data
-    const { addProject } = useProjectsStore.getState();
-    const { closeCreateModal } = useModalStore.getState();
     const { dbUser } = useUserStore.getState();
-
     if (!dbUser?.user_id) {
       toast.error("User not found. Please log in again.");
       return;
     }
 
-    // Submit project
-    const newProject = {
-      name: title.trim(),
-      description: description.trim(),
-      budget: budgetNumber,
-      amount_spent: 0,
-    };
+    set({ isSubmitting: true });
 
     try {
+      const { addProject } = useProjectsStore.getState();
+      const { closeCreateModal } = useModalStore.getState();
+
+      const newProject = {
+        name: createForm.title.trim(),
+        description: createForm.description.trim(),
+        budget: validation.budgetNumber,
+        amount_spent: 0,
+      };
+
       await addProject(newProject, dbUser.user_id);
       closeCreateModal();
       resetCreateForm();
     } catch (error) {
       console.error("Error in form submission:", error);
+    } finally {
+      set({ isSubmitting: false });
     }
   },
 
-  submitEditForm: () => {
+  submitEditForm: async () => {
     const { editForm, resetEditForm } = get();
-    const { title, description, budget } = editForm;
+    const validation = validateForm(editForm);
 
-    if (!title.trim() || !description.trim() || !budget.trim()) {
-      toast.error("Please fill in all fields");
-      return;
-    }
+    if (!validation) return;
 
-    const budgetNumber = Number.parseFloat(budget);
-    if (isNaN(budgetNumber) || budgetNumber <= 0) {
-      toast.error("Please enter a valid budget amount");
-      return;
-    }
-
-    const { updateProject } = useProjectsStore.getState();
     const { selectedProject, closeEditModal } = useModalStore.getState();
-
     if (!selectedProject) return;
 
-    updateProject(selectedProject.id, {
-      name: title.trim(),
-      description: description.trim(),
-      budget: budgetNumber,
-    });
+    set({ isSubmitting: true });
 
-    closeEditModal();
-    resetEditForm();
+    try {
+      const { updateProject } = useProjectsStore.getState();
+
+      const updates = {
+        name: editForm.title.trim(),
+        description: editForm.description.trim(),
+        budget: validation.budgetNumber,
+      };
+
+      updateProject(selectedProject.project_id, updates);
+      closeEditModal();
+      resetEditForm();
+    } catch (error) {
+      console.error("Error in form submission:", error);
+    } finally {
+      set({ isSubmitting: false });
+    }
   },
 }));

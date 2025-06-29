@@ -3,7 +3,7 @@ import { useAuthStore } from "./auth-store";
 import axios from "axios";
 import { toast } from "sonner";
 
-interface Project {
+export interface Project {
   user_id: string;
   project_id: string;
   name: string;
@@ -94,20 +94,126 @@ export const useProjectsStore = create<ProjectsState>((set, get) => ({
     }
   },
 
-  updateProject: (projectId, updates) => {
-    set((state) => ({
-      projects: state.projects.map((project) =>
-        project.project_id === projectId ? { ...project, ...updates } : project,
-      ),
-    }));
+  updateProject: async (projectId, updates) => {
+    const originalProjects = get().projects;
+    const currentProject = originalProjects.find(
+      (p) => p.project_id === projectId,
+    );
+
+    if (!currentProject) {
+      toast.error("Project not found");
+      return;
+    }
+
+    try {
+      set({ isLoading: true, error: null });
+      const authHeaders = await useAuthStore.getState().getAuthHeaders();
+
+      set((state) => ({
+        projects: state.projects.map((project) =>
+          project.project_id === projectId
+            ? { ...project, ...updates }
+            : project,
+        ),
+      }));
+
+      const updateData = {
+        name: updates.name,
+        description: updates.description,
+        budget: updates.budget,
+        user_id: currentProject.user_id,
+        project_id: projectId,
+        amount_spent: currentProject.amount_spent,
+      };
+
+      console.log("Updating project with full data:", updateData);
+
+      const response = await axios.put(
+        `${API_URL}/projects/${projectId}`,
+        updateData,
+        { headers: authHeaders },
+      );
+
+      set((state) => ({
+        projects: state.projects.map((project) =>
+          project.project_id === projectId ? response.data : project,
+        ),
+        isLoading: false,
+      }));
+
+      toast.success("Project updated successfully", {
+        description: "Your project has been updated.",
+        style: { backgroundColor: "#349868", color: "white" },
+      });
+    } catch (error) {
+      console.error("Update project error:", error);
+
+      set({ projects: originalProjects, isLoading: false });
+
+      const errorMessage = axios.isAxiosError(error)
+        ? error.response?.data?.message || error.message
+        : "Failed to update project";
+
+      set({ error: errorMessage });
+      toast.error("Failed to update project", {
+        description: errorMessage,
+        style: { backgroundColor: "#E73648", color: "white" },
+      });
+    }
   },
 
-  deleteProject: (projectId) => {
-    set((state) => ({
-      projects: state.projects.filter(
-        (project) => project.project_id !== projectId,
-      ),
-    }));
+  deleteProject: async (projectId) => {
+    const originalProjects = get().projects;
+    const projectToDelete = originalProjects.find(
+      (p) => p.project_id === projectId,
+    );
+
+    if (!projectToDelete) {
+      toast.error("Project not found");
+      return;
+    }
+
+    try {
+      set({ isLoading: true, error: null });
+      const authHeaders = await useAuthStore.getState().getAuthHeaders();
+
+      // Optimistic update - remove from UI immediately
+      set((state) => ({
+        projects: state.projects.filter(
+          (project) => project.project_id !== projectId,
+        ),
+      }));
+
+      console.log("Deleting project:", projectId);
+      console.log("Delete URL:", `${API_URL}/projects/${projectId}`);
+
+      // Make API call to delete from backend
+      await axios.delete(`${API_URL}/projects/${projectId}`, {
+        headers: authHeaders,
+      });
+
+      set({ isLoading: false });
+
+      toast.success("Project deleted successfully", {
+        description: `"${projectToDelete.name}" has been deleted.`,
+        style: { backgroundColor: "#349868", color: "white" },
+      });
+    } catch (error) {
+      console.error("Delete project error:", error);
+
+      // Revert optimistic update on error - restore the project
+      set({ projects: originalProjects, isLoading: false });
+
+      const errorMessage = axios.isAxiosError(error)
+        ? error.response?.data?.message || error.message
+        : "Failed to delete project";
+
+      set({ error: errorMessage });
+      toast.error("Failed to delete project", {
+        description: errorMessage,
+        style: { backgroundColor: "#E73648", color: "white" },
+      });
+    }
   },
 
   clearProjects: () => {

@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import type { Project } from "@/app/projects/mockProject";
+import { Project } from "@/app/store/projects-store";
 import { usePurchaseStore } from "@/app/store/receiptDetails/purchaseStore";
 
 interface ModalStore {

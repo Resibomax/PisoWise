@@ -30,7 +30,7 @@ export function EditProjectModal() {
   useEffect(() => {
     if (isEditModalOpen && selectedProject) {
       initializeEditForm(
-        selectedProject.title,
+        selectedProject.name,
         selectedProject.description,
         selectedProject.budget,
       );
