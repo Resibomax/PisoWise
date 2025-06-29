@@ -1,5 +1,5 @@
-import { useModalStore } from "@/app/store/modal-store";
-import { useProjectsStore } from "@/app/store/projects-store";
+import { useModalStore } from "@/app/store/project/modal-store";
+import { useProjectsStore } from "@/app/store/project/projects-store";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,

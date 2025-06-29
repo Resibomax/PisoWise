@@ -3,7 +3,7 @@
 import { useEffect } from "react";
 import { useAuthStore } from "../store/auth-store";
 import { useUserStore } from "../store/user-store";
-import { useProjectsStore } from "../store/projects-store";
+import { useProjectsStore } from "../store/project/projects-store";
 
 export const useProjectsPage = () => {
   const auth = useAuthStore();

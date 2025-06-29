@@ -1,7 +1,7 @@
 "use client";
 
 import { useParams } from "next/navigation";
-import { useModalStore } from "@/app/store/modal-store";
+import { useModalStore } from "@/app/store/project/modal-store";
 import { useReceiptStore } from "@/app/store/projectDetails/receiptsStore";
 import ItemsCard from "@/components/receipts/cards/ItemsCard";
 import { ReceiptsHeader } from "@/components/receipts/Header";

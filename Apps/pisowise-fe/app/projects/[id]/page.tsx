@@ -1,8 +1,8 @@
 "use client";
 
 import { useParams } from "next/navigation";
-import { useProjectsStore } from "@/app/store/projects-store";
-import { useModalStore } from "@/app/store/modal-store";
+import { useProjectsStore } from "@/app/store/project/projects-store";
+import { useModalStore } from "@/app/store/project/modal-store";
 import { EditProjectModal } from "@/components/projects/modal/EditprojectModal";
 import { ProjectHeader } from "@/components/projects/details/Header";
 import AddReceipt from "@/components/projects/details/AddReceipt";

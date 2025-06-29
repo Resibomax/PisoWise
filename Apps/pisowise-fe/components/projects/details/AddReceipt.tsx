@@ -1,7 +1,7 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { useModalStore } from "@/app/store/modal-store";
+import { useModalStore } from "@/app/store/project/modal-store";
 import { Undo2, Image as ImageIcon, Loader, XCircle } from "lucide-react";
 import { useRef, useState, useEffect } from "react";
 import Image from "next/image";

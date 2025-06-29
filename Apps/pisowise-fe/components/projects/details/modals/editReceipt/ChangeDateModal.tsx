@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { DialogContent, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { useModalStore } from "@/app/store/modal-store";
+import { useModalStore } from "@/app/store/project/modal-store";
 import { Calendar } from "@/components/ui/calendar";
 import { useReceiptStore } from "@/app/store/projectDetails/receiptsStore";
 import { usePurchaseStore } from "@/app/store/receiptDetails/purchaseStore";

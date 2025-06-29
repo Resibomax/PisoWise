@@ -1,7 +1,7 @@
 import { create } from "zustand";
-import { useProjectsStore } from "./projects-store";
-import { useModalStore } from "./modal-store";
-import { useUserStore } from "./user-store";
+import { useProjectsStore } from "../project/projects-store";
+import { useModalStore } from "../project/modal-store";
+import { useUserStore } from "../user-store";
 import { toast } from "sonner";
 
 interface FormData {

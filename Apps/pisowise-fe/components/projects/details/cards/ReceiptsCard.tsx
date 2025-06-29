@@ -6,8 +6,8 @@ import { Undo2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import Receipt from "../Receipt";
-import { useReceiptStore } from "@/app/store/receipt-store";
-import { useModalStore } from "@/app/store/modal-store";
+import { useReceiptStore } from "@/app/store/project/receipt-store";
+import { useModalStore } from "@/app/store/project/modal-store";
 import { useState, useEffect } from "react";
 import EditReceipt from "../EditReceipt";
 
