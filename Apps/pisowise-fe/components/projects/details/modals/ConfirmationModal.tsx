@@ -1,5 +1,5 @@
-import { useModalStore } from "@/app/store/projectsPage/modalStore";
-import { useProjectStore } from "@/app/store/projectsPage/projectStore";
+import { useModalStore } from "@/app/store/project/modal-store";
+import { useProjectsStore } from "@/app/store/project/projects-store";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -15,12 +15,12 @@ export function ConfirmationModal() {
   const { isConfirmDeleteModalOpen, closeConfirmDeleteModal } = useModalStore();
   const router = useRouter();
   const params = useParams();
-  const { deleteProject, getProjectById } = useProjectStore();
+  const { deleteProject, getProjectById } = useProjectsStore();
   const project = params.id ? getProjectById(params.id as string) : null;
 
   const handleDelete = () => {
     if (project) {
-      deleteProject(project.id);
+      deleteProject(project.project_id);
       closeConfirmDeleteModal();
       router.push("/projects");
     }
