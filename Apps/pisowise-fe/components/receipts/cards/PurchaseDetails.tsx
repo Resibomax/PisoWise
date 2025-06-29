@@ -2,7 +2,7 @@
 
 import { useReceiptStore } from "@/app/store/projectDetails/receiptsStore";
 import { Card, CardContent } from "@/components/ui/card";
-import { useModalStore } from "@/app/store/projectsPage/modalStore";
+import { useModalStore } from "@/app/store/project/modal-store";
 import { usePurchaseStore } from "@/app/store/receiptDetails/purchaseStore";
 import { Calendar, Store } from "lucide-react";
 import Image from "next/image";

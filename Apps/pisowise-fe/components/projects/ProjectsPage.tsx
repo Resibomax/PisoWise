@@ -4,13 +4,15 @@ import { Plus, SquarePen } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import ProjectCard from "./cards/ProjectCard";
 import CreateProject from "./cards/CreateProjectCard";
-import { useModalStore } from "@/app/store/projectsPage/modalStore";
+import { useModalStore } from "@/app/store/project/modal-store";
 import NoProjectsCard from "./cards/NoProjectsCard";
 import Loader from "@/components/ui/loader";
 import { useProjectsPage } from "@/app/hooks/use-projects-page";
+import { CreateProjectModal } from "./modal/CreateProjectModal";
+import { EditProjectModal } from "./modal/EditprojectModal";
 
 export default function ProjectsPage() {
-  const { openCreateModal } = useModalStore();
+  const { openCreateModal, openEditModal } = useModalStore();
   const { isAuthenticated, projects, isLoading, error, refetchProjects } =
     useProjectsPage();
 
@@ -88,6 +90,7 @@ export default function ProjectsPage() {
                     className="p-1 hover:bg-white rounded-[12px] transition-color hover:text-black text-white"
                     onClick={(e) => {
                       e.stopPropagation();
+                      openEditModal(project);
                     }}
                   >
                     <SquarePen className="w-5 h-5 cursor-pointer" />
@@ -100,6 +103,8 @@ export default function ProjectsPage() {
           </div>
         )}
       </div>
+      <CreateProjectModal />
+      <EditProjectModal />
     </div>
   );
 }

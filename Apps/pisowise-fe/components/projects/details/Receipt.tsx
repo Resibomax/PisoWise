@@ -1,6 +1,6 @@
 "use client";
 
-import { useReceiptStore } from "@/app/store/receipt-store";
+import { useReceiptStore } from "@/app/store/project/receipt-store";
 import Link from "next/link";
 import { ChevronRight } from "lucide-react";
 import { useEffect } from "react";

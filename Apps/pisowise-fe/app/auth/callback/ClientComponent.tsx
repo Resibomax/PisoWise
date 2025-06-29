@@ -6,6 +6,8 @@ import { useAuthStore } from "@/app/store/authStore";
 import { initializeAmplifyOAuth } from "@/lib/auth/amplify-oauth";
 import { debugAuthConfig } from "@/lib/auth/debug";
 import { CheckCircle, XCircle, Loader2 } from "lucide-react";
+import { fetchAuthSession, getCurrentUser } from "@aws-amplify/auth";
+import axios from "axios";
 
 export default function AuthCallback() {
   const [error, setError] = useState<string | null>(null);
@@ -35,13 +37,88 @@ export default function AuthCallback() {
         await handleOAuthCallback();
         setProgress(100);
 
+        const session = await fetchAuthSession();
+        const user = await getCurrentUser();
+        const token = session.tokens?.idToken?.toString();
+
+        const email =
+          (user as { attributes?: { email?: string } })?.attributes?.email ||
+          user.signInDetails?.loginId ||
+          (session.tokens?.idToken as { payload?: { email?: string } })?.payload
+            ?.email;
+
+        if (!email) {
+          throw new Error("User email is missing from all known sources.");
+        }
+
+        const payload = {
+          email,
+          username: email.split("@")[0],
+        };
+
+        console.log("Checking if user already exists:", email);
+
+        const checkRes = await axios.get(
+          "https://8x7vhw6k4m.execute-api.ap-southeast-1.amazonaws.com/users",
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          },
+        );
+
+        const users = checkRes.data as Array<{ email: string }>;
+        const userExists = users.some((u) => u.email === email);
+
+        if (userExists) {
+          console.log("User already exists, skipping POST.");
+        } else {
+          console.log("User not found, creating new user...");
+
+          const response = await axios.post(
+            "https://8x7vhw6k4m.execute-api.ap-southeast-1.amazonaws.com/users",
+            payload,
+            {
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${token}`,
+              },
+            },
+          );
+          console.log("User created:", response.data);
+        }
+
         setTimeout(() => {
           router.push("/projects");
         }, 800);
       } catch (err: unknown) {
-        const errorMessage =
-          err instanceof Error ? err.message : "Authentication failed";
-        console.error("Error during OAuth redirect:", err);
+        let errorMessage = "Authentication failed";
+
+        if (axios.isAxiosError(err)) {
+          if (err.response) {
+            console.error("API Error Response:", {
+              status: err.response.status,
+              data: err.response.data,
+              headers: err.response.headers,
+            });
+
+            errorMessage =
+              err.response.data?.message ||
+              err.response.data?.error ||
+              JSON.stringify(err.response.data) ||
+              `Request failed with status ${err.response.status}`;
+          } else if (err.request) {
+            console.error("No response received:", err.request);
+            errorMessage = "No response from the server.";
+          } else {
+            console.error("Axios setup error:", err.message);
+            errorMessage = err.message;
+          }
+        } else if (err instanceof Error) {
+          console.error("General error:", err.message);
+          errorMessage = err.message;
+        }
+
         setError(errorMessage);
 
         setTimeout(() => {
@@ -52,7 +129,6 @@ export default function AuthCallback() {
 
     handleCallback();
   }, [router, handleOAuthCallback, searchParams]);
-
   return (
     <div
       className="relative h-screen font-[Ember] flex items-center justify-center"
@@ -62,13 +138,6 @@ export default function AuthCallback() {
         backgroundSize: "auto",
       }}
     >
-      {/* Logo */}
-      <div className="absolute top-6 left-1/2 transform -translate-x-1/2">
-        <div className="w-16 h-16 font-semibold text-[#FBF5F3] flex items-center justify-center text-xl">
-          Logo
-        </div>
-      </div>
-
       {/* Main content */}
       <div className="bg-[#FBF5F3] p-8 rounded-[12px] shadow-lg w-[90%] max-w-md mx-4">
         {error ? (
