@@ -69,7 +69,6 @@ export default function Receipt({ projectId }: ReceiptProps) {
     <div className="max-h-[220px] md:max-h-[240px] lg:max-h-[320px] xl:max-h-[320px] overflow-y-auto custom-scrollbar">
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-1 gap-2 px-3 lg:px-4">
         {receipts.map((receipt, index) => {
-          console.log(`Rendering receipt ${index}:`, receipt);
           return (
             <Link
               key={receipt.receipt_id}
@@ -79,7 +78,7 @@ export default function Receipt({ projectId }: ReceiptProps) {
               <div className="flex items-center justify-between">
                 <div>
                   <h3 className="text-white font-roboto-regular text-[16px] md:text-[18px]">
-                    {receipt.vendor_name || "Unknown Store"}
+                    Receipt {index + 1}
                   </h3>
                   <p className="text-white font-roboto-light text-[12px] md:text-[14px]">
                     {receipt.vendor_name}
