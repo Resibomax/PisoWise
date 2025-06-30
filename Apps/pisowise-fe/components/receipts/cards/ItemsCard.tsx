@@ -1,38 +1,33 @@
 import { useEffect } from "react";
 import { useModalStore } from "@/app/store/project/modal-store";
-import { useReceiptStore } from "@/app/store/projectDetails/receiptsStore";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Pencil, Trash2, PlusSquare, MinusSquare } from "lucide-react";
 import { usePurchaseStore } from "@/app/store/receiptDetails/purchaseStore";
 import { Button } from "@/components/ui/button";
+import type { Receipt } from "@/app/store/project/receipt-store";
 
 interface ItemsCardProps {
-  receiptId: string;
+  receipt: Receipt;
 }
 
-export default function ItemsCard({ receiptId }: ItemsCardProps) {
-  const { getReceiptById } = useReceiptStore();
-  const receipt = getReceiptById(receiptId);
+export default function ItemsCard({ receipt }: ItemsCardProps) {
   const isInEditMode = useModalStore((state) => state.isInEditMode);
-
-  const { items, clear, addItem, updateItemQuantity, removeItem } =
-    usePurchaseStore();
-  const { setEditingIndex } = usePurchaseStore();
+  const {
+    items,
+    clear,
+    updateItemQuantity,
+    removeItem,
+    setEditingIndex,
+    initializeFromReceipt,
+  } = usePurchaseStore();
 
   const { openAddItemModal, openChangeItemModal } = useModalStore();
 
   useEffect(() => {
     if (isInEditMode && receipt) {
-      clear();
-      receipt.items.forEach((item) => {
-        addItem({
-          itemName: item.name,
-          quantity: item.quantity,
-          price: item.price,
-        });
-      });
+      initializeFromReceipt(receipt);
     }
-  }, [isInEditMode, receipt, clear, addItem]);
+  }, [isInEditMode, receipt, initializeFromReceipt]);
 
   if (!receipt) {
     return (
@@ -85,17 +80,21 @@ export default function ItemsCard({ receiptId }: ItemsCardProps) {
 
               <div className="flex flex-row justify-between items-center font-roboto-bld">
                 <span>
-                  {("itemName" in item ? item.itemName : item.name) ??
-                    "Unnamed item"}
+                  {isInEditMode ? item.itemName : item.item_name ?? "Unnamed item"}
                 </span>
-                <span>₱{(item.price * item.quantity).toFixed(2)}</span>
+                <span>
+                  ₱{((isInEditMode ? item.price : item.unit_price) * item.quantity).toFixed(2)}
+                </span>
               </div>
+
 
               {isInEditMode ? (
                 <div className="flex items-center space-x-2 mt-1">
                   <span className="text-[#C4C4C4]">Qty:</span>
                   <button
-                    onClick={() => updateItemQuantity(index, item.quantity - 1)}
+                    onClick={() =>
+                      updateItemQuantity(index, Math.max(1, item.quantity - 1))
+                    }
                   >
                     <MinusSquare className="w-5 h-5 text-white cursor-pointer" />
                   </button>

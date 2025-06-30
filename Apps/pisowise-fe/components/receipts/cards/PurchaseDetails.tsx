@@ -1,6 +1,5 @@
 "use client";
 
-import { useReceiptStore } from "@/app/store/projectDetails/receiptsStore";
 import { Card, CardContent } from "@/components/ui/card";
 import { useModalStore } from "@/app/store/project/modal-store";
 import { usePurchaseStore } from "@/app/store/receiptDetails/purchaseStore";
@@ -8,15 +7,14 @@ import { Calendar, Store } from "lucide-react";
 import Image from "next/image";
 import { ImageModal } from "../modals/ImageModal";
 import { Button } from "@/components/ui/button";
+import type { Receipt } from "@/app/store/project/receipt-store";
 
 interface PurchaseDeetsProps {
-  receiptId: string;
+  receipt: Receipt;
   isEditMode?: boolean;
 }
 
-export default function DetailsCard({ receiptId }: PurchaseDeetsProps) {
-  const { getReceiptById } = useReceiptStore();
-  const receipt = getReceiptById(receiptId);
+export default function DetailsCard({ receipt }: PurchaseDeetsProps) {
   const { openImageModal, openChangeStoreModal, openChangeDateModal } =
     useModalStore();
   const isInEditMode = useModalStore((state) => state.isInEditMode);
@@ -89,19 +87,19 @@ export default function DetailsCard({ receiptId }: PurchaseDeetsProps) {
             <div className="flex items-center gap-2">
               <Store className="h-4 w-4" />
               <p className="text-sm">
-                {receipt.address || "No address provided"}
+                {receipt.vendor_name || "No address provided"}
               </p>
             </div>
             <div className="flex items-center gap-2">
               <Calendar className="h-4 w-4" />
-              <p className="text-sm">{receipt.date}</p>
+              <p className="text-sm">{receipt.transaction_date}</p>
             </div>
           </div>
         )}
       </CardContent>
 
       {/* Image modal */}
-      <ImageModal receiptId={receiptId} />
+      <ImageModal receipt={receipt} />
     </Card>
   );
 }

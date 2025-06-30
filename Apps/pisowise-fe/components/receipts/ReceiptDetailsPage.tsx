@@ -53,16 +53,7 @@ export default function ProjectReceiptDetailsPage() {
     );
   }
 
-  if (error) {
-    console.log(receipt)
-    return (
-      <h1>Error</h1>
-    )
-  }
-
-  console.log("This is 1 line before '!receipt' conditional, receipt = ", receipt)
   if (!receipt) {
-    console.log("This is 1 line after '!receipt' conditional, receipt = ", receipt)
     return (
       <div className="p-4 text-white">
         <h1>Receipt Not Found</h1>
@@ -79,27 +70,28 @@ export default function ProjectReceiptDetailsPage() {
       <ReceiptsHeader receipt={receipt} />
       <div className="flex flex-col space-y-4 lg:flex-row lg:space-x-4 lg:space-y-0">
         <div className="lg:w-3/10">
-          <DetailsCard receiptId={receiptIdString || ""} />
+          <DetailsCard receipt={receipt || ""} />
         </div>
         <div className="lg:w-4/10">
-          <ItemsCard receiptId={receiptIdString || ""} />
+          <ItemsCard receipt={receipt || ""} />
         </div>
         <div className="lg:w-3/10">
-          <TotalCard receiptId={receiptIdString || ""} />
+          <TotalCard receipt={receipt || ""} />
           {isInEditMode && (
             <Button
               className="flex flex-row bg-[#349868] text-[#FBF5F3] rounded-[12px] w-full mt-4"
               onClick={() => {
                 if (!receiptIdString) return;
+                console.log("Items: ", items)
 
                 updateReceipt(receiptIdString, {
-                  address: storeName,
-                  date,
+                  vendor_name: storeName,
+                  transaction_date: date,
                   items: items.map((item) => ({
-                    id: crypto.randomUUID(),
-                    name: item.itemName,
+                    item_id: crypto.randomUUID(),
+                    item_name: item.itemName,
                     quantity: item.quantity,
-                    price: item.price,
+                    unit_price: item.price,
                   })),
                 });
 

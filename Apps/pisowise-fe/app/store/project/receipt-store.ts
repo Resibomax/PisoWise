@@ -76,10 +76,12 @@ export const useReceiptStore = create<ReceiptState>((set, get) => ({
       const url = `${API_URL}/receipts/${receiptId}`;
 
       const response = await axios.put(url, updates, { headers });
+      console.log("Response: ", response)
 
       set({ receipt: response.data, isLoading: false });
     } catch (error) {
       let errorMessage = "Failed to update receipt";
+      console.log("Error: ", errorMessage);
 
       if (axios.isAxiosError(error)) {
         errorMessage = error.response?.data?.message || error.message;

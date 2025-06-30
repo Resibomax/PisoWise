@@ -1,15 +1,17 @@
 "use client";
 
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
-import { useReceiptStore } from "@/app/store/projectDetails/receiptsStore";
+import type { Receipt } from "@/app/store/project/receipt-store";
+import { usePurchaseStore } from "@/app/store/receiptDetails/purchaseStore";
+import { useModalStore } from "@/app/store/project/modal-store";
 
 interface ItemsCardProps {
-  receiptId: string;
+  receipt: Receipt;
 }
 
-export default function ItemsCard({ receiptId }: ItemsCardProps) {
-  const { getReceiptById } = useReceiptStore();
-  const receipt = getReceiptById(receiptId);
+export default function ItemsCard({ receipt }: ItemsCardProps) {
+  const isInEditMode = useModalStore((state) => state.isInEditMode);
+  const items = usePurchaseStore((state) => state.items);
 
   if (!receipt) {
     return (
@@ -20,13 +22,20 @@ export default function ItemsCard({ receiptId }: ItemsCardProps) {
     );
   }
 
-  const subtotal = receipt.items.reduce(
-    (acc, item) => acc + (item.price / 1.12) * item.quantity,
+  const itemsToUse = isInEditMode
+    ? items.map((item) => ({
+      unit_price: item.price,
+      quantity: item.quantity,
+    }))
+    : receipt.items;
+
+  const subtotal = itemsToUse.reduce(
+    (acc, item) => acc + (item.unit_price / 1.12) * item.quantity,
     0,
   );
 
-  const total = receipt.items.reduce(
-    (acc, item) => acc + item.price * item.quantity,
+  const total = itemsToUse.reduce(
+    (acc, item) => acc + item.unit_price * item.quantity,
     0,
   );
 

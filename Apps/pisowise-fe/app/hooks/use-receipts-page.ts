@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { useAuthStore } from "../store/session-store";
 import { useUserStore } from "../store/user-store";
 import { useReceiptStore } from "../store/project/receipt-store";
@@ -10,25 +10,38 @@ export const useReceiptDetailsPage = (receiptId: string) => {
   const user = useUserStore();
   const receipts = useReceiptStore();
 
-  // Init auth
+  const hasInitializedAuth = useRef(false);
+  const hasFetchedUser = useRef(false);
+  const hasFetchedReceipt = useRef(false);
+
+  // Init auth (only once)
   useEffect(() => {
-    auth.initializeAuth();
+    if (!hasInitializedAuth.current) {
+      auth.initializeAuth();
+      hasInitializedAuth.current = true;
+    }
   }, []);
 
-  // Fetch DB user once authenticated
+  // Fetch DB user once per email
   useEffect(() => {
-    if (auth.isAuthenticated && auth.user?.email) {
+    if (
+      auth.isAuthenticated &&
+      auth.user?.email &&
+      !hasFetchedUser.current
+    ) {
       user.fetchDatabaseUser(auth.user.email);
-    } else {
+      hasFetchedUser.current = true;
+    } else if (!auth.isAuthenticated || !auth.user?.email) {
       user.clearUser();
-      receipts.clearReceipt();
+      hasFetchedUser.current = false; // allow re-fetch when signing in again
     }
   }, [auth.isAuthenticated, auth.user?.email]);
 
-  // Fetch receipt when user is ready and receiptId exists
+  // Fetch receipt once per ID
   useEffect(() => {
-    if (receiptId) {
+    if (receiptId && !hasFetchedReceipt.current) {
       receipts.getReceiptById(receiptId);
+      hasFetchedReceipt.current = true;
     }
   }, [receiptId]);
 
@@ -39,6 +52,7 @@ export const useReceiptDetailsPage = (receiptId: string) => {
 
   const refetchReceipt = async () => {
     if (receiptId) {
+      hasFetchedReceipt.current = true;
       await receipts.getReceiptById(receiptId);
     }
   };

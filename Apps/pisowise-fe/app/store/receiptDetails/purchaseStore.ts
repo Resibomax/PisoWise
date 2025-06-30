@@ -1,4 +1,5 @@
 import { create } from "zustand";
+import type { Receipt } from "@/app/store/project/receipt-store";
 
 interface Item {
   itemName: string;
@@ -60,15 +61,15 @@ export const usePurchaseStore = create<PurchaseState>((set) => ({
     set((state) => ({
       items: state.items.filter((_, i) => i !== index),
     })),
-  initializeFromReceipt: (receipt) =>
+  initializeFromReceipt: (receipt: Receipt) =>
     set({
-      storeName: receipt.address || "",
-      date: receipt.date || "",
+      storeName: receipt.vendor_name || "",
+      date: receipt.transaction_date || "",
       items:
         receipt.items?.map((item) => ({
-          itemName: item.name || "",
+          itemName: item.item_name || "",
           quantity: item.quantity || 1,
-          price: item.price || 0,
+          price: item.unit_price || 0,
         })) || [],
     }),
 }));
