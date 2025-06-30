@@ -1,6 +1,6 @@
 "use client";
 
-import { useModalStore } from "@/app/store/projectsPage/modalStore";
+import { useModalStore } from "@/app/store/project/modal-store";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Undo2, Trash, SquarePen } from "lucide-react";

@@ -13,8 +13,8 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { useModalStore } from "@/app/store/projectsPage/modalStore";
-import { useFormStore } from "@/app/store/projectsPage/formStore";
+import { useModalStore } from "@/app/store/project/modal-store";
+import { useFormStore } from "@/app/store/project/form-store";
 
 export function EditProjectModal() {
   const { isEditModalOpen, selectedProject, closeEditModal } = useModalStore();
@@ -30,7 +30,7 @@ export function EditProjectModal() {
   useEffect(() => {
     if (isEditModalOpen && selectedProject) {
       initializeEditForm(
-        selectedProject.title,
+        selectedProject.name,
         selectedProject.description,
         selectedProject.budget,
       );

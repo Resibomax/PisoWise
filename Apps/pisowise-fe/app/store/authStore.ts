@@ -66,6 +66,8 @@ interface AuthStore {
   clearError: () => void;
 }
 
+const API_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
+
 export const useAuthStore = create<AuthStore>((set, get) => ({
   isLoginOpen: false,
   isSignupOpen: false,
@@ -152,16 +154,12 @@ export const useAuthStore = create<AuthStore>((set, get) => ({
         };
 
         try {
-          await axios.post(
-            "https://8x7vhw6k4m.execute-api.ap-southeast-1.amazonaws.com/users",
-            userPayload,
-            {
-              headers: {
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${idToken}`,
-              },
+          await axios.post(`${API_URL}/users`, userPayload, {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${idToken}`,
             },
-          );
+          });
           console.log("Internal user pushed to DB");
         } catch (pushErr: unknown) {
           if (axios.isAxiosError(pushErr) && pushErr.response?.status === 409) {
