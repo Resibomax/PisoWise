@@ -12,7 +12,7 @@ def create_receipt(receipt: ReceiptCreate, db: Session = Depends(get_db)):
     uc = ReceiptUseCase(db)
     return uc.create_receipt_usecase(receipt)
 
-@receipt_router.get("/receipts", response_model=List[ReceiptResponse])
+@receipt_router.get("/receipts", response_model=(List[ReceiptResponse]))
 def get_receipts(project_id: Optional[str] = Query(default=None), db: Session = Depends(get_db)):
     uc = ReceiptUseCase(db)
     if project_id:
