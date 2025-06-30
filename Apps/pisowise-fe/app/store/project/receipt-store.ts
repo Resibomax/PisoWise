@@ -46,11 +46,11 @@ export const useReceiptStore = create<ReceiptState>((set, get) => ({
       set({ isLoading: true, error: null });
 
       const headers = await useAuthStore.getState().getAuthHeaders();
-      const url = `${API_URL}/receipts/${receiptId}`;
+      const url = `${API_URL}/receipts?receipt_id=${receiptId}`;
 
       const response = await axios.get(url, { headers });
 
-      set({ receipt: response.data, isLoading: false });
+      set({ receipt: response.data[0], isLoading: false });
     } catch (error) {
       let errorMessage = "Failed to fetch receipt";
 
