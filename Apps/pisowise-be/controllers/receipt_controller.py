@@ -13,11 +13,20 @@ def create_receipt(receipt: ReceiptCreate, db: Session = Depends(get_db)):
     return uc.create_receipt_usecase(receipt)
 
 @receipt_router.get("/receipts", response_model=(List[ReceiptResponse]))
-def get_receipts(project_id: Optional[str] = Query(default=None), db: Session = Depends(get_db)):
+def get_receipts(
+        project_id: Optional[str] = Query(default=None),
+        db: Session = Depends(get_db)):
     uc = ReceiptUseCase(db)
     if project_id:
         return uc.get_receipts_by_project_id_usecase(project_id)
     return uc.get_all_receipts_usecase()
+
+@receipt_router.get("/receipts/{receipt_id}", response_model=ReceiptResponse)
+def get_receipt_by_id(
+        receipt_id: str,
+        db: Session = Depends(get_db)):
+    uc = ReceiptUseCase(db)
+    return uc.get_receipt_by_id_usecase(receipt_id)
 
 @receipt_router.put("/receipts/{receipt_id}", response_model=ReceiptResponse)
 def update_receipt(

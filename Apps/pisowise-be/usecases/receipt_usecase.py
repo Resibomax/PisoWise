@@ -16,12 +16,19 @@ class ReceiptUseCase:
         return self.repo.get_all_receipts()
 
     def get_receipts_by_project_id_usecase(self, project_id: str) -> List[Receipt]:
-        if project_id is None:
-            raise HTTPException(status_code=400, detail="project_id is required")
-
         receipt = self.repo.get_receipts_by_project_id(project_id)
         if not receipt:
             raise HTTPException(status_code=404, detail="No receipts found for this project")
+
+        return receipt
+
+    def get_receipt_by_id_usecase(self, receipt_id: str) -> Receipt:
+        if not receipt_id:
+            raise HTTPException(status_code=400, detail="Receipt id is required")
+
+        receipt = self.repo.get_receipt_by_id(receipt_id)
+        if not receipt:
+            raise HTTPException(status_code=404, detail="No receipt found with this id")
 
         return receipt
 
