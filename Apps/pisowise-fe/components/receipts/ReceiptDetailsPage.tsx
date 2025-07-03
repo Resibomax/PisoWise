@@ -45,7 +45,6 @@ export default function ProjectReceiptDetailsPage() {
   }, [isInEditMode, receipt, initializeFromReceipt]);
 
   if (isLoading) {
-    console.log(receipt)
     return (
       <div className="p-4 text-white">
         <h1>Loading Receipt...</h1>
@@ -88,7 +87,6 @@ export default function ProjectReceiptDetailsPage() {
                   vendor_name: storeName,
                   transaction_date: date,
                   items: items.map((item) => ({
-                    item_id: crypto.randomUUID(),
                     item_name: item.itemName,
                     quantity: item.quantity,
                     unit_price: item.price,
