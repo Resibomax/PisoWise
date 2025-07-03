@@ -4,7 +4,7 @@ import { DialogContent, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useModalStore } from "@/app/store/project/modal-store";
-import { useReceiptStore } from "@/app/store/projectDetails/receiptsStore";
+import { useReceiptStore } from "@/app/store/project/receipt-store";
 import { usePurchaseStore } from "@/app/store/receiptDetails/purchaseStore";
 import { useState } from "react";
 
@@ -14,8 +14,7 @@ interface ChangeStoreModalProps {
 
 export default function ChangeStoreModal({ receiptId }: ChangeStoreModalProps) {
   const { closeChangeStoreModal, isInEditMode } = useModalStore();
-  const receipt = useReceiptStore((state) => state.getReceiptById(receiptId));
-  const updateReceipt = useReceiptStore((state) => state.updateReceipt);
+  const { receipt, updateReceipt } = useReceiptStore();
   const { setStoreName } = usePurchaseStore();
 
   const [storeName, setLocalStoreName] = useState(receipt?.address || "");
@@ -24,7 +23,7 @@ export default function ChangeStoreModal({ receiptId }: ChangeStoreModalProps) {
     e.preventDefault();
 
     // Update the receipt store
-    updateReceipt(receiptId, { address: storeName });
+    updateReceipt(receiptId, { vendor_name: storeName });
 
     // If in edit mode, also update the purchase store
     if (isInEditMode) {
