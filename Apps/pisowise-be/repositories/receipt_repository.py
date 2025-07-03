@@ -27,31 +27,38 @@ class ReceiptRepository:
 
     def update_receipt(self, receipt_id: str, updates: ReceiptUpdate) -> Receipt:
         receipt = self.db.query(Receipt).filter(Receipt.receipt_id == receipt_id).first()
-
+    
         if not receipt:
             raise ValueError(f"Receipt with id {receipt_id} not found")
-
+    
         update_data = updates.model_dump(exclude_unset=True)
-
+    
         for field, value in update_data.items():
             if field == "items":
-                # Delete existing items instead of clearing
+                # Clear existing items
                 for item in receipt.items:
                     self.db.delete(item)
-                self.db.flush()  # Apply deletions before adding new ones
-
+                self.db.flush()
+    
+                # Add new items and compute total
+                total_amount = 0
                 for item_data in value:
+                    total_price = item_data["quantity"] * item_data["unit_price"]
+                    total_amount += total_price
+    
                     new_item = Item(
                         item_name=item_data["item_name"],
                         quantity=item_data["quantity"],
                         unit_price=item_data["unit_price"],
-                        total_price=item_data["quantity"] * item_data["unit_price"],
-                        receipt=receipt  # Use relationship
+                        total_price=total_price,
+                        receipt=receipt
                     )
                     self.db.add(new_item)
+    
+                receipt.total_amount = total_amount
             else:
                 setattr(receipt, field, value)
-
+    
         self.db.commit()
         self.db.refresh(receipt)
         return receipt

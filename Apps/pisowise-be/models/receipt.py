@@ -10,7 +10,6 @@ class ReceiptCreate(BaseModel):
     vendor_name: Optional[str] = None
 
 class ReceiptUpdate(BaseModel):
-    total_amount: Optional[float] = None
     transaction_date: Optional[date] = None
     vendor_name: Optional[str] = None
     items: Optional[List[ItemUpdate]] = None
