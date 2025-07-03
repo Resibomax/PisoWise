@@ -14,7 +14,7 @@ interface ChangeDateModalProps {
 
 export default function ChangeDateModal({ receiptId }: ChangeDateModalProps) {
   const { closeChangeDateModal, isInEditMode } = useModalStore();
-  const { receipt, updateReceipt } = useReceiptStore();
+  const { receipt } = useReceiptStore();
   const { setDate } = usePurchaseStore();
 
   const [selectedDate, setSelectedDate] = useState<Date>(
@@ -25,9 +25,6 @@ export default function ChangeDateModal({ receiptId }: ChangeDateModalProps) {
     e.preventDefault();
     if (selectedDate) {
       const formatted = selectedDate.toLocaleDateString("en-CA");
-
-      // Update the receipt store
-      updateReceipt(receiptId, { transaction_date: formatted });
 
       // If in edit mode, also update the purchase store
       if (isInEditMode) {

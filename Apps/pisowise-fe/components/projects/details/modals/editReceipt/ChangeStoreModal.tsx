@@ -14,16 +14,13 @@ interface ChangeStoreModalProps {
 
 export default function ChangeStoreModal({ receiptId }: ChangeStoreModalProps) {
   const { closeChangeStoreModal, isInEditMode } = useModalStore();
-  const { receipt, updateReceipt } = useReceiptStore();
+  const { receipt } = useReceiptStore();
   const { setStoreName } = usePurchaseStore();
 
   const [storeName, setLocalStoreName] = useState(receipt?.address || "");
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-
-    // Update the receipt store
-    updateReceipt(receiptId, { vendor_name: storeName });
 
     // If in edit mode, also update the purchase store
     if (isInEditMode) {
