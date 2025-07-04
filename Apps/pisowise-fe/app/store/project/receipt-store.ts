@@ -35,7 +35,7 @@ interface ReceiptState {
 
 const API_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
-export const useReceiptStore = create<ReceiptState>((set, get) => ({
+export const useReceiptStore = create<ReceiptState>((set) => ({
   receipt: null,
   receipts: null,
   isLoading: false,
@@ -107,6 +107,7 @@ export const useReceiptStore = create<ReceiptState>((set, get) => ({
       const url = `${API_URL}/receipts/${receiptId}`;
 
       const response = await axios.delete(url, { headers });
+      console.log("Response: ", response)
 
       set((state) => ({
         receipts: state.receipts?.filter((r) => r.receipt_id !== receiptId) || [],

@@ -1,7 +1,6 @@
 "use client";
 
 import { useReceiptStore } from "@/app/store/project/receipt-store";
-import Link from "next/link";
 import { Trash } from "lucide-react";
 import { useEffect, useRef } from "react";
 
