@@ -28,9 +28,9 @@ interface ReceiptState {
     receiptId: string,
     updates: Partial<Receipt>,
   ) => Promise<void>;
-  clearReceipt: () => void;
+  deleteReceipt: (receiptId: string) => Promise<void>;
   getReceiptsByProjectId: (projectId: string) => Promise<Receipt[] | null>;
-  clearReceipts: () => void;
+  deleteReceipts: () => void;
 }
 
 const API_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
@@ -47,6 +47,7 @@ export const useReceiptStore = create<ReceiptState>((set, get) => ({
 
       const headers = await useAuthStore.getState().getAuthHeaders();
       const url = `${API_URL}/receipts/${receiptId}`;
+      console.log("Calling API: ", url)
 
       const response = await axios.get(url, { headers });
       console.log(response.data)
@@ -96,11 +97,35 @@ export const useReceiptStore = create<ReceiptState>((set, get) => ({
     }
   },
 
-  clearReceipt: () => {
-    set({ receipt: null, error: null, isLoading: false });
+  deleteReceipt: async (receiptId: string) => {
+    try {
+      set({ isLoading: true, error: null });
+
+      const headers = {
+        ...(await useAuthStore.getState().getAuthHeaders()), accept: "application/json",
+      };
+      const url = `${API_URL}/receipts/${receiptId}`;
+
+      const response = await axios.delete(url, { headers });
+
+      set((state) => ({
+        receipts: state.receipts?.filter((r) => r.receipt_id !== receiptId) || [],
+        isLoading: false,
+      }));
+    } catch (error) {
+      let errorMessage = "Failed to delete receipt";
+
+      if (axios.isAxiosError(error)) {
+        errorMessage = error.response?.data?.message || error.message;
+      } else if (error instanceof Error) {
+        errorMessage = error.message;
+      }
+
+      set({ error: errorMessage, isLoading: false });
+    }
   },
 
-  clearReceipts: () => {
+  deleteReceipts: () => {
     set({ receipts: null, error: null, isLoading: false });
   },
 
