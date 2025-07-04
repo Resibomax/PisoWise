@@ -58,7 +58,7 @@ export const usePurchaseStore = create<PurchaseState>((set) => ({
       date: receipt.transaction_date || "",
       items:
         receipt.items?.map((item) => ({
-          name: item.name || "",
+          itemName: item.name || "",
           quantity: item.quantity || 1,
           price: item.price || 0,
         })) || [],
