@@ -2,7 +2,7 @@ import { create } from "zustand";
 import type { Receipt } from "@/app/store/project/receipt-store";
 
 interface Item {
-  itemName: string;
+  name: string;
   quantity: number;
   price: number;
 }
@@ -58,7 +58,7 @@ export const usePurchaseStore = create<PurchaseState>((set) => ({
       date: receipt.transaction_date || "",
       items:
         receipt.items?.map((item) => ({
-          itemName: item.item_name || "",
+          name: item.item_name || "",
           quantity: item.quantity || 1,
           price: item.unit_price || 0,
         })) || [],
