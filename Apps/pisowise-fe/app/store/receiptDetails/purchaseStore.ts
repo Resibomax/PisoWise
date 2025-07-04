@@ -60,7 +60,7 @@ export const usePurchaseStore = create<PurchaseState>((set) => ({
         receipt.items?.map((item) => ({
           name: item.name || "",
           quantity: item.quantity || 1,
-          price: item.unit_price || 0,
+          price: item.price || 0,
         })) || [],
     }),
 }));
