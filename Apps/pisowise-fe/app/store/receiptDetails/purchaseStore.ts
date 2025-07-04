@@ -20,16 +20,7 @@ interface PurchaseState {
   setEditingIndex: (index: number | null) => void;
   editingIndex: number | null;
   removeItem: (index: number) => void;
-  initializeFromReceipt: (receipt: {
-    address?: string;
-    date?: string;
-    items?: Array<{
-      id?: string;
-      name?: string;
-      quantity?: number;
-      price?: number;
-    }>;
-  }) => void;
+  initializeFromReceipt: (receipt: Receipt) => void;
 }
 
 export const usePurchaseStore = create<PurchaseState>((set) => ({
