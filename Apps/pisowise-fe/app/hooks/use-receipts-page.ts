@@ -5,7 +5,7 @@ import { useAuthStore } from "../store/session-store";
 import { useUserStore } from "../store/user-store";
 import { useReceiptStore } from "../store/project/receipt-store";
 
-export const useReceiptDetailsPage = (receiptId: string | null) => {
+export const useReceiptDetailsPage = (receiptId: string ?? null) => {
   const auth = useAuthStore();
   const user = useUserStore();
   const receipts = useReceiptStore();
