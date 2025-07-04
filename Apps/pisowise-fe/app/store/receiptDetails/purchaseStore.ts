@@ -2,7 +2,7 @@ import { create } from "zustand";
 import type { Receipt } from "@/app/store/project/receipt-store";
 
 interface Item {
-  name: string;
+  itemName: string;
   quantity: number;
   price: number;
 }
