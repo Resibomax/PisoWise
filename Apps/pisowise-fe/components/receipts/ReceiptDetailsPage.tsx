@@ -23,7 +23,7 @@ export default function ProjectReceiptDetailsPage() {
   const receiptIdString = Array.isArray(receiptId) ? receiptId[0] : receiptId;
 
   const { receipt, isLoading, updateReceipt } =
-    useReceiptDetailsPage(receiptIdString);
+    useReceiptDetailsPage(receiptIdString ?? null);
 
   const isInEditMode = useModalStore((state) => state.isInEditMode);
   const { isChangeStoreModalOpen, closeChangeStoreModal } = useModalStore();
