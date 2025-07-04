@@ -2,7 +2,7 @@ import { create } from "zustand";
 import { useAuthStore } from "../session-store";
 import axios from "axios";
 
-interface Receipt {
+export interface Receipt {
   receipt_id: string;
   project_id: string;
   vendor_name: string;
