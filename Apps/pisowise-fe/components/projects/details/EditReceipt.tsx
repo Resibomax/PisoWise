@@ -3,22 +3,31 @@
 import { useReceiptStore } from "@/app/store/project/receipt-store";
 import Link from "next/link";
 import { Trash } from "lucide-react";
+import { useEffect } from "react";
 
 interface ReceiptProps {
   projectId: string;
 }
 
 export default function EditReceipt({ projectId }: ReceiptProps) {
-  const { getReceiptsByProjectId } = useReceiptStore();
-  const receipts = getReceiptsByProjectId(projectId);
+  const { getReceiptsByProjectId, receipts } = useReceiptStore();
+
+  useEffect(() => {
+    if (!receipts || receipts.length === 0) {
+      const fetchReceipts = async () => {
+        await getReceiptsByProjectId(projectId);
+      };
+      fetchReceipts();
+    }
+  }, [projectId]);
 
   return (
     <div className="max-h-[220px] md:max-h-[240px] lg:max-h-[280px] xl:max-h-[280px] overflow-y-auto custom-scrollbar">
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-1 gap-2 px-3 lg:px-4">
-        {receipts.map((receipt) => (
+        {receipts?.map((receipt) => (
           <Link
-            key={receipt.id}
-            href={`/projects/${projectId}/receipts/${receipt.id}`}
+            key={receipt.receipt_id}
+            href={`/projects/${projectId}/receipts/${receipt.receipt_id}`}
             className="block p-3 bg-transparent rounded-[12px] transition-colors border border-[#349868]"
           >
             <div className="flex items-center justify-between">
@@ -28,16 +37,16 @@ export default function EditReceipt({ projectId }: ReceiptProps) {
                 </div>
                 <div>
                   <h3 className="text-white font-roboto-regular text-[16px] md:text-[18px]">
-                    {receipt.title}
+                    {receipt.vendor_name}
                   </h3>
                   <p className="text-white font-roboto-light text-[12px] md:text-[14px]">
-                    {receipt.totalItems} Items
+                    {receipt.items?.length} Items
                   </p>
                 </div>
               </div>
               <div className="flex items-center">
                 <p className="text-white font-roboto-regular text-[16px] md:text-[20px]">
-                  ₱{receipt.totalAmount.toLocaleString()}
+                  ₱{receipt.total_amount.toLocaleString()}
                 </p>
               </div>
             </div>

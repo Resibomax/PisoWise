@@ -105,12 +105,6 @@ export const useReceiptStore = create<ReceiptState>((set, get) => ({
   },
 
   getReceiptsByProjectId: async (projectId: string) => {
-    const currentState = get();
-
-    if (currentState.isLoading) {
-      return currentState.receipts;
-    }
-
     try {
       set({ isLoading: true, error: null });
 

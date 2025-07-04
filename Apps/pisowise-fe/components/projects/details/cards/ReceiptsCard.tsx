@@ -17,8 +17,7 @@ interface ReceiptsCardProps {
 }
 
 export default function ReceiptsCard({ title, projectId }: ReceiptsCardProps) {
-  const receipts = useReceiptStore((state) => state.receipts);
-  const isLoading = useReceiptStore((state) => state.isLoading);
+  const { isLoading, receipts } = useReceiptStore();
 
   const getReceiptsByProjectId = useReceiptStore(
     (state) => state.getReceiptsByProjectId,
