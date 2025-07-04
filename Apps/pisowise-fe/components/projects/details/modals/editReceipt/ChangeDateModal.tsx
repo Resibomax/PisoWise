@@ -14,7 +14,7 @@ export default function ChangeDateModal() {
   const { setDate } = usePurchaseStore();
 
   const [selectedDate, setSelectedDate] = useState<Date>(
-    receipt?.date ? new Date(receipt.date) : new Date(),
+    receipt?.transaction_date ? new Date(receipt.transaction_date) : new Date(),
   );
 
   const handleSubmit = (e: React.FormEvent) => {
