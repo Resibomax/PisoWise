@@ -1,8 +1,7 @@
 from sqlalchemy.orm import Session
-from models.base import Receipt  # SQLAlchemy model defined here
+from models.base import Receipt, Item
 from models.receipt import ReceiptCreate, ReceiptUpdate
 from typing import List
-
 
 class ReceiptRepository:
     def __init__(self, db: Session):
@@ -43,11 +42,12 @@ class ReceiptRepository:
         return receipt
 
     def delete_receipt(self, receipt_id: str) -> bool:
-        receipt = (
-            self.db.query(Receipt).filter(Receipt.receipt_id == receipt_id).first()
-        )
-        if receipt:
-            self.db.delete(receipt)
-            self.db.commit()
-            return True
-        return False
+        receipt = self.db.query(Receipt).filter(Receipt.receipt_id == receipt_id).first()
+        if not receipt:
+            return False
+    
+        self.db.query(Item).filter(Item.receipt_id == receipt_id).delete()
+        self.db.delete(receipt)
+        self.db.commit()
+        return True
+
