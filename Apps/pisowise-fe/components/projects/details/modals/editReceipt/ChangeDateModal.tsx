@@ -8,11 +8,7 @@ import { Calendar } from "@/components/ui/calendar";
 import { useReceiptStore } from "@/app/store/project/receipt-store";
 import { usePurchaseStore } from "@/app/store/receiptDetails/purchaseStore";
 
-interface ChangeDateModalProps {
-  receiptId: string;
-}
-
-export default function ChangeDateModal({ receiptId }: ChangeDateModalProps) {
+export default function ChangeDateModal() {
   const { closeChangeDateModal, isInEditMode } = useModalStore();
   const { receipt } = useReceiptStore();
   const { setDate } = usePurchaseStore();

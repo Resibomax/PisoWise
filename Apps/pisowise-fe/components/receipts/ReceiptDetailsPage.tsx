@@ -25,7 +25,6 @@ export default function ProjectReceiptDetailsPage() {
   const {
     receipt,
     isLoading,
-    error,
     updateReceipt,
   } = useReceiptDetailsPage(receiptIdString);
 
@@ -107,10 +106,10 @@ export default function ProjectReceiptDetailsPage() {
         open={isChangeStoreModalOpen}
         onOpenChange={closeChangeStoreModal}
       >
-        <ChangeStoreModal receiptId={receiptIdString || ""} />
+        <ChangeStoreModal />
       </Dialog>
       <Dialog open={isChangeDateModalOpen} onOpenChange={closeChangeDateModal}>
-        <ChangeDateModal receiptId={receiptIdString || ""} />
+        <ChangeDateModal />
       </Dialog>
       <Dialog open={isChangeItemModalOpen} onOpenChange={closeChangeItemModal}>
         <ChangeItemModal />

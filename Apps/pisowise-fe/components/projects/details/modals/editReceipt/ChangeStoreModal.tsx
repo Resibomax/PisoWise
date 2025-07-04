@@ -8,11 +8,7 @@ import { useReceiptStore } from "@/app/store/project/receipt-store";
 import { usePurchaseStore } from "@/app/store/receiptDetails/purchaseStore";
 import { useState } from "react";
 
-interface ChangeStoreModalProps {
-  receiptId: string;
-}
-
-export default function ChangeStoreModal({ receiptId }: ChangeStoreModalProps) {
+export default function ChangeStoreModal() {
   const { closeChangeStoreModal, isInEditMode } = useModalStore();
   const { receipt } = useReceiptStore();
   const { setStoreName } = usePurchaseStore();
