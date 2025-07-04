@@ -10,7 +10,8 @@ interface ReceiptProps {
 }
 
 export default function Receipt({ projectId }: ReceiptProps) {
-  const { receipts, isLoading, error, getReceiptsByProjectId } = useReceiptStore();
+  const { receipts, isLoading, error, getReceiptsByProjectId } =
+    useReceiptStore();
 
   useEffect(() => {
     if (!receipts || receipts.length === 0) {

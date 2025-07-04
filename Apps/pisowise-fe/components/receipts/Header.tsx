@@ -88,4 +88,3 @@ export function ReceiptsHeader({ receipt, onEdit }: ProjectHeaderProps) {
     </div>
   );
 }
-

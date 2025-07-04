@@ -24,11 +24,7 @@ export const useReceiptDetailsPage = (receiptId: string) => {
 
   // Fetch DB user once per email
   useEffect(() => {
-    if (
-      auth.isAuthenticated &&
-      auth.user?.email &&
-      !hasFetchedUser.current
-    ) {
+    if (auth.isAuthenticated && auth.user?.email && !hasFetchedUser.current) {
       user.fetchDatabaseUser(auth.user.email);
       hasFetchedUser.current = true;
     } else if (!auth.isAuthenticated || !auth.user?.email) {
@@ -45,8 +41,7 @@ export const useReceiptDetailsPage = (receiptId: string) => {
     }
   }, [receiptId]);
 
-  const isLoading =
-    auth.isLoading || user.isLoading || receipts.isLoading;
+  const isLoading = auth.isLoading || user.isLoading || receipts.isLoading;
 
   const error = auth.error || user.error || receipts.error;
 

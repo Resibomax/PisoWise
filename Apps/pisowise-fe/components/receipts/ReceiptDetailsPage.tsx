@@ -22,11 +22,8 @@ export default function ProjectReceiptDetailsPage() {
   const projectIdString = Array.isArray(projectId) ? projectId[0] : projectId;
   const receiptIdString = Array.isArray(receiptId) ? receiptId[0] : receiptId;
 
-  const {
-    receipt,
-    isLoading,
-    updateReceipt,
-  } = useReceiptDetailsPage(receiptIdString);
+  const { receipt, isLoading, updateReceipt } =
+    useReceiptDetailsPage(receiptIdString);
 
   const isInEditMode = useModalStore((state) => state.isInEditMode);
   const { isChangeStoreModalOpen, closeChangeStoreModal } = useModalStore();
@@ -80,7 +77,7 @@ export default function ProjectReceiptDetailsPage() {
               className="flex flex-row bg-[#349868] text-[#FBF5F3] rounded-[12px] w-full mt-4"
               onClick={() => {
                 if (!receiptIdString) return;
-                console.log("Items: ", items)
+                console.log("Items: ", items);
 
                 updateReceipt(receiptIdString, {
                   vendor_name: storeName,
@@ -120,4 +117,3 @@ export default function ProjectReceiptDetailsPage() {
     </div>
   );
 }
-

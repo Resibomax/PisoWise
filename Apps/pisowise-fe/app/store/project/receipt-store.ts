@@ -47,10 +47,10 @@ export const useReceiptStore = create<ReceiptState>((set) => ({
 
       const headers = await useAuthStore.getState().getAuthHeaders();
       const url = `${API_URL}/receipts/${receiptId}`;
-      console.log("Calling API: ", url)
+      console.log("Calling API: ", url);
 
       const response = await axios.get(url, { headers });
-      console.log(response.data)
+      console.log(response.data);
       set({ receipt: response.data, isLoading: false });
     } catch (error) {
       let errorMessage = "Failed to fetch receipt";
@@ -77,7 +77,7 @@ export const useReceiptStore = create<ReceiptState>((set) => ({
       const url = `${API_URL}/receipts/${receiptId}`;
 
       const response = await axios.put(url, updates, { headers });
-      console.log("Response: ", response)
+      console.log("Response: ", response);
 
       set({ receipt: response.data, isLoading: false });
     } catch (error) {
@@ -102,15 +102,17 @@ export const useReceiptStore = create<ReceiptState>((set) => ({
       set({ isLoading: true, error: null });
 
       const headers = {
-        ...(await useAuthStore.getState().getAuthHeaders()), accept: "application/json",
+        ...(await useAuthStore.getState().getAuthHeaders()),
+        accept: "application/json",
       };
       const url = `${API_URL}/receipts/${receiptId}`;
 
       const response = await axios.delete(url, { headers });
-      console.log("Response: ", response)
+      console.log("Response: ", response);
 
       set((state) => ({
-        receipts: state.receipts?.filter((r) => r.receipt_id !== receiptId) || [],
+        receipts:
+          state.receipts?.filter((r) => r.receipt_id !== receiptId) || [],
         isLoading: false,
       }));
     } catch (error) {

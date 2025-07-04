@@ -80,13 +80,18 @@ export default function ItemsCard({ receipt }: ItemsCardProps) {
 
               <div className="flex flex-row justify-between items-center font-roboto-bld">
                 <span>
-                  {isInEditMode ? item.itemName : item.item_name ?? "Unnamed item"}
+                  {isInEditMode
+                    ? item.itemName
+                    : (item.item_name ?? "Unnamed item")}
                 </span>
                 <span>
-                  ₱{((isInEditMode ? item.price : item.unit_price) * item.quantity).toFixed(2)}
+                  ₱
+                  {(
+                    (isInEditMode ? item.price : item.unit_price) *
+                    item.quantity
+                  ).toFixed(2)}
                 </span>
               </div>
-
 
               {isInEditMode ? (
                 <div className="flex items-center space-x-2 mt-1">

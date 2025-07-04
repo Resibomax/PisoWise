@@ -24,9 +24,9 @@ export default function ItemsCard({ receipt }: ItemsCardProps) {
 
   const itemsToUse = isInEditMode
     ? items.map((item) => ({
-      unit_price: item.price,
-      quantity: item.quantity,
-    }))
+        unit_price: item.price,
+        quantity: item.quantity,
+      }))
     : receipt.items;
 
   const subtotal = itemsToUse.reduce(
