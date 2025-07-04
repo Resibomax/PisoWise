@@ -13,7 +13,7 @@ export default function ChangeStoreModal() {
   const { receipt } = useReceiptStore();
   const { setStoreName } = usePurchaseStore();
 
-  const [storeName, setLocalStoreName] = useState(receipt?.address || "");
+  const [storeName, setLocalStoreName] = useState(receipt?.vendor_name || "");
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
