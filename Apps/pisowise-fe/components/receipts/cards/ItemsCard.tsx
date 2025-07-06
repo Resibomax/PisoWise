@@ -44,7 +44,7 @@ export default function ItemsCard({ receipt }: ItemsCardProps) {
     <Card className="p-6 bg-[#1B1212] text-[#FBF5F3] rounded-[12px] md:h-[480px] h-auto flex flex-col">
       <CardHeader className="flex flex-col items-start mb-4">
         <h2 className="text-lg font-roboto-bld">
-          Items ({itemsToRender.length})
+          Items ({itemsToRender.length ?? 0})
         </h2>
       </CardHeader>
 
