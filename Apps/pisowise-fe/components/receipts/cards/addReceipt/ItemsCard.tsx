@@ -27,8 +27,8 @@ export default function ItemsCard() {
                 #{index + 1}
               </span>
               <div className="flex flex-row justify-between items-center font-roboto-bld">
-                <span>{item.itemName}</span>
-                <span>₱{(item.price * item.quantity).toFixed(2)}</span>
+                <span>{item.item_name}</span>
+                <span>₱{(item.unit_price * item.quantity).toFixed(2)}</span>
               </div>
               <span>Qty: {item.quantity}</span>
               <hr className="mt-4 mb-2 border-t border-[#349868]" />

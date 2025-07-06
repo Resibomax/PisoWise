@@ -32,7 +32,7 @@ export default function ProjectReceiptDetailsPage() {
   const { isAddItemModalOpen, closeAddItemModal } = useModalStore();
   const toggleEditModeOff = useModalStore((state) => state.toggleEditModeOff);
 
-  const { storeName, date, items, initializeFromReceipt } = usePurchaseStore();
+  const { vendor_name, transaction_date, items, initializeFromReceipt } = usePurchaseStore();
 
   useEffect(() => {
     if (isInEditMode && receipt) {
@@ -80,12 +80,12 @@ export default function ProjectReceiptDetailsPage() {
                 console.log("Items: ", items);
 
                 updateReceipt(receiptIdString, {
-                  vendor_name: storeName,
-                  transaction_date: date,
+                  vendor_name: vendor_name,
+                  transaction_date: transaction_date,
                   items: items.map((item) => ({
-                    item_name: item.itemName,
+                    item_name: item.item_name,
                     quantity: item.quantity,
-                    unit_price: item.price,
+                    unit_price: item.unit_price,
                   })),
                 });
 

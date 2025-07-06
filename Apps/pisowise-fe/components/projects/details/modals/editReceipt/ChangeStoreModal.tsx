@@ -11,16 +11,16 @@ import { useState } from "react";
 export default function ChangeStoreModal() {
   const { closeChangeStoreModal, isInEditMode } = useModalStore();
   const { receipt } = useReceiptStore();
-  const { setStoreName } = usePurchaseStore();
+  const { setVendorName } = usePurchaseStore();
 
-  const [storeName, setLocalStoreName] = useState(receipt?.vendor_name || "");
+  const [vendorName, setLocalVendorName] = useState(receipt?.vendor_name || "");
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
     // If in edit mode, also update the purchase store
     if (isInEditMode) {
-      setStoreName(storeName);
+      setVendorName(vendorName);
     }
 
     closeChangeStoreModal?.();
@@ -38,8 +38,8 @@ export default function ChangeStoreModal() {
           <Input
             className="w-full bg-white"
             type="text"
-            value={storeName}
-            onChange={(e) => setLocalStoreName(e.target.value)}
+            value={vendorName}
+            onChange={(e) => setLocalVendorName(e.target.value)}
             required
           />
         </div>

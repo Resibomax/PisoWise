@@ -7,12 +7,12 @@ export default function ItemsCard() {
   const { items } = usePurchaseStore();
 
   const subtotal = items.reduce(
-    (acc, item) => acc + (item.price / 1.12) * item.quantity,
+    (acc, item) => acc + (item.unit_price / 1.12) * item.quantity,
     0,
   );
 
   const total = items.reduce(
-    (acc, item) => acc + item.price * item.quantity,
+    (acc, item) => acc + item.unit_price * item.quantity,
     0,
   );
 

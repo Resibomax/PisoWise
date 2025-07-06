@@ -10,9 +10,9 @@ export interface Receipt {
   total_amount: number;
   items?: Array<{
     item_id: string;
-    name: string;
+    item_name: string;
     quantity: number;
-    price: number;
+    unit_price: number;
   }>;
 }
 

@@ -13,17 +13,17 @@ export default function ChangeStoreModal() {
 
   const itemToEdit = editingIndex !== null ? items[editingIndex] : null;
 
-  const [itemName, setItemName] = useState(itemToEdit?.itemName || "");
+  const [itemName, setItemName] = useState(itemToEdit?.item_name || "");
   const [quantity, setQuantity] = useState(
     itemToEdit?.quantity.toString() || "1",
   );
-  const [price, setPrice] = useState(itemToEdit?.price.toString() || "0.00");
+  const [price, setPrice] = useState(itemToEdit?.unit_price.toString() || "0.00");
 
   useEffect(() => {
     if (itemToEdit) {
-      setItemName(itemToEdit.itemName);
+      setItemName(itemToEdit.item_name);
       setQuantity(itemToEdit.quantity.toString());
-      setPrice(itemToEdit.price.toString());
+      setPrice(itemToEdit.unit_price.toString());
     }
   }, [itemToEdit]);
 
@@ -31,9 +31,9 @@ export default function ChangeStoreModal() {
     e.preventDefault();
     if (editingIndex !== null) {
       editItem(editingIndex, {
-        itemName,
+        item_name: itemName,
         quantity: parseInt(quantity),
-        price: parseFloat(price),
+        unit_price: parseFloat(price),
       });
     }
     closeChangeItemModal?.();
