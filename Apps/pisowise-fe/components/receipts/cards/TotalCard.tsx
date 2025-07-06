@@ -22,12 +22,13 @@ export default function ItemsCard({ receipt }: ItemsCardProps) {
     );
   }
 
-  const itemsToUse = (isInEditMode
-    ? items.map((item) => ({
-      unit_price: item.unit_price,
-      quantity: item.quantity,
-    }))
-    : receipt.items) ?? []
+  const itemsToUse =
+    (isInEditMode
+      ? items.map((item) => ({
+          unit_price: item.unit_price,
+          quantity: item.quantity,
+        }))
+      : receipt.items) ?? [];
 
   const subtotal = itemsToUse.reduce(
     (acc, item) => acc + (item.unit_price / 1.12) * item.quantity,
