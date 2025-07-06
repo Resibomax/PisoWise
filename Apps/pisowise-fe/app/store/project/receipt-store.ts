@@ -9,7 +9,6 @@ export interface Receipt {
   transaction_date: string;
   total_amount: number;
   items?: Array<{
-    item_id: string;
     item_name: string;
     quantity: number;
     unit_price: number;
