@@ -43,9 +43,9 @@ export default function DetailsCard({ receipt }: PurchaseDeetsProps) {
 
         {/* Image or Placeholder */}
         <div className="flex-grow flex justify-center items-center mb-4">
-          {receipt.receiptImage && receipt.receiptImage.trim() !== "" ? (
+          {receipt.image_url && receipt.image_url.trim() !== "" ? (
             <Image
-              src={receipt.receiptImage || "/placeholder.svg"}
+              src={receipt.image_url || "/placeholder.svg"}
               alt="Receipt"
               width={150}
               height={150}

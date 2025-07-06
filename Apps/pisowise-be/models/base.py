@@ -44,6 +44,7 @@ class Receipt(Base):
     total_amount = Column(Float, nullable=False)
     transaction_date = Column(Date, nullable=False)
     vendor_name = Column(String, nullable=True)
+    image_url = Column(String, nullable=True)
 
     # relationship to the Project model
     project = relationship("Project", back_populates="receipts")

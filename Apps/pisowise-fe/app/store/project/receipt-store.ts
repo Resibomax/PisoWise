@@ -8,6 +8,7 @@ export interface Receipt {
   vendor_name: string;
   transaction_date: string;
   total_amount: number;
+  image_url: string;
   items?: Array<{
     item_name: string;
     quantity: number;

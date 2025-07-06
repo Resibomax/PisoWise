@@ -8,6 +8,7 @@ class ReceiptCreate(BaseModel):
     total_amount: float
     transaction_date: date
     vendor_name: Optional[str] = None
+    image_url: Optional[str] = None
 
 class ReceiptUpdate(BaseModel):
     total_amount: Optional[float] = None
@@ -20,6 +21,7 @@ class ReceiptResponse(BaseModel):
     total_amount: float
     transaction_date: date
     vendor_name: Optional[str] = None
+    image_url: Optional[str] = None
     items: Optional[List[ItemResponse]] = None
 
     class Config:

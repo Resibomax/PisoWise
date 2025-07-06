@@ -31,7 +31,7 @@ export function ImageModal({ receipt }: ImageModalProps) {
       <DialogTitle></DialogTitle>
       <DialogContent className="sm:max-w-md bg-transparent shadow-none text-white border-none flex items-center justify-center">
         <Image
-          src={receipt.receipt_image || "/placeholder.svg"}
+          src={receipt.image_url || "/placeholder.svg"}
           alt="Receipt"
           width={400}
           height={400}
