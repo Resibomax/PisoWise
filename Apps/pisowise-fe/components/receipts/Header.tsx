@@ -5,11 +5,7 @@ import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Undo2, Trash, SquarePen } from "lucide-react";
 import { useReceiptStore } from "@/app/store/project/receipt-store";
-
-interface Receipt {
-  title: string;
-  receipt_id: string;
-}
+import type { Receipt } from "@/app/store/project/receipt-store";
 
 interface ProjectHeaderProps {
   receipt: Receipt;
@@ -54,7 +50,7 @@ export function ReceiptsHeader({ receipt, onEdit }: ProjectHeaderProps) {
       {/* Desktop Header */}
       <div className="hidden lg:flex flex-row items-center justify-between md:justify-start gap-6 w-full">
         <p className="text-[24px] font-[Ember] text-white md:text-3xl">
-          {receipt.title}
+          {receipt.receipt_id}
         </p>
         <Button
           className="bg-[#1B1212] hover:bg-[#FBF5F3] hover:text-black text-white font-[Ember] rounded-[12px] text-[16px] cursor-pointer flex items-center gap-2"
@@ -75,7 +71,7 @@ export function ReceiptsHeader({ receipt, onEdit }: ProjectHeaderProps) {
       {/* Mobile/Tablet Header */}
       <div className="lg:hidden flex flex-row items-center justify-between md:justify-start gap-6 w-full">
         <p className="text-[24px] font-[Ember] text-white md:text-3xl">
-          {receipt.title}
+          {receipt.receipt_id}
         </p>
         <Button
           className="bg-[#1B1212] hover:bg-[#FBF5F3] hover:text-black text-white font-[Ember] rounded-[12px] text-[16px] cursor-pointer flex items-center gap-2"
