@@ -17,7 +17,9 @@ export default function ChangeStoreModal() {
   const [quantity, setQuantity] = useState(
     itemToEdit?.quantity.toString() || "1",
   );
-  const [price, setPrice] = useState(itemToEdit?.unit_price.toString() || "0.00");
+  const [price, setPrice] = useState(
+    itemToEdit?.unit_price.toString() || "0.00",
+  );
 
   useEffect(() => {
     if (itemToEdit) {

@@ -22,8 +22,9 @@ export default function ProjectReceiptDetailsPage() {
   const projectIdString = Array.isArray(projectId) ? projectId[0] : projectId;
   const receiptIdString = Array.isArray(receiptId) ? receiptId[0] : receiptId;
 
-  const { receipt, isLoading, updateReceipt } =
-    useReceiptDetailsPage(receiptIdString ?? null);
+  const { receipt, isLoading, updateReceipt } = useReceiptDetailsPage(
+    receiptIdString ?? null,
+  );
 
   const isInEditMode = useModalStore((state) => state.isInEditMode);
   const { isChangeStoreModalOpen, closeChangeStoreModal } = useModalStore();
@@ -32,7 +33,8 @@ export default function ProjectReceiptDetailsPage() {
   const { isAddItemModalOpen, closeAddItemModal } = useModalStore();
   const toggleEditModeOff = useModalStore((state) => state.toggleEditModeOff);
 
-  const { vendor_name, transaction_date, items, initializeFromReceipt } = usePurchaseStore();
+  const { vendor_name, transaction_date, items, initializeFromReceipt } =
+    usePurchaseStore();
 
   useEffect(() => {
     if (isInEditMode && receipt) {

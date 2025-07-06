@@ -65,11 +65,15 @@ export default function DetailsCard({ receipt }: PurchaseDeetsProps) {
             <div className="flex flex-col gap-4">
               <div className="flex items-center gap-2">
                 <Store className="h-4 w-4" />
-                <p className="text-sm">{vendor_name || "No address provided"}</p>
+                <p className="text-sm">
+                  {vendor_name || "No address provided"}
+                </p>
               </div>
               <div className="flex items-center gap-2">
                 <Calendar className="h-4 w-4" />
-                <p className="text-sm">{transaction_date || "No date provided"}</p>
+                <p className="text-sm">
+                  {transaction_date || "No date provided"}
+                </p>
               </div>
             </div>
 
