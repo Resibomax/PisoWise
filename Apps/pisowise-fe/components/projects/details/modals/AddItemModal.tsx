@@ -19,9 +19,9 @@ export default function AddStoreModal() {
     e.preventDefault();
 
     addItem({
-      itemName,
+      item_name: itemName,
       quantity: parseInt(quantity),
-      price: parseFloat(price),
+      unit_price: parseFloat(price),
     });
 
     closeAddItemModal?.();

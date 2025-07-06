@@ -13,17 +13,19 @@ export default function ChangeStoreModal() {
 
   const itemToEdit = editingIndex !== null ? items[editingIndex] : null;
 
-  const [itemName, setItemName] = useState(itemToEdit?.itemName || "");
+  const [itemName, setItemName] = useState(itemToEdit?.item_name || "");
   const [quantity, setQuantity] = useState(
     itemToEdit?.quantity.toString() || "1",
   );
-  const [price, setPrice] = useState(itemToEdit?.price.toString() || "0.00");
+  const [price, setPrice] = useState(
+    itemToEdit?.unit_price.toString() || "0.00",
+  );
 
   useEffect(() => {
     if (itemToEdit) {
-      setItemName(itemToEdit.itemName);
+      setItemName(itemToEdit.item_name);
       setQuantity(itemToEdit.quantity.toString());
-      setPrice(itemToEdit.price.toString());
+      setPrice(itemToEdit.unit_price.toString());
     }
   }, [itemToEdit]);
 
@@ -31,9 +33,9 @@ export default function ChangeStoreModal() {
     e.preventDefault();
     if (editingIndex !== null) {
       editItem(editingIndex, {
-        itemName,
+        item_name: itemName,
         quantity: parseInt(quantity),
-        price: parseFloat(price),
+        unit_price: parseFloat(price),
       });
     }
     closeChangeItemModal?.();
@@ -41,14 +43,14 @@ export default function ChangeStoreModal() {
   };
 
   return (
-    <DialogContent className="bg-[#FBF5F3] text-[#1B1212] rounded-[12px]">
+    <DialogContent className="bg-[#FBF5F3] text-[#1b1212] rounded-[12px]">
       <DialogTitle className="font-Ember font-medium text-[24px] tracking-[0.48px] text-left">
         {editingIndex !== null ? `Edit Item ${editingIndex + 1}` : "Edit Item"}
       </DialogTitle>
       <form onSubmit={handleSubmit} className="flex flex-col gap-4">
         <div>
           <Input
-            className="w-full bg-white"
+            className="w-full bg-white text-[black]"
             type="text"
             value={itemName}
             onChange={(e) => setItemName(e.target.value)}
@@ -59,11 +61,23 @@ export default function ChangeStoreModal() {
         <div>
           <p className="mb-1.5">Quantity</p>
           <Input
-            className="w-full bg-white"
+            className="w-full bg-white text-[black]"
             type="number"
             min={1}
             value={quantity}
             onChange={(e) => setQuantity(e.target.value)}
+            required
+          />
+        </div>
+
+        <div>
+          <p className="mb-1.5">Unit Price</p>
+          <Input
+            className="w-full bg-white text-[black]"
+            type="number"
+            min={1}
+            value={price}
+            onChange={(e) => setPrice(e.target.value)}
             required
           />
         </div>

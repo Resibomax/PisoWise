@@ -10,22 +10,15 @@ interface ReceiptProps {
 }
 
 export default function Receipt({ projectId }: ReceiptProps) {
-  const receipts = useReceiptStore((state) => state.receipts);
-  const isLoading = useReceiptStore((state) => state.isLoading);
-  const error = useReceiptStore((state) => state.error);
-  const getReceiptsByProjectId = useReceiptStore(
-    (state) => state.getReceiptsByProjectId,
-  );
+  const { receipts, isLoading, error, getReceiptsByProjectId } =
+    useReceiptStore();
 
   useEffect(() => {
-    console.log("Receipt component state:", {
-      receipts,
-      receiptsLength: receipts?.length,
-      isLoading,
-      error,
-      projectId,
-    });
-  }, [receipts, isLoading, error, projectId]);
+    if (!receipts || receipts.length === 0) {
+      console.log("Fetching receipts for project:", projectId);
+      getReceiptsByProjectId(projectId);
+    }
+  }, [projectId, receipts, getReceiptsByProjectId]);
 
   if (isLoading) {
     return (

@@ -1,17 +1,18 @@
 import { create } from "zustand";
+import type { Receipt } from "@/app/store/project/receipt-store";
 
 interface Item {
-  itemName: string;
+  item_name: string;
   quantity: number;
-  price: number;
+  unit_price: number;
 }
 
 interface PurchaseState {
-  storeName: string;
-  date: string;
+  vendor_name: string;
+  transaction_date: string;
   items: Item[];
-  setStoreName: (name: string) => void;
-  setDate: (date: string) => void;
+  setVendorName: (name: string) => void;
+  setDate: (transaction_date: string) => void;
   addItem: (item: Item) => void;
   clear: () => void;
   updateItemQuantity: (index: number, quantity: number) => void;
@@ -19,24 +20,15 @@ interface PurchaseState {
   setEditingIndex: (index: number | null) => void;
   editingIndex: number | null;
   removeItem: (index: number) => void;
-  initializeFromReceipt: (receipt: {
-    address?: string;
-    date?: string;
-    items?: Array<{
-      id?: string;
-      name?: string;
-      quantity?: number;
-      price?: number;
-    }>;
-  }) => void;
+  initializeFromReceipt: (receipt: Receipt) => void;
 }
 
 export const usePurchaseStore = create<PurchaseState>((set) => ({
-  storeName: "",
-  date: "",
+  vendor_name: "",
+  transaction_date: "",
   items: [],
-  setStoreName: (name) => set({ storeName: name }),
-  setDate: (date) => set({ date }),
+  setVendorName: (name) => set({ vendor_name: name }),
+  setDate: (transaction_date) => set({ transaction_date }),
   addItem: (item) => set((state) => ({ items: [...state.items, item] })),
   clear: () => set({ items: [] }),
   updateItemQuantity: (index: number, quantity: number) =>
@@ -60,15 +52,15 @@ export const usePurchaseStore = create<PurchaseState>((set) => ({
     set((state) => ({
       items: state.items.filter((_, i) => i !== index),
     })),
-  initializeFromReceipt: (receipt) =>
+  initializeFromReceipt: (receipt: Receipt) =>
     set({
-      storeName: receipt.address || "",
-      date: receipt.date || "",
+      vendor_name: receipt.vendor_name || "",
+      transaction_date: receipt.transaction_date || "",
       items:
         receipt.items?.map((item) => ({
-          itemName: item.name || "",
+          item_name: item.item_name || "",
           quantity: item.quantity || 1,
-          price: item.price || 0,
+          unit_price: item.unit_price || 0,
         })) || [],
     }),
 }));

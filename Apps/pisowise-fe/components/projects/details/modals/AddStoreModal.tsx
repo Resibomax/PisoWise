@@ -8,11 +8,11 @@ import { usePurchaseStore } from "@/app/store/receiptDetails/purchaseStore";
 
 export default function AddStoreModal() {
   const { closeAddStoreModal } = useModalStore();
-  const { storeName, setStoreName } = usePurchaseStore();
+  const { vendor_name, setVendorName } = usePurchaseStore();
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Store name:", storeName);
+    console.log("Store name:", vendor_name);
     closeAddStoreModal();
   };
 
@@ -28,8 +28,8 @@ export default function AddStoreModal() {
           <Input
             className="w-full bg-white"
             type="text"
-            value={storeName}
-            onChange={(e) => setStoreName(e.target.value)}
+            value={vendor_name}
+            onChange={(e) => setVendorName(e.target.value)}
             required
           />
         </div>

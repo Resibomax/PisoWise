@@ -1,19 +1,17 @@
-import { useReceiptStore } from "@/app/store/projectDetails/receiptsStore";
 import { useModalStore } from "@/app/store/project/modal-store";
 import Image from "next/image";
 
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { Card, CardContent } from "@/components/ui/card";
 import { DialogTitle } from "@radix-ui/react-dialog";
+import type { Receipt } from "@/app/store/project/receipt-store";
 
 interface ImageModalProps {
-  receiptId: string;
+  receipt: Receipt;
 }
 
-export function ImageModal({ receiptId }: ImageModalProps) {
+export function ImageModal({ receipt }: ImageModalProps) {
   const { isImageModalOpen, closeImageModal } = useModalStore();
-  const { getReceiptById } = useReceiptStore();
-  const receipt = getReceiptById(receiptId);
 
   if (!receipt) {
     return (
@@ -33,7 +31,7 @@ export function ImageModal({ receiptId }: ImageModalProps) {
       <DialogTitle></DialogTitle>
       <DialogContent className="sm:max-w-md bg-transparent shadow-none text-white border-none flex items-center justify-center">
         <Image
-          src={receipt.receiptImage || "/placeholder.svg"}
+          src={receipt.image_url || "/placeholder.svg"}
           alt="Receipt"
           width={400}
           height={400}

@@ -5,30 +5,22 @@ import { DialogContent, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { useModalStore } from "@/app/store/project/modal-store";
 import { Calendar } from "@/components/ui/calendar";
-import { useReceiptStore } from "@/app/store/projectDetails/receiptsStore";
+import { useReceiptStore } from "@/app/store/project/receipt-store";
 import { usePurchaseStore } from "@/app/store/receiptDetails/purchaseStore";
 
-interface ChangeDateModalProps {
-  receiptId: string;
-}
-
-export default function ChangeDateModal({ receiptId }: ChangeDateModalProps) {
+export default function ChangeDateModal() {
   const { closeChangeDateModal, isInEditMode } = useModalStore();
-  const receipt = useReceiptStore((state) => state.getReceiptById(receiptId));
-  const updateReceipt = useReceiptStore((state) => state.updateReceipt);
+  const { receipt } = useReceiptStore();
   const { setDate } = usePurchaseStore();
 
   const [selectedDate, setSelectedDate] = useState<Date>(
-    receipt?.date ? new Date(receipt.date) : new Date(),
+    receipt?.transaction_date ? new Date(receipt.transaction_date) : new Date(),
   );
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (selectedDate) {
       const formatted = selectedDate.toLocaleDateString("en-CA");
-
-      // Update the receipt store
-      updateReceipt(receiptId, { date: formatted });
 
       // If in edit mode, also update the purchase store
       if (isInEditMode) {
