@@ -16,6 +16,19 @@ export interface Receipt {
   }>;
 }
 
+interface CreateReceiptData {
+  project_id: string;
+  vendor_name: string;
+  transaction_date: string;
+  total_amount: number;
+  image_url?: string;
+  items: Array<{
+    item_name: string;
+    quantity: number;
+    unit_price: number;
+  }>;
+}
+
 interface ReceiptState {
   receipt: Receipt | null;
   receipts: Receipt[] | null;
@@ -31,6 +44,7 @@ interface ReceiptState {
   deleteReceipt: (receiptId: string) => Promise<void>;
   getReceiptsByProjectId: (projectId: string) => Promise<Receipt[] | null>;
   deleteReceipts: () => void;
+  createReceipt: (receiptData: CreateReceiptData) => Promise<Receipt | null>;
 }
 
 const API_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
@@ -66,6 +80,44 @@ export const useReceiptStore = create<ReceiptState>((set) => ({
         isLoading: false,
         receipt: null,
       });
+    }
+  },
+
+  createReceipt: async (receiptData: CreateReceiptData) => {
+    try {
+      set({ isLoading: true, error: null });
+      const headers = await useAuthStore.getState().getAuthHeaders();
+      const url = `${API_URL}/receipts`;
+
+      console.log("Creating receipt with data:", receiptData);
+      const response = await axios.post(url, receiptData, { headers });
+
+      const newReceipt = response.data;
+      console.log("Created receipt:", newReceipt);
+
+      set((state) => ({
+        receipt: newReceipt,
+        receipts: state.receipts
+          ? [...state.receipts, newReceipt]
+          : [newReceipt],
+        isLoading: false,
+      }));
+
+      return newReceipt;
+    } catch (error) {
+      let errorMessage = "Failed to create receipt";
+      if (axios.isAxiosError(error)) {
+        errorMessage = error.response?.data?.message || error.message;
+      } else if (error instanceof Error) {
+        errorMessage = error.message;
+      }
+
+      set({
+        error: errorMessage,
+        isLoading: false,
+      });
+
+      return null;
     }
   },
 

@@ -1,5 +1,6 @@
 import { create } from "zustand";
 import type { Receipt } from "@/app/store/project/receipt-store";
+import { useReceiptStore } from "@/app/store/project/receipt-store";
 
 interface Item {
   item_name: string;
@@ -30,9 +31,14 @@ interface PurchaseState {
   resetToManual: () => void;
   initializeManualEntry: () => void;
   initializeGenerated: () => void;
+  createNewReceipt: (
+    projectId: string,
+    imageUrl?: string,
+  ) => Promise<Receipt | null>;
+  calculateTotalAmount: () => number;
 }
 
-export const usePurchaseStore = create<PurchaseState>((set) => ({
+export const usePurchaseStore = create<PurchaseState>((set, get) => ({
   vendor_name: "",
   transaction_date: "",
   items: [],
@@ -140,4 +146,51 @@ export const usePurchaseStore = create<PurchaseState>((set) => ({
       isManualEntry: false,
       editingIndex: null,
     }),
+
+  calculateTotalAmount: () => {
+    const { items } = get();
+    return items.reduce(
+      (total, item) => total + item.unit_price * item.quantity,
+      0,
+    );
+  },
+
+  createNewReceipt: async (projectId: string, imageUrl?: string) => {
+    const { vendor_name, transaction_date, items, calculateTotalAmount } =
+      get();
+
+    if (!vendor_name || !transaction_date || items.length === 0) {
+      console.error("Missing required fields for receipt creation");
+      return null;
+    }
+
+    const receiptData = {
+      project_id: projectId,
+      vendor_name,
+      transaction_date,
+      total_amount: calculateTotalAmount(),
+      image_url: imageUrl || "",
+      items,
+    };
+
+    try {
+      const newReceipt = await useReceiptStore
+        .getState()
+        .createReceipt(receiptData);
+      if (newReceipt) {
+        set({
+          vendor_name: "",
+          transaction_date: "",
+          items: [],
+          entryMode: "manual",
+          isManualEntry: true,
+          editingIndex: null,
+        });
+      }
+      return newReceipt;
+    } catch (error) {
+      console.error("Failed to create receipt:", error);
+      return null;
+    }
+  },
 }));

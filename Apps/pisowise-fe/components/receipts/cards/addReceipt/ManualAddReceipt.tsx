@@ -1,8 +1,11 @@
 "use client";
 
+import { useState } from "react";
+import { useRouter, useParams } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Undo2, Plus } from "lucide-react";
 import { useModalStore } from "@/app/store/project/modal-store";
+import { usePurchaseStore } from "@/app/store/receiptDetails/purchaseStore";
 import { Dialog } from "@/components/ui/dialog";
 import PurchaseDetailsCard from "@/components/receipts/cards/addReceipt/PurchaseDetailsCard";
 import ItemsCard from "@/components/receipts/cards/addReceipt/ItemsCard";
@@ -12,10 +15,69 @@ import AddDateModal from "@/components/projects/details/modals/AddDateModal";
 import AddItemModal from "@/components/projects/details/modals/AddItemModal";
 
 export default function AddReceipt() {
+  const router = useRouter();
+  const { id: projectId } = useParams();
+  const projectIdString = Array.isArray(projectId) ? projectId[0] : projectId;
+
+  const [isCreating, setIsCreating] = useState(false);
+
   const { isAddStoreModalOpen, closeAddStoreModal } = useModalStore();
   const { isAddDateModalOpen, closeAddDateModal } = useModalStore();
   const { isAddItemModalOpen, closeAddItemModal } = useModalStore();
   const { closeAddReceiptPage, closeManualReceipt } = useModalStore();
+
+  const { vendor_name, transaction_date, items, createNewReceipt, clear } =
+    usePurchaseStore();
+
+  const handleCreateReceipt = async () => {
+    if (!projectIdString) {
+      alert("Project ID not found");
+      return;
+    }
+
+    // Validation
+    if (!vendor_name || !transaction_date || items.length === 0) {
+      alert(
+        "Please fill in all required fields:\n- Vendor name\n- Transaction date\n- At least one item",
+      );
+      return;
+    }
+
+    setIsCreating(true);
+    try {
+      const newReceipt = await createNewReceipt(projectIdString);
+
+      if (newReceipt) {
+        console.log("Receipt created successfully:", newReceipt);
+
+        // Close modals and navigate
+        closeManualReceipt?.();
+        closeAddReceiptPage();
+
+        // Navigate to the new receipt details page
+        router.push(
+          `/projects/${projectIdString}/receipts/${newReceipt.receipt_id}`,
+        );
+      } else {
+        alert("Failed to create receipt. Please try again.");
+      }
+    } catch (error) {
+      console.error("Error creating receipt:", error);
+      alert("Failed to create receipt. Please try again.");
+    } finally {
+      setIsCreating(false);
+    }
+  };
+
+  const handleCancel = () => {
+    // Clear the purchase store data
+    clear();
+
+    // Close modals
+    closeManualReceipt?.();
+    closeAddReceiptPage();
+    useModalStore.getState().setManualInput(false);
+  };
 
   return (
     <div className="flex flex-col">
@@ -24,10 +86,7 @@ export default function AddReceipt() {
         <div className="flex items-center justify-between">
           <Button
             className="flex gap-2 mb-4 items-center bg-transparent hover:bg-white hover:text-black rounded-[12px] text-white"
-            onClick={() => {
-              closeManualReceipt?.();
-              closeAddReceiptPage();
-            }}
+            onClick={handleCancel}
           >
             <Undo2 className="h-5 w-5" />
             <span className="font-roboto-regular text-[16px]">Back</span>
@@ -37,9 +96,7 @@ export default function AddReceipt() {
           <h1 className="text-2xl font-bold font-roboto-semibld">Receipt</h1>
           <Button
             className="flex bg-[#1B1212] font-Ember font-normal tracking-[0.48px]"
-            onClick={() => {
-              useModalStore.getState().setManualInput(false);
-            }}
+            onClick={handleCancel}
           >
             Cancel
           </Button>
@@ -56,11 +113,19 @@ export default function AddReceipt() {
         <div className="lg:w-3/10">
           <ReceiptTotalCard />
           <Button
-            className="flex flex-row bg-[#349868] text-[#FBF5F3] rounded-[12px] w-full"
-            onClick={() => {}}
+            className="flex flex-row bg-[#349868] text-[#FBF5F3] rounded-[12px] w-full mt-4"
+            onClick={handleCreateReceipt}
+            disabled={
+              isCreating ||
+              !vendor_name ||
+              !transaction_date ||
+              items.length === 0
+            }
           >
             <Plus className="h-5 w-5" />
-            <span className="text-[16px]">Create Receipt</span>
+            <span className="text-[16px]">
+              {isCreating ? "Creating..." : "Create Receipt"}
+            </span>
           </Button>
         </div>
       </div>
