@@ -17,6 +17,7 @@ import { usePurchaseStore } from "@/app/store/receiptDetails/purchaseStore";
 import { useReceiptDetailsPage } from "../../app/hooks/use-receipts-page";
 import { useEffect } from "react";
 import Loader from "../ui/loader";
+import { ConfirmationModal } from "./modals/ConfirmationModal";
 
 export default function ProjectReceiptDetailsPage() {
   const { id: projectId, receiptId } = useParams();
@@ -117,6 +118,9 @@ export default function ProjectReceiptDetailsPage() {
       <Dialog open={isAddItemModalOpen} onOpenChange={closeAddItemModal}>
         <AddItemModal />
       </Dialog>
+
+      {/* Pass the receipt ID to the confirmation modal */}
+      <ConfirmationModal receiptId={receipt.receipt_id || receiptIdString} />
     </div>
   );
 }

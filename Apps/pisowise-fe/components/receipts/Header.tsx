@@ -4,16 +4,20 @@ import { useModalStore } from "@/app/store/project/modal-store";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Undo2, Trash, SquarePen } from "lucide-react";
-import { useReceiptStore } from "@/app/store/project/receipt-store";
 import type { Receipt } from "@/app/store/project/receipt-store";
 
 interface ProjectHeaderProps {
   receipt: Receipt;
   onEdit?: () => void;
 }
+
 export function ReceiptsHeader({ receipt, onEdit }: ProjectHeaderProps) {
-  const { isInEditMode, toggleEditModeOn, toggleEditModeOff } = useModalStore();
-  const { deleteReceipt } = useReceiptStore();
+  const {
+    isInEditMode,
+    toggleEditModeOn,
+    toggleEditModeOff,
+    openConfirmDeleteModal,
+  } = useModalStore();
   const router = useRouter();
 
   const handleEditClick = () => {
@@ -21,7 +25,7 @@ export function ReceiptsHeader({ receipt, onEdit }: ProjectHeaderProps) {
       toggleEditModeOff();
     } else {
       toggleEditModeOn();
-      onEdit?.(); // Optional callback
+      onEdit?.();
     }
   };
 
@@ -39,7 +43,7 @@ export function ReceiptsHeader({ receipt, onEdit }: ProjectHeaderProps) {
 
         <Button
           className="lg:hidden flex gap-2 items-center bg-transparent border border-[#E73648] text-[#E73648] hover:bg-[#E73648] hover:text-white rounded-[12px] text-[16px]"
-          onClick={() => deleteReceipt(receipt.receipt_id)}
+          onClick={openConfirmDeleteModal}
         >
           <Trash className="cursor-pointer h-6 w-6" />
           <p className="font-roboto-regular text-[16px]">Delete</p>
@@ -60,7 +64,7 @@ export function ReceiptsHeader({ receipt, onEdit }: ProjectHeaderProps) {
         </Button>
         <Button
           className="flex gap-2 items-center bg-transparent border border-[#E73648] text-[#E73648] hover:bg-[#E73648] hover:text-white rounded-[12px] text-[16px]"
-          onClick={() => deleteReceipt(receipt.receipt_id)}
+          onClick={openConfirmDeleteModal}
         >
           <Trash className="cursor-pointer h-6 w-6" />
           <p className="font-roboto-regular text-[16px]">Delete</p>
