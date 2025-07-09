@@ -48,12 +48,15 @@ export default function ItemsCard({ isManualEntry = true }: ItemsCardProps) {
       </CardContent>
       <div className="flex flex-row gap-2 justify-end mt-4">
         <Button
-          className="border border-[#349868] bg-transparent"
+          className="border border-white bg-transparent rounded-[12px] hover:bg-white hover:text-black font-roboto-regula"
           onClick={clear}
         >
           Reset
         </Button>
-        <Button className="bg-[#349868]" onClick={openAddItemModal}>
+        <Button
+          className="bg-[#349868] hover:bg-[#49C187] rounded-[12px] font-roboto-regular"
+          onClick={openAddItemModal}
+        >
           Add Item
         </Button>
       </div>

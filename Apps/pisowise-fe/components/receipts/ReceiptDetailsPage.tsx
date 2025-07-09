@@ -77,7 +77,7 @@ export default function ProjectReceiptDetailsPage() {
           <TotalCard receipt={receipt || ""} />
           {isInEditMode && (
             <Button
-              className="flex flex-row bg-[#349868] text-[#FBF5F3] rounded-[12px] w-full mt-4"
+              className="flex flex-row bg-[#349868] hover:bg-[#49C187] font-roboto-regular rounded-[12px] w-full mt-4"
               onClick={() => {
                 if (!receiptIdString) return;
                 console.log("Items: ", items);

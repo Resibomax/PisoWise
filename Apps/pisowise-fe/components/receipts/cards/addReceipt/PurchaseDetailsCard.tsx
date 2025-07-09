@@ -37,10 +37,16 @@ export default function PurchaseDetailsCard() {
         </div>
 
         <div className="flex flex-row gap-2 justify-end">
-          <Button className="bg-[#349868]" onClick={openAddStoreModal}>
+          <Button
+            className="bg-[#349868] hover:bg-[#49C187] rounded-[12px] font-roboto-regular"
+            onClick={openAddStoreModal}
+          >
             Add Store
           </Button>
-          <Button className="bg-[#349868]" onClick={openAddDateModal}>
+          <Button
+            className="bg-[#349868] hover:bg-[#49C187] rounded-[12px] font-roboto-regular"
+            onClick={openAddDateModal}
+          >
             Add Date
           </Button>
         </div>

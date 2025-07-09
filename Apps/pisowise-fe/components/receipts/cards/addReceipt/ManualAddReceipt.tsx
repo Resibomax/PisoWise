@@ -95,7 +95,7 @@ export default function AddReceipt() {
         <div className="flex flex-row justify-between items-center mb-4 text-white">
           <h1 className="text-2xl font-bold font-roboto-semibld">Receipt</h1>
           <Button
-            className="flex bg-[#1B1212] font-Ember font-normal tracking-[0.48px]"
+            className="flex bg-[#1B1212]  font-roboto-light rounded-[12px] hover:bg-white hover:text-black tracking-[0.48px]"
             onClick={handleCancel}
           >
             Cancel
@@ -113,7 +113,7 @@ export default function AddReceipt() {
         <div className="lg:w-3/10">
           <ReceiptTotalCard />
           <Button
-            className="flex flex-row bg-[#349868] text-[#FBF5F3] rounded-[12px] w-full mt-4"
+            className="flex flex-row bg-[#349868] hover:bg-[#49C187] rounded-[12px] font-roboto-regular w-full mt-4"
             onClick={handleCreateReceipt}
             disabled={
               isCreating ||

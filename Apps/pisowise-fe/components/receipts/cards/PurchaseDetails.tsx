@@ -78,16 +78,22 @@ export default function DetailsCard({ receipt }: PurchaseDeetsProps) {
             </div>
 
             <div className="flex flex-row gap-2 justify-end mt-1 w-full">
-              <Button className="bg-[#349868]" onClick={openChangeStoreModal}>
+              <Button
+                className="bg-[#349868] hover:bg-[#49C187] rounded-[12px] font-roboto-regular"
+                onClick={openChangeStoreModal}
+              >
                 {vendor_name ? "Change Store" : "Add Store"}
               </Button>
-              <Button className="bg-[#349868]" onClick={openChangeDateModal}>
+              <Button
+                className="bg-[#349868] hover:bg-[#49C187] rounded-[12px] font-roboto-regular"
+                onClick={openChangeDateModal}
+              >
                 {transaction_date ? "Change Date" : "Add Date"}
               </Button>
             </div>
           </div>
         ) : (
-          <div className="flex justify-start gap-8 mt-4 text-[14px] font-roboto-light">
+          <div className="flex justify-start gap-8 mt-2 text-[14px] font-roboto-light">
             <div className="flex items-center gap-2">
               <Store className="h-4 w-4" />
               <p className="text-sm">
