@@ -44,18 +44,14 @@ export const usePurchaseStore = create<PurchaseState>((set, get) => ({
   items: [],
   entryMode: "manual",
   isManualEntry: true,
-
   setVendorName: (name) => set({ vendor_name: name }),
-
   setDate: (transaction_date) => set({ transaction_date }),
-
   addItem: (item) =>
     set((state) => ({
       items: [...state.items, item],
       entryMode: "manual",
       isManualEntry: true,
     })),
-
   clear: () =>
     set({
       items: [],
@@ -65,7 +61,6 @@ export const usePurchaseStore = create<PurchaseState>((set, get) => ({
       transaction_date: "",
       editingIndex: null,
     }),
-
   updateItemQuantity: (index: number, quantity: number) =>
     set((state) => {
       const updatedItems = [...state.items];
@@ -75,22 +70,18 @@ export const usePurchaseStore = create<PurchaseState>((set, get) => ({
       };
       return { items: updatedItems };
     }),
-
   editItem: (index: number, updatedItem: Item) =>
     set((state) => {
       const updatedItems = [...state.items];
       updatedItems[index] = { ...updatedItems[index], ...updatedItem };
       return { items: updatedItems };
     }),
-
   setEditingIndex: (index: number | null) => set({ editingIndex: index }),
   editingIndex: null,
-
   removeItem: (index) =>
     set((state) => ({
       items: state.items.filter((_, i) => i !== index),
     })),
-
   initializeFromReceipt: (receipt: Receipt) =>
     set({
       vendor_name: receipt.vendor_name || "",
@@ -104,19 +95,16 @@ export const usePurchaseStore = create<PurchaseState>((set, get) => ({
       entryMode: "generated",
       isManualEntry: false,
     }),
-
   setManualEntry: (isManual: boolean) =>
     set({
       isManualEntry: isManual,
       entryMode: isManual ? "manual" : "generated",
     }),
-
   setEntryMode: (mode: EntryMode) =>
     set({
       entryMode: mode,
       isManualEntry: mode === "manual",
     }),
-
   resetToManual: () =>
     set({
       entryMode: "manual",
@@ -126,7 +114,6 @@ export const usePurchaseStore = create<PurchaseState>((set, get) => ({
       transaction_date: "",
       editingIndex: null,
     }),
-
   initializeManualEntry: () =>
     set({
       vendor_name: "",
@@ -136,7 +123,6 @@ export const usePurchaseStore = create<PurchaseState>((set, get) => ({
       isManualEntry: true,
       editingIndex: null,
     }),
-
   initializeGenerated: () =>
     set({
       vendor_name: "",
@@ -146,7 +132,6 @@ export const usePurchaseStore = create<PurchaseState>((set, get) => ({
       isManualEntry: false,
       editingIndex: null,
     }),
-
   calculateTotalAmount: () => {
     const { items } = get();
     return items.reduce(
@@ -154,29 +139,24 @@ export const usePurchaseStore = create<PurchaseState>((set, get) => ({
       0,
     );
   },
-
   createNewReceipt: async (projectId: string, imageUrl?: string) => {
     const { vendor_name, transaction_date, items, calculateTotalAmount } =
       get();
 
-    if (!vendor_name || !transaction_date || items.length === 0) {
-      console.error("Missing required fields for receipt creation");
-      return null;
-    }
-
     const receiptData = {
       project_id: projectId,
-      vendor_name,
-      transaction_date,
+      vendor_name: vendor_name || "Unknown Vendor",
+      transaction_date:
+        transaction_date || new Date().toISOString().split("T")[0],
       total_amount: calculateTotalAmount(),
       image_url: imageUrl || "",
       items,
     };
 
     try {
-      const newReceipt = await useReceiptStore
-        .getState()
-        .createReceipt(receiptData);
+      const receiptStore = useReceiptStore.getState();
+      const newReceipt = await receiptStore.createReceipt(receiptData);
+
       if (newReceipt) {
         set({
           vendor_name: "",
@@ -187,9 +167,9 @@ export const usePurchaseStore = create<PurchaseState>((set, get) => ({
           editingIndex: null,
         });
       }
+
       return newReceipt;
-    } catch (error) {
-      console.error("Failed to create receipt:", error);
+    } catch {
       return null;
     }
   },

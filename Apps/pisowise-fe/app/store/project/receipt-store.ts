@@ -1,3 +1,5 @@
+"use client";
+
 import { create } from "zustand";
 import { useAuthStore } from "../session-store";
 import axios from "axios";
@@ -29,12 +31,18 @@ interface CreateReceiptData {
   }>;
 }
 
+interface ItemCreate {
+  receipt_id: string;
+  item_name: string;
+  quantity: number;
+  unit_price: number;
+}
+
 interface ReceiptState {
   receipt: Receipt | null;
   receipts: Receipt[] | null;
   isLoading: boolean;
   error: string | null;
-
   // Actions
   getReceiptById: (receiptId: string) => Promise<void>;
   updateReceipt: (
@@ -43,7 +51,6 @@ interface ReceiptState {
   ) => Promise<void>;
   deleteReceipt: (receiptId: string) => Promise<void>;
   getReceiptsByProjectId: (projectId: string) => Promise<Receipt[] | null>;
-  deleteReceipts: () => void;
   createReceipt: (receiptData: CreateReceiptData) => Promise<Receipt | null>;
 }
 
@@ -58,23 +65,17 @@ export const useReceiptStore = create<ReceiptState>((set) => ({
   getReceiptById: async (receiptId: string) => {
     try {
       set({ isLoading: true, error: null });
-
       const headers = await useAuthStore.getState().getAuthHeaders();
       const url = `${API_URL}/receipts/${receiptId}`;
-      console.log("Calling API: ", url);
-
       const response = await axios.get(url, { headers });
-      console.log(response.data);
       set({ receipt: response.data, isLoading: false });
     } catch (error) {
       let errorMessage = "Failed to fetch receipt";
-
       if (axios.isAxiosError(error)) {
         errorMessage = error.response?.data?.message || error.message;
       } else if (error instanceof Error) {
         errorMessage = error.message;
       }
-
       set({
         error: errorMessage,
         isLoading: false,
@@ -87,13 +88,32 @@ export const useReceiptStore = create<ReceiptState>((set) => ({
     try {
       set({ isLoading: true, error: null });
       const headers = await useAuthStore.getState().getAuthHeaders();
-      const url = `${API_URL}/receipts`;
 
-      console.log("Creating receipt with data:", receiptData);
-      const response = await axios.post(url, receiptData, { headers });
+      const { items, ...receiptOnlyData } = receiptData;
+      const receiptUrl = `${API_URL}/receipts`;
+      const receiptResponse = await axios.post(receiptUrl, receiptOnlyData, {
+        headers,
+      });
+      const newReceipt = receiptResponse.data;
 
-      const newReceipt = response.data;
-      console.log("Created receipt:", newReceipt);
+      if (items && items.length > 0) {
+        const itemPromises = items.map(async (item) => {
+          const itemData: ItemCreate = {
+            receipt_id: newReceipt.receipt_id,
+            item_name: item.item_name,
+            quantity: item.quantity,
+            unit_price: item.unit_price,
+          };
+          try {
+            await axios.post(`${API_URL}/items`, itemData, { headers });
+            return { success: true };
+          } catch {
+            return { success: false };
+          }
+        });
+
+        await Promise.allSettled(itemPromises);
+      }
 
       set((state) => ({
         receipt: newReceipt,
@@ -111,12 +131,10 @@ export const useReceiptStore = create<ReceiptState>((set) => ({
       } else if (error instanceof Error) {
         errorMessage = error.message;
       }
-
       set({
         error: errorMessage,
         isLoading: false,
       });
-
       return null;
     }
   },
@@ -124,24 +142,17 @@ export const useReceiptStore = create<ReceiptState>((set) => ({
   updateReceipt: async (receiptId: string, updates: Partial<Receipt>) => {
     try {
       set({ isLoading: true, error: null });
-
       const headers = await useAuthStore.getState().getAuthHeaders();
       const url = `${API_URL}/receipts/${receiptId}`;
-
       const response = await axios.put(url, updates, { headers });
-      console.log("Response: ", response);
-
       set({ receipt: response.data, isLoading: false });
     } catch (error) {
       let errorMessage = "Failed to update receipt";
-      console.log("Error: ", errorMessage);
-
       if (axios.isAxiosError(error)) {
         errorMessage = error.response?.data?.message || error.message;
       } else if (error instanceof Error) {
         errorMessage = error.message;
       }
-
       set({
         error: errorMessage,
         isLoading: false,
@@ -152,16 +163,12 @@ export const useReceiptStore = create<ReceiptState>((set) => ({
   deleteReceipt: async (receiptId: string) => {
     try {
       set({ isLoading: true, error: null });
-
       const headers = {
         ...(await useAuthStore.getState().getAuthHeaders()),
         accept: "application/json",
       };
       const url = `${API_URL}/receipts/${receiptId}`;
-
-      const response = await axios.delete(url, { headers });
-      console.log("Response: ", response);
-
+      await axios.delete(url, { headers });
       set((state) => ({
         receipts:
           state.receipts?.filter((r) => r.receipt_id !== receiptId) || [],
@@ -169,50 +176,36 @@ export const useReceiptStore = create<ReceiptState>((set) => ({
       }));
     } catch (error) {
       let errorMessage = "Failed to delete receipt";
-
       if (axios.isAxiosError(error)) {
         errorMessage = error.response?.data?.message || error.message;
       } else if (error instanceof Error) {
         errorMessage = error.message;
       }
-
       set({ error: errorMessage, isLoading: false });
     }
-  },
-
-  deleteReceipts: () => {
-    set({ receipts: null, error: null, isLoading: false });
   },
 
   getReceiptsByProjectId: async (projectId: string) => {
     try {
       set({ isLoading: true, error: null });
-
       const headers = await useAuthStore.getState().getAuthHeaders();
       const url = `${API_URL}/receipts?project_id=${projectId}`;
-
       const response = await axios.get(url, { headers });
-
       const receiptsData = Array.isArray(response.data) ? response.data : null;
-
       set({ receipts: receiptsData, isLoading: false });
-
       return receiptsData;
     } catch (error) {
       let errorMessage = "Failed to fetch receipts";
-
       if (axios.isAxiosError(error)) {
         errorMessage = error.response?.data?.message || error.message;
       } else if (error instanceof Error) {
         errorMessage = error.message;
       }
-
       set({
         error: errorMessage,
         isLoading: false,
         receipts: null,
       });
-
       return null;
     }
   },
