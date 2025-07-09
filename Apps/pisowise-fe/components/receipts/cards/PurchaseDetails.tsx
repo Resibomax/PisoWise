@@ -34,7 +34,7 @@ export default function DetailsCard({ receipt }: PurchaseDeetsProps) {
   }
 
   return (
-    <Card className="bg-[#1B1212] border-none shadow-lg hover:shadow-xl transition-shadow rounded-[12px] text-white w-full">
+    <Card className="bg-[#1B1212] border-none shadow-lg hover:shadow-xl transition-shadow rounded-[12px] md:h-[480px] h-auto text-white w-full">
       <CardContent className="p-5 flex flex-col h-full">
         {/* Header */}
         <div className="flex-shrink-0 mb-4">
@@ -61,8 +61,8 @@ export default function DetailsCard({ receipt }: PurchaseDeetsProps) {
 
         {/* Store and Date Details Layout */}
         {isInEditMode ? (
-          <div className="flex flex-col justify-between items-start gap-4 mt-4 font-roboto-regular">
-            <div className="flex flex-col gap-4">
+          <div className="flex flex-col justify-between items-start gap-4 mt-2 font-roboto-regular">
+            <div className="flex gap-8">
               <div className="flex items-center gap-2">
                 <Store className="h-4 w-4" />
                 <p className="text-sm">
@@ -77,7 +77,7 @@ export default function DetailsCard({ receipt }: PurchaseDeetsProps) {
               </div>
             </div>
 
-            <div className="flex flex-row gap-2 justify-end w-full">
+            <div className="flex flex-row gap-2 justify-end mt-1 w-full">
               <Button className="bg-[#349868]" onClick={openChangeStoreModal}>
                 {vendor_name ? "Change Store" : "Add Store"}
               </Button>
@@ -87,7 +87,7 @@ export default function DetailsCard({ receipt }: PurchaseDeetsProps) {
             </div>
           </div>
         ) : (
-          <div className="flex flex-col gap-4 mt-4 text-[14px] font-roboto-light">
+          <div className="flex justify-start gap-8 mt-4 text-[14px] font-roboto-light">
             <div className="flex items-center gap-2">
               <Store className="h-4 w-4" />
               <p className="text-sm">
