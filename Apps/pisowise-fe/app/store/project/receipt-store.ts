@@ -3,6 +3,7 @@
 import { create } from "zustand";
 import { useAuthStore } from "../session-store";
 import axios from "axios";
+import { toast } from "sonner";
 
 export interface Receipt {
   receipt_id: string;
@@ -43,7 +44,6 @@ interface ReceiptState {
   receipts: Receipt[] | null;
   isLoading: boolean;
   error: string | null;
-  // Actions
   getReceiptById: (receiptId: string) => Promise<void>;
   updateReceipt: (
     receiptId: string,
@@ -68,6 +68,7 @@ export const useReceiptStore = create<ReceiptState>((set) => ({
       const headers = await useAuthStore.getState().getAuthHeaders();
       const url = `${API_URL}/receipts/${receiptId}`;
       const response = await axios.get(url, { headers });
+
       set({ receipt: response.data, isLoading: false });
     } catch (error) {
       let errorMessage = "Failed to fetch receipt";
@@ -76,10 +77,15 @@ export const useReceiptStore = create<ReceiptState>((set) => ({
       } else if (error instanceof Error) {
         errorMessage = error.message;
       }
+
       set({
         error: errorMessage,
         isLoading: false,
         receipt: null,
+      });
+      toast.error("Failed to load receipt", {
+        description: errorMessage,
+        style: { backgroundColor: "#E73648", color: "white" },
       });
     }
   },
@@ -88,8 +94,8 @@ export const useReceiptStore = create<ReceiptState>((set) => ({
     try {
       set({ isLoading: true, error: null });
       const headers = await useAuthStore.getState().getAuthHeaders();
-
       const { items, ...receiptOnlyData } = receiptData;
+
       const receiptUrl = `${API_URL}/receipts`;
       const receiptResponse = await axios.post(receiptUrl, receiptOnlyData, {
         headers,
@@ -111,7 +117,6 @@ export const useReceiptStore = create<ReceiptState>((set) => ({
             return { success: false };
           }
         });
-
         await Promise.allSettled(itemPromises);
       }
 
@@ -123,6 +128,10 @@ export const useReceiptStore = create<ReceiptState>((set) => ({
         isLoading: false,
       }));
 
+      toast.success("Receipt created successfully", {
+        description: `Receipt from "${receiptData.vendor_name}" has been added to your project.`,
+        style: { backgroundColor: "#349868", color: "white" },
+      });
       return newReceipt;
     } catch (error) {
       let errorMessage = "Failed to create receipt";
@@ -131,9 +140,14 @@ export const useReceiptStore = create<ReceiptState>((set) => ({
       } else if (error instanceof Error) {
         errorMessage = error.message;
       }
+
       set({
         error: errorMessage,
         isLoading: false,
+      });
+      toast.error("Failed to create receipt", {
+        description: errorMessage,
+        style: { backgroundColor: "#E73648", color: "white" },
       });
       return null;
     }
@@ -145,7 +159,12 @@ export const useReceiptStore = create<ReceiptState>((set) => ({
       const headers = await useAuthStore.getState().getAuthHeaders();
       const url = `${API_URL}/receipts/${receiptId}`;
       const response = await axios.put(url, updates, { headers });
+
       set({ receipt: response.data, isLoading: false });
+      toast.success("Receipt updated successfully", {
+        description: "Your receipt changes have been saved.",
+        style: { backgroundColor: "#349868", color: "white" },
+      });
     } catch (error) {
       let errorMessage = "Failed to update receipt";
       if (axios.isAxiosError(error)) {
@@ -153,9 +172,14 @@ export const useReceiptStore = create<ReceiptState>((set) => ({
       } else if (error instanceof Error) {
         errorMessage = error.message;
       }
+
       set({
         error: errorMessage,
         isLoading: false,
+      });
+      toast.error("Failed to update receipt", {
+        description: errorMessage,
+        style: { backgroundColor: "#E73648", color: "white" },
       });
     }
   },
@@ -169,11 +193,18 @@ export const useReceiptStore = create<ReceiptState>((set) => ({
       };
       const url = `${API_URL}/receipts/${receiptId}`;
       await axios.delete(url, { headers });
+
       set((state) => ({
         receipts:
           state.receipts?.filter((r) => r.receipt_id !== receiptId) || [],
         isLoading: false,
       }));
+
+      toast.success("Receipt deleted successfully", {
+        description:
+          "The receipt has been permanently removed from your project.",
+        style: { backgroundColor: "#349868", color: "white" },
+      });
     } catch (error) {
       let errorMessage = "Failed to delete receipt";
       if (axios.isAxiosError(error)) {
@@ -181,7 +212,12 @@ export const useReceiptStore = create<ReceiptState>((set) => ({
       } else if (error instanceof Error) {
         errorMessage = error.message;
       }
+
       set({ error: errorMessage, isLoading: false });
+      toast.error("Failed to delete receipt", {
+        description: errorMessage,
+        style: { backgroundColor: "#E73648", color: "white" },
+      });
     }
   },
 
@@ -191,20 +227,31 @@ export const useReceiptStore = create<ReceiptState>((set) => ({
       const headers = await useAuthStore.getState().getAuthHeaders();
       const url = `${API_URL}/receipts?project_id=${projectId}`;
       const response = await axios.get(url, { headers });
-      const receiptsData = Array.isArray(response.data) ? response.data : null;
+      const receiptsData = Array.isArray(response.data) ? response.data : [];
+
       set({ receipts: receiptsData, isLoading: false });
       return receiptsData;
     } catch (error) {
+      if (axios.isAxiosError(error) && error.response?.status === 404) {
+        set({ receipts: [], isLoading: false, error: null });
+        return [];
+      }
+
       let errorMessage = "Failed to fetch receipts";
       if (axios.isAxiosError(error)) {
         errorMessage = error.response?.data?.message || error.message;
       } else if (error instanceof Error) {
         errorMessage = error.message;
       }
+
       set({
         error: errorMessage,
         isLoading: false,
         receipts: null,
+      });
+      toast.error("Failed to load receipts", {
+        description: errorMessage,
+        style: { backgroundColor: "#E73648", color: "white" },
       });
       return null;
     }
