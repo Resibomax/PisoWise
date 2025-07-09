@@ -16,6 +16,7 @@ import AddItemModal from "@/components/projects/details/modals/AddItemModal";
 import { usePurchaseStore } from "@/app/store/receiptDetails/purchaseStore";
 import { useReceiptDetailsPage } from "../../app/hooks/use-receipts-page";
 import { useEffect } from "react";
+import Loader from "../ui/loader";
 
 export default function ProjectReceiptDetailsPage() {
   const { id: projectId, receiptId } = useParams();
@@ -44,8 +45,8 @@ export default function ProjectReceiptDetailsPage() {
 
   if (isLoading) {
     return (
-      <div className="p-4 text-white">
-        <h1>Loading Receipt...</h1>
+      <div className="flex items-center justify-center h-screen">
+        <Loader />
       </div>
     );
   }

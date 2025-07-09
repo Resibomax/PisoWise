@@ -6,7 +6,7 @@ import { useModalStore } from "@/app/store/project/modal-store";
 import { Dialog } from "@/components/ui/dialog";
 import PurchaseDetailsCard from "@/components/receipts/cards/addReceipt/PurchaseDetailsCard";
 import ItemsCard from "@/components/receipts/cards/addReceipt/ItemsCard";
-import ReceiptTotalCard from "@/components/receipts/cards/addReceipt/ReceiptTotalCard";
+import ReceiptTotalCard from "@/components/receipts/cards/addReceipt/TotalCard";
 import AddStoreModal from "@/components/projects/details/modals/AddStoreModal";
 import AddDateModal from "@/components/projects/details/modals/AddDateModal";
 import AddItemModal from "@/components/projects/details/modals/AddItemModal";
