@@ -1,18 +1,26 @@
-from fastapi import APIRouter, Depends, Query
+from fastapi import APIRouter, Depends, Query, HTTPException, File, UploadFile
 from sqlalchemy.orm import Session
+from typing import List, Optional
 from models.receipt import ReceiptCreate, ReceiptUpdate, ReceiptResponse
 from usecases.receipt_usecase import ReceiptUseCase
-from typing import List, Optional
 from db.database import get_db
 
 receipt_router = APIRouter()
+
+@receipt_router.post("/receipts/upload-image", response_model=dict)
+async def upload_receipt_image(
+    file: UploadFile = File(...),
+    db: Session = Depends(get_db)
+):
+    uc = ReceiptUseCase(db)
+    return await uc.upload_receipt_image_usecase(file)
 
 @receipt_router.post("/receipts", response_model=ReceiptResponse)
 def create_receipt(receipt: ReceiptCreate, db: Session = Depends(get_db)):
     uc = ReceiptUseCase(db)
     return uc.create_receipt_usecase(receipt)
 
-@receipt_router.get("/receipts", response_model=(List[ReceiptResponse]))
+@receipt_router.get("/receipts", response_model=List[ReceiptResponse])
 def get_receipts(
         project_id: Optional[str] = Query(default=None),
         db: Session = Depends(get_db)):
