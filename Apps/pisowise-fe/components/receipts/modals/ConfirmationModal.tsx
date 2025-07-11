@@ -27,7 +27,7 @@ export function ConfirmationModal({ receiptId }: ConfirmationModalProps) {
       if (receiptId) {
         await deleteReceipt(receiptId);
         closeConfirmDeleteModal();
-        router.push(`/projects/${receiptId}`);
+        router.push(`/projects/`);
       }
     } catch (error) {
       console.error("Error deleting receipt:", error);
