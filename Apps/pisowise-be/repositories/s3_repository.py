@@ -31,7 +31,7 @@ class S3Repository:
                 Bucket=self.bucket_name,
                 Key=key,
                 ContentType=content_type,
-                Metadata=metadata
+                Metadata=metadata,
             )
 
             return f"https://{self.bucket_name}.s3.{os.getenv('AWS_REGION')}.amazonaws.com/{key}"

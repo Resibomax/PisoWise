@@ -71,7 +71,6 @@ class ReceiptUseCase:
                 project_id=project_id
             )
 
-            # Optionally create a receipt
             result = {"image_url": image_url}
             if create_receipt:
                 receipt_data = ReceiptCreate(
@@ -82,7 +81,8 @@ class ReceiptUseCase:
                     image_url=image_url
                 )
                 receipt = self.repo.create_receipt(receipt_data)
-                result["receipt"] = receipt
+                if receipt:
+                    result["receipt"] = receipt
 
             return result
 

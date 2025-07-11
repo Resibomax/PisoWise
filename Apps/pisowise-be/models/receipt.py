@@ -28,4 +28,5 @@ class ReceiptResponse(BaseModel):
         from_attributes = True
 
 class UploadResponse(BaseModel):
+   image_url: str
    receipt: Optional[ReceiptResponse] = None
