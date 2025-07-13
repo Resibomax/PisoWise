@@ -103,7 +103,7 @@ export default function ProjectDetailsPage() {
       ) : isManualReceiptButtonPressed ? (
         <ManualAddReceipt />
       ) : (
-        <AddReceipt />
+        <AddReceipt project_id={project.project_id} />
       )}
     </div>
   );
