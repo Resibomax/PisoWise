@@ -50,7 +50,6 @@ class ReceiptUseCase:
         self, 
         file: UploadFile, 
         project_id: str, 
-        create_receipt: bool = False
     ) -> Dict[str, Union[str, ReceiptResponse]]:
         try:
             if not file:
