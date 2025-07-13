@@ -12,11 +12,10 @@ receipt_router = APIRouter()
 async def upload_receipt_image(
     file: UploadFile = File(...),
     project_id: str = Query(..., description="Project ID to associate with the receipt"),  # Required
-    create_receipt: bool = Query(False, description="Whether to create a receipt record with the uploaded image"),  # Required
     db: Session = Depends(get_db)
 ):
     uc = ReceiptUseCase(db)
-    result = await uc.upload_receipt_image_usecase(file, project_id, create_receipt)
+    result = await uc.upload_receipt_image_usecase(file, project_id)
     return result
 
 @receipt_router.post("/receipts", response_model=ReceiptResponse)
