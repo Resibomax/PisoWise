@@ -29,4 +29,3 @@ class ReceiptResponse(BaseModel):
 
 class UploadResponse(BaseModel):
    image_url: str
-   receipt: Optional[ReceiptResponse] = None

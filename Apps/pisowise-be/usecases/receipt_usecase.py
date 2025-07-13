@@ -70,21 +70,7 @@ class ReceiptUseCase:
                 content_type=file.content_type or "application/octet-stream",
                 project_id=project_id
             )
-
-            result = {"image_url": image_url}
-            if create_receipt:
-                receipt_data = ReceiptCreate(
-                    project_id=project_id,
-                    total_amount=0.0,
-                    transaction_date=datetime.datetime.now().date(),
-                    vendor_name=None,
-                    image_url=image_url
-                )
-                receipt = self.repo.create_receipt(receipt_data)
-                if receipt:
-                    result["receipt"] = receipt
-
-            return result
+            return {"image_url": image_url}
 
         except Exception as e:
             raise HTTPException(status_code=500, detail=f"Image upload failed: {str(e)}")
