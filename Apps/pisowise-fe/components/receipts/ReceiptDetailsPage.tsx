@@ -16,6 +16,8 @@ import AddItemModal from "@/components/projects/details/modals/AddItemModal";
 import { usePurchaseStore } from "@/app/store/receiptDetails/purchaseStore";
 import { useReceiptDetailsPage } from "../../app/hooks/use-receipts-page";
 import { useEffect } from "react";
+import Loader from "../ui/loader";
+import { ConfirmationModal } from "./modals/ConfirmationModal";
 
 export default function ProjectReceiptDetailsPage() {
   const { id: projectId, receiptId } = useParams();
@@ -44,8 +46,8 @@ export default function ProjectReceiptDetailsPage() {
 
   if (isLoading) {
     return (
-      <div className="p-4 text-white">
-        <h1>Loading Receipt...</h1>
+      <div className="flex items-center justify-center h-screen">
+        <Loader />
       </div>
     );
   }
@@ -76,7 +78,7 @@ export default function ProjectReceiptDetailsPage() {
           <TotalCard receipt={receipt || ""} />
           {isInEditMode && (
             <Button
-              className="flex flex-row bg-[#349868] text-[#FBF5F3] rounded-[12px] w-full mt-4"
+              className="flex flex-row bg-[#349868] hover:bg-[#49C187] font-roboto-regular rounded-[12px] w-full mt-4"
               onClick={() => {
                 if (!receiptIdString) return;
                 console.log("Items: ", items);
@@ -116,6 +118,9 @@ export default function ProjectReceiptDetailsPage() {
       <Dialog open={isAddItemModalOpen} onOpenChange={closeAddItemModal}>
         <AddItemModal />
       </Dialog>
+
+      {/* Pass the receipt ID to the confirmation modal */}
+      <ConfirmationModal receiptId={receipt.receipt_id || receiptIdString} />
     </div>
   );
 }

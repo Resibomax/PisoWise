@@ -4,17 +4,27 @@ import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { useModalStore } from "@/app/store/project/modal-store";
 import { usePurchaseStore } from "@/app/store/receiptDetails/purchaseStore";
+import { useEffect } from "react";
 
-export default function ItemsCard() {
+interface ItemsCardProps {
+  isManualEntry?: boolean;
+}
+
+export default function ItemsCard({ isManualEntry = true }: ItemsCardProps) {
   const { openAddItemModal } = useModalStore();
-  const { items, clear } = usePurchaseStore();
+  const { items, clear, initializeManualEntry } = usePurchaseStore();
+
+  useEffect(() => {
+    if (isManualEntry) {
+      initializeManualEntry();
+    }
+  }, [isManualEntry, initializeManualEntry]);
 
   return (
     <Card className="mb-4 p-6 bg-[#1B1212] text-[#FBF5F3] rounded-[12px] md:h-[480px] h-auto flex flex-col">
       <CardHeader className="flex flex-col items-start mb-4">
         <h2 className="text-lg font-roboto-bld">Items ({items.length})</h2>
       </CardHeader>
-
       <CardContent className="flex-1 overflow-y-auto space-y-2 pr-2 custom-scrollbar">
         {items.length === 0 ? (
           <div className="hidden justify-center items-center bg-[#123524] rounded-[12px] h-full md:flex">
@@ -36,15 +46,17 @@ export default function ItemsCard() {
           ))
         )}
       </CardContent>
-
       <div className="flex flex-row gap-2 justify-end mt-4">
         <Button
-          className="border border-[#349868] bg-transparent"
+          className="border border-white bg-transparent rounded-[12px] hover:bg-white hover:text-black font-roboto-regula"
           onClick={clear}
         >
           Reset
         </Button>
-        <Button className="bg-[#349868]" onClick={openAddItemModal}>
+        <Button
+          className="bg-[#349868] hover:bg-[#49C187] rounded-[12px] font-roboto-regular"
+          onClick={openAddItemModal}
+        >
           Add Item
         </Button>
       </div>

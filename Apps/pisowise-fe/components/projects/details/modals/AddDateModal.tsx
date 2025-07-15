@@ -16,7 +16,7 @@ export default function AddDateModal() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (selectedDate) {
-      const formatted = selectedDate.toISOString().split("T")[0];
+      const formatted = selectedDate.toLocaleDateString("en-CA");
       setDate(formatted);
       console.log("Selected Date:", formatted);
     }

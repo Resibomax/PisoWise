@@ -10,7 +10,7 @@ import BudgetCard from "@/components/projects/details/cards/BudgetCard";
 import ReceiptsCard from "@/components/projects/details/cards/ReceiptsCard";
 import InsightsCard from "@/components/projects/details/cards/AIInsightsCard";
 import WarningCard from "@/components/projects/details/cards/WarningCard";
-import ManualAddReceipt from "@/components/projects/details/ManualAddReceipt";
+import ManualAddReceipt from "@/components/receipts/cards/addReceipt/ManualAddReceipt";
 import Loader from "@/components/ui/loader";
 
 export default function ProjectDetailsPage() {

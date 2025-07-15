@@ -25,7 +25,7 @@ export default function EditReceipt({ projectId }: ReceiptProps) {
   return (
     <div className="max-h-[220px] md:max-h-[240px] lg:max-h-[280px] xl:max-h-[280px] overflow-y-auto custom-scrollbar">
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-1 gap-2 px-3 lg:px-4">
-        {receipts?.map((receipt) => (
+        {receipts?.map((receipt, index) => (
           <div
             key={receipt.receipt_id}
             className="block p-3 bg-transparent rounded-[12px] transition-colors border border-[#349868]"
@@ -43,7 +43,7 @@ export default function EditReceipt({ projectId }: ReceiptProps) {
                 </div>
                 <div>
                   <h3 className="text-white font-roboto-regular text-[16px] md:text-[18px]">
-                    {receipt.vendor_name}
+                    {"Receipt " + (index + 1)}
                   </h3>
                   <p className="text-white font-roboto-light text-[12px] md:text-[14px]">
                     {receipt.items?.length} Items
