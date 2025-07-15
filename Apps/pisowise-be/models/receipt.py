@@ -26,3 +26,6 @@ class ReceiptResponse(BaseModel):
 
     class Config:
         from_attributes = True
+
+class UploadResponse(BaseModel):
+   image_url: str

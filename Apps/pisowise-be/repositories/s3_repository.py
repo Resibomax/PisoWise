@@ -9,32 +9,28 @@ class S3Repository:
         self.s3_client = boto3.client('s3')
         self.bucket_name = "pisowise-receipts"
 
-    async def upload_file(self, file_content: bytes, key: str, content_type: str) -> str:
+    async def upload_file(self, file_content: bytes, key: str, content_type: str, project_id: str = None) -> str:
         try:
-            
-            if file_content is None:
+            if not file_content:
                 raise ValueError("file_content cannot be None")
             if not key:
                 raise ValueError("key cannot be empty")
             if not content_type:
-                content_type = "application/octet-stream"  
-                
-            # for debugging purposes
-            print(f"Uploading file with key: {key}, content_type: {content_type}, bucket: {self.bucket_name}")
+                content_type = "application/octet-stream"
+
+            metadata = {"project_id": project_id} if project_id else {}
 
             self.s3_client.put_object(
                 Body=file_content,
                 Bucket=self.bucket_name,
                 Key=key,
-                ContentType=content_type
+                ContentType=content_type,
+                Metadata=metadata,
             )
 
-            
-            url = f"https://{self.bucket_name}.s3.{os.getenv('AWS_REGION')}.amazonaws.com/{key}"
-            return url
+            return f"https://{self.bucket_name}.s3.{os.getenv('AWS_REGION')}.amazonaws.com/{key}"
 
         except Exception as e:
-            print(f"Error in upload_file: {str(e)}")
             raise Exception(f"S3 upload error: {str(e)}")
         
     async def delete_file(self, key: str) -> bool:

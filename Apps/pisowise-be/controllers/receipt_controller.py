@@ -1,4 +1,5 @@
-from fastapi import APIRouter, Depends, Query, HTTPException, File, UploadFile
+from fastapi import APIRouter, Depends, Query, HTTPException, File, UploadFile, Form
+from models.receipt import UploadResponse
 from sqlalchemy.orm import Session
 from typing import List, Optional
 from models.receipt import ReceiptCreate, ReceiptUpdate, ReceiptResponse
@@ -7,13 +8,15 @@ from db.database import get_db
 
 receipt_router = APIRouter()
 
-@receipt_router.post("/receipts/upload-image", response_model=dict)
+@receipt_router.post("/receipts/upload-image", response_model=UploadResponse)
 async def upload_receipt_image(
     file: UploadFile = File(...),
+    project_id: str = Form(..., description="Project ID to associate with the receipt"),  # Required
     db: Session = Depends(get_db)
 ):
     uc = ReceiptUseCase(db)
-    return await uc.upload_receipt_image_usecase(file)
+    result = await uc.upload_receipt_image_usecase(file, project_id)
+    return result
 
 @receipt_router.post("/receipts", response_model=ReceiptResponse)
 def create_receipt(receipt: ReceiptCreate, db: Session = Depends(get_db)):

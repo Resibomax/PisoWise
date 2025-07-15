@@ -1,19 +1,38 @@
 "use client";
 
+import type React from "react";
 import { Button } from "@/components/ui/button";
 import { useModalStore } from "@/app/store/project/modal-store";
-import { Undo2, Image as ImageIcon, Loader, XCircle } from "lucide-react";
+import { useReceiptStore } from "@/app/store/project/receipt-store";
+import { Undo2, ImageIcon, Loader, XCircle } from "lucide-react";
 import { useRef, useState, useEffect } from "react";
 import Image from "next/image";
 
-export default function AddReceipt() {
-  const { closeAddReceiptPage, openManualReceipt } = useModalStore();
-  const fileInputRef = useRef<HTMLInputElement>(null);
+interface AddReceiptProps {
+  project_id: string;
+}
 
-  const [isUploading, setIsUploading] = useState(false);
+export default function AddReceipt({ project_id }: AddReceiptProps) {
+  const { closeAddReceiptPage, openManualReceipt } = useModalStore();
+  const { uploadReceiptWithImage, isUploading, uploadError, clearErrors } =
+    useReceiptStore();
+  const fileInputRef = useRef<HTMLInputElement>(null);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
-  const [error, setError] = useState<string | null>(null);
+
+  // cleanup on unmount, prevent memory leaks
+  useEffect(() => {
+    return () => {
+      if (previewUrl) {
+        URL.revokeObjectURL(previewUrl);
+      }
+    };
+  }, [previewUrl]);
+
+  // clean errors when component mounts
+  useEffect(() => {
+    clearErrors();
+  }, [clearErrors]);
 
   const handleInputBoxClick = () => {
     if (!isUploading) fileInputRef.current?.click();
@@ -22,44 +41,24 @@ export default function AddReceipt() {
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
+      if (previewUrl) {
+        URL.revokeObjectURL(previewUrl);
+      }
       setSelectedFile(file);
       setPreviewUrl(URL.createObjectURL(file));
-      setError(null);
+      clearErrors();
     }
   };
 
   const handleUpload = async () => {
-    if (!selectedFile) return;
-
-    setIsUploading(true);
-    setError(null);
-
-    try {
-      await new Promise((resolve, reject) =>
-        setTimeout(() => {
-          const fail = Math.random() < 0.3;
-          if (fail) {
-            reject(new Error("OCR failed"));
-          } else {
-            resolve("Success");
-          }
-        }, 2000),
-      );
-
-      console.log("File uploaded successfully:", selectedFile.name);
-    } catch (err) {
-      console.error("Upload failed:", err);
-      setError("Can't Read Receipt");
-    } finally {
-      setIsUploading(false);
+    if (!selectedFile) {
+      return;
+    }
+    const result = await uploadReceiptWithImage(selectedFile, project_id);
+    if (result) {
+      closeAddReceiptPage();
     }
   };
-
-  useEffect(() => {
-    return () => {
-      if (previewUrl) URL.revokeObjectURL(previewUrl);
-    };
-  }, [previewUrl]);
 
   return (
     <div className="flex flex-col mt-2">
@@ -76,23 +75,20 @@ export default function AddReceipt() {
           <span className="font-roboto-regular text-[16px]">Back</span>
         </Button>
       </div>
-
       {/* Content */}
       <div className="relative flex flex-col w-full items-center">
         {isUploading && (
           <div className="fixed inset-0 bg-black/30 backdrop-blur-sm z-20" />
         )}
         <div
-          className={`w-full max-w-sm md:max-w-md flex flex-col items-center gap-6 relative z-10 ${
-            isUploading ? "pointer-events-none select-none" : ""
-          }`}
+          className={`w-full max-w-sm md:max-w-md flex flex-col items-center gap-6 relative z-10 ${isUploading ? "pointer-events-none select-none" : ""}`}
         >
-          {error && (
+          {uploadError && (
             <div className="flex justify-center items-center bg-[#1B1212] border-2 border-[#E73648] rounded-[12px] p-4">
               <div className="flex flex-row items-center text-center gap-3">
                 <XCircle className="text-red-400 w-6 h-6" />
                 <span className="text-red-400 font-roboto-regular text-[16px]">
-                  Error! {error}
+                  Error! {uploadError}
                 </span>
               </div>
             </div>
@@ -107,14 +103,12 @@ export default function AddReceipt() {
           />
           <div
             onClick={handleInputBoxClick}
-            className={`flex items-center justify-center bg-[#1B1212] h-[294px] w-full md:w-[640px] md:h-[455px] rounded-[12px] border-2 border-[#349868] transition ${
-              isUploading ? "cursor-not-allowed" : "cursor-pointer"
-            }`}
+            className={`flex items-center justify-center bg-[#1B1212] h-[294px] w-full md:w-[640px] md:h-[455px] rounded-[12px] border-2 border-[#349868] transition ${isUploading ? "cursor-not-allowed" : "cursor-pointer"}`}
           >
             {previewUrl ? (
               <Image
-                src={previewUrl}
-                alt="Preview"
+                src={previewUrl || "/placeholder.svg"}
+                alt="Receipt preview"
                 width={640}
                 height={455}
                 className="max-h-full max-w-full object-contain rounded-[12px] p-2"
