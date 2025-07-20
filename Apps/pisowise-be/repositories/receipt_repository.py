@@ -16,7 +16,7 @@ class ReceiptRepository:
         self.db.refresh(receipt)
         return receipt
 
-    def get_all_receipts(self) -> List[ReceiptResponse]:
+    def get_all_receipts(self) -> List[Receipt]:
         return self.db.query(Receipt).all()
 
     def get_receipts_by_project_id(self, project_id: str) -> List[Receipt]:
