@@ -26,13 +26,16 @@ class ReceiptRepository:
         return self.db.query(Receipt).filter(Receipt.receipt_id == receipt_id).first()
 
     def clear_receipt_items(self, receipt_id: str) -> Receipt:
-        receipt = self.db.query(Receipt).filter(Receipt.receipt_id == receipt_id).first()
+        receipt = (
+            self.db.query(Receipt).filter(Receipt.receipt_id == receipt_id).first()
+        )
 
         if not receipt:
             raise ValueError(f"Receipt with id {receipt_id} not found")
 
         for item in receipt.items:
             self.db.delete(item)
+
         self.db.commit()
         self.db.refresh(receipt)
         return receipt
@@ -54,6 +57,7 @@ class ReceiptRepository:
                         receipt=receipt,
                     )
                     self.db.add(new_item)
+
         self.db.commit()
         self.db.refresh(receipt)
         return receipt
