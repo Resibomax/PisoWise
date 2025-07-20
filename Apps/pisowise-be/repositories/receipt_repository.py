@@ -26,9 +26,7 @@ class ReceiptRepository:
         return self.db.query(Receipt).filter(Receipt.receipt_id == receipt_id).first()
 
     def clear_receipt_items(self, receipt_id: str) -> Receipt:
-        receipt = (
-            self.db.query(Receipt).filter(Receipt.receipt_id == receipt_id).first()
-        )
+        receipt = self.db.query(Receipt).filter(Receipt.receipt_id == receipt_id).first()
 
         if not receipt:
             raise ValueError(f"Receipt with id {receipt_id} not found")
@@ -39,7 +37,9 @@ class ReceiptRepository:
         self.db.refresh(receipt)
         return receipt
 
-    def add_item_to_receipt(self, receipt: Receipt, item_data: ReceiptUpdate) -> Receipt:
+    def add_item_to_receipt(
+        self, receipt: Receipt, item_data: ReceiptUpdate
+    ) -> Receipt:
         update_data = item_data.model_dump(exclude_unset=True)
 
         for field, value in update_data.items():
@@ -59,10 +59,7 @@ class ReceiptRepository:
         return receipt
 
     def update_receipt_fields(
-        self, 
-        receipt: ReceiptResponse, 
-        update_data: ReceiptUpdate, 
-        total_amount: float
+        self, receipt: ReceiptResponse, update_data: ReceiptUpdate, total_amount: float
     ) -> ReceiptResponse:
         updateData = update_data.model_dump(exclude_unset=True)
 
