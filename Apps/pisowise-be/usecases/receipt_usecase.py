@@ -6,6 +6,7 @@ import os
 import uuid
 from repositories.receipt_repository import ReceiptRepository
 from repositories.s3_repository import S3Repository
+from repositories.project_repository import ProjectRepository
 from models.receipt import ReceiptCreate, ReceiptUpdate, ReceiptResponse
 from typing import List, Dict, Union
 
@@ -13,10 +14,16 @@ from typing import List, Dict, Union
 class ReceiptUseCase:
     def __init__(self, db: Session):
         self.repo = ReceiptRepository(db)
+        self.project_repo = ProjectRepository(db) 
         self.s3_repo = S3Repository()
 
     def create_receipt_usecase(self, receipt: ReceiptCreate) -> ReceiptResponse:
-        return self.repo.create_receipt(receipt)
+        created_receipt = self.repo.create_receipt(receipt)
+
+        project = self.project_repo.get_project_by_id(receipt.project_id)
+        self.project_repo.calculate_project_total(project)
+
+        return created_receipt
 
     def get_all_receipts_usecase(self) -> List[ReceiptResponse]:
         return self.repo.get_all_receipts()
@@ -42,26 +49,34 @@ class ReceiptUseCase:
 
         self.repo.clear_receipt_items(receipt_id)
         receipt = self.repo.add_item_to_receipt(receipt, updates)
+        self.repo.calculate_receipt_total(receipt)
 
-        total_amount = 0.0 
-        for item in receipt.items:
-            total_amount += item.quantity * item.unit_price
+        updated_receipt = self.repo.update_receipt_fields(receipt, updates)
 
-        updated_receipt = self.repo.update_receipt_fields(
-            receipt, updates, total_amount
-        )
+        project = self.project_repo.get_project_by_id(receipt.project_id)
+        self.project_repo.calculate_project_total(project)
 
         return updated_receipt
 
     def delete_receipt_usecase(self, receipt_id: str) -> bool:
         receipt = self.repo.get_receipt_by_id(receipt_id)
+
+        if not receipt:
+            raise HTTPException(status_code=404, detail="No receipt found with this ID")
+
         if receipt and receipt.image_url:
             try:
                 key = receipt.image_url.split(".com/")[1]
                 self.s3_repo.delete_file(key)
             except Exception:
                 pass
-        return self.repo.delete_receipt(receipt_id)
+
+        deleted_receipt = self.repo.delete_receipt(receipt_id)
+
+        project = self.project_repo.get_project_by_id(receipt.project_id)
+        self.project_repo.calculate_project_total(project)
+
+        return deleted_receipt
 
     async def upload_receipt_image_usecase(
         self,

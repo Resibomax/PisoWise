@@ -12,6 +12,7 @@ class ItemUpdate(BaseModel):
     item_name: Optional[str] = None
     quantity: Optional[int] = Field(default=None, gt=0)
     unit_price: Optional[float] = Field(default=None, gt=0)
+    total_price: Optional[float] = None
 
 class ItemResponse(BaseModel):
     item_id: UUID
