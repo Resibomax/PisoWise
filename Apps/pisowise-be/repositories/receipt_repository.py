@@ -62,8 +62,19 @@ class ReceiptRepository:
         self.db.refresh(receipt)
         return receipt
 
+    def calculate_receipt_total(self, receipt: Receipt) -> Receipt:
+        total_amount = 0.0
+        for item in receipt.items:
+            total_amount += item.quantity * item.unit_price
+
+        receipt.total_amount = total_amount
+
+        self.db.commit()
+        self.db.refresh(receipt)
+        return total_amount
+
     def update_receipt_fields(
-        self, receipt: ReceiptResponse, update_data: ReceiptUpdate, total_amount: float
+        self, receipt: ReceiptResponse, update_data: ReceiptUpdate
     ) -> ReceiptResponse:
         updateData = update_data.model_dump(exclude_unset=True)
 
@@ -71,8 +82,6 @@ class ReceiptRepository:
             if field == "items":
                 continue
             setattr(receipt, field, value)
-
-        receipt.total_amount = total_amount
 
         self.db.commit()
         self.db.refresh(receipt)
