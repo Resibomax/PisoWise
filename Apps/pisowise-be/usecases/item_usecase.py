@@ -64,4 +64,10 @@ class ItemUseCase:
         if not existing_item:
             raise HTTPException(status_code=404, detail="Item not found")
 
-        return self.repo.delete_item(item_id)
+        deleted_item = self.repo.delete_item(item_id)
+
+        # Recalculate Receipt total_amount
+        receipt = self.receipt_repo.get_receipt_by_id(existing_item.receipt_id)
+        self.receipt_repo.calculate_receipt_total(receipt)
+
+        return deleted_item
