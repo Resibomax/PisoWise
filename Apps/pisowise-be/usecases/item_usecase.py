@@ -43,10 +43,16 @@ class ItemUseCase:
         quantity = update_data.get("quantity", existing_item.quantity)
         unit_price = update_data.get("unit_price", existing_item.unit_price)
 
-        # Recalculate total_price
+        # Recalculate Item total_price
         update_data["total_price"] = quantity * unit_price
 
+        # Update Item
         updated_item = self.repo.update_item(item_id, ItemUpdate(**update_data))
+
+        # Recalculate Receipt total_amount
+        receipt = self.receipt_repo.get_receipt_by_id(existing_item.receipt_id)
+        self.receipt_repo.calculate_receipt_total(receipt)
+
         return ItemResponse.model_validate(updated_item)
 
     def delete_item_usecase(self, item_id: str) -> bool:

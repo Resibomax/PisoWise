@@ -42,14 +42,9 @@ class ReceiptUseCase:
 
         self.repo.clear_receipt_items(receipt_id)
         receipt = self.repo.add_item_to_receipt(receipt, updates)
+        self.repo.calculate_receipt_total(receipt)
 
-        total_amount = 0.0 
-        for item in receipt.items:
-            total_amount += item.quantity * item.unit_price
-
-        updated_receipt = self.repo.update_receipt_fields(
-            receipt, updates, total_amount
-        )
+        updated_receipt = self.repo.update_receipt_fields(receipt, updates)
 
         return updated_receipt
 
