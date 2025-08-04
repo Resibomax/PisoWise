@@ -19,6 +19,10 @@ class ItemUseCase:
         calculated_total = item.quantity * item.unit_price
 
         new_item = self.repo.create_item(item, total_price=calculated_total)
+
+        # Recalculate Receipt total_amount
+        self.receipt_repo.calculate_receipt_total(receipt)
+
         return ItemResponse.model_validate(new_item)
     
     def get_all_items_usecase(self) -> List[ItemResponse]:
