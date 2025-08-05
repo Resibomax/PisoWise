@@ -1,5 +1,5 @@
 from sqlalchemy.orm import Session
-from models.base import Project, User
+from models.base import Project, User, Receipt
 from models.project import ProjectCreate, ProjectUpdate
 from typing import List, Optional
 
@@ -46,8 +46,12 @@ class ProjectRepository:
         return amount_spent
 
     def delete_project(self, project: Project) -> None:
+        if not project:
+            return False
+
         self.db.delete(project)
         self.db.commit()
+        return True
 
 
 

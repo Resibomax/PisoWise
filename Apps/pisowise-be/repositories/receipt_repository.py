@@ -94,7 +94,6 @@ class ReceiptRepository:
         if not receipt:
             return False
 
-        self.db.query(Item).filter(Item.receipt_id == receipt_id).delete()
         self.db.delete(receipt)
         self.db.commit()
         return True
