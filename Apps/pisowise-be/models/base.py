@@ -13,7 +13,7 @@ class User(Base):
     username = Column(String, nullable=False)
 
     # relationship to the Project model
-    projects = relationship("Project", back_populates="user")
+    projects = relationship("Project", back_populates="user", cascade="all, delete-orphan")
 
 # Project Model
 class Project(Base):
@@ -30,10 +30,10 @@ class Project(Base):
     user = relationship("User", back_populates="projects")
 
     # relationship to the Receipt Model
-    receipts = relationship("Receipt", back_populates="project")
+    receipts = relationship("Receipt", back_populates="project", cascade="all, delete-orphan")
 
     # relationship to the ai_insights
-    ai_insights = relationship("AIInsight", back_populates="project")
+    ai_insights = relationship("AIInsight", back_populates="project", cascade="all, delete-orphan")
 
 
 # Receipt Model
@@ -44,12 +44,13 @@ class Receipt(Base):
     total_amount = Column(Float, nullable=False)
     transaction_date = Column(Date, nullable=False)
     vendor_name = Column(String, nullable=True)
+    image_url = Column(String, nullable=True)
 
     # relationship to the Project model
     project = relationship("Project", back_populates="receipts")
 
     # relationship to the Item Model
-    items = relationship("Item", back_populates="receipt")
+    items = relationship("Item", back_populates="receipt", cascade="all, delete-orphan")
 
 
 # Item Model

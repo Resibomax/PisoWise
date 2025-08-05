@@ -4,7 +4,7 @@ import { useState } from "react";
 import { DialogContent, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { useModalStore } from "@/app/store/projectsPage/modalStore";
+import { useModalStore } from "@/app/store/project/modal-store";
 import { usePurchaseStore } from "@/app/store/receiptDetails/purchaseStore";
 
 export default function AddStoreModal() {
@@ -19,9 +19,9 @@ export default function AddStoreModal() {
     e.preventDefault();
 
     addItem({
-      itemName,
+      item_name: itemName,
       quantity: parseInt(quantity),
-      price: parseFloat(price),
+      unit_price: parseFloat(price),
     });
 
     closeAddItemModal?.();

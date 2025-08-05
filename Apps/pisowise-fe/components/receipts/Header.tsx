@@ -1,22 +1,23 @@
 "use client";
 
-import { useModalStore } from "@/app/store/projectsPage/modalStore";
+import { useModalStore } from "@/app/store/project/modal-store";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Undo2, Trash, SquarePen } from "lucide-react";
-
-interface Receipt {
-  title: string;
-}
+import type { Receipt } from "@/app/store/project/receipt-store";
 
 interface ProjectHeaderProps {
   receipt: Receipt;
-  onDelete?: () => void;
   onEdit?: () => void;
 }
 
 export function ReceiptsHeader({ receipt, onEdit }: ProjectHeaderProps) {
-  const { isInEditMode, toggleEditModeOn, toggleEditModeOff } = useModalStore();
+  const {
+    isInEditMode,
+    toggleEditModeOn,
+    toggleEditModeOff,
+    openConfirmDeleteModal,
+  } = useModalStore();
   const router = useRouter();
 
   const handleEditClick = () => {
@@ -24,12 +25,12 @@ export function ReceiptsHeader({ receipt, onEdit }: ProjectHeaderProps) {
       toggleEditModeOff();
     } else {
       toggleEditModeOn();
-      onEdit?.(); // Optional callback
+      onEdit?.();
     }
   };
 
   return (
-    <div className="gap-[20px] flex flex-col">
+    <div className="flex flex-col gap-[20px]">
       {/* Header Section */}
       <div className="flex justify-between items-center">
         <Button
@@ -40,16 +41,19 @@ export function ReceiptsHeader({ receipt, onEdit }: ProjectHeaderProps) {
           <p className="font-roboto-regular text-[16px]">Back</p>
         </Button>
 
-        <Button className="lg:hidden flex gap-2 items-center bg-transparent border-1 border-[#E73648] text-[#E73648] hover:bg-[#E73648] hover:text-white rounded-[12px] text-[16px]">
+        <Button
+          className="lg:hidden flex gap-2 items-center bg-transparent border border-[#E73648] text-[#E73648] hover:bg-[#E73648] hover:text-white rounded-[12px] text-[16px]"
+          onClick={openConfirmDeleteModal}
+        >
           <Trash className="cursor-pointer h-6 w-6" />
           <p className="font-roboto-regular text-[16px]">Delete</p>
         </Button>
       </div>
 
-      {/* Mobile-Tablet Header */}
-      <div className="hidden flex-row items-center justify-between md:justify-start gap-6 w-full lg:flex">
+      {/* Desktop Header */}
+      <div className="hidden lg:flex flex-row items-center justify-between md:justify-start gap-6 w-full">
         <p className="text-[24px] font-[Ember] text-white md:text-3xl">
-          {receipt.title}
+          {"Receipt Details"}
         </p>
         <Button
           className="bg-[#1B1212] hover:bg-[#FBF5F3] hover:text-black text-white font-[Ember] rounded-[12px] text-[16px] cursor-pointer flex items-center gap-2"
@@ -58,16 +62,19 @@ export function ReceiptsHeader({ receipt, onEdit }: ProjectHeaderProps) {
           {!isInEditMode && <SquarePen className="w-5 h-5" />}
           {isInEditMode ? "Cancel" : "Edit"}
         </Button>
-        <Button className="flex gap-2 items-center bg-transparent border-1 border-[#E73648] text-[#E73648] hover:bg-[#E73648] hover:text-white rounded-[12px] text-[16px]">
+        <Button
+          className="flex gap-2 items-center bg-transparent border border-[#E73648] text-[#E73648] hover:bg-[#E73648] hover:text-white rounded-[12px] text-[16px]"
+          onClick={openConfirmDeleteModal}
+        >
           <Trash className="cursor-pointer h-6 w-6" />
           <p className="font-roboto-regular text-[16px]">Delete</p>
         </Button>
       </div>
 
-      {/* Desktop Header */}
-      <div className="flex flex-row items-center justify-between md:justify-start gap-6 w-full lg:hidden">
+      {/* Mobile/Tablet Header */}
+      <div className="lg:hidden flex flex-row items-center justify-between md:justify-start gap-6 w-full">
         <p className="text-[24px] font-[Ember] text-white md:text-3xl">
-          {receipt.title}
+          {receipt.receipt_id}
         </p>
         <Button
           className="bg-[#1B1212] hover:bg-[#FBF5F3] hover:text-black text-white font-[Ember] rounded-[12px] text-[16px] cursor-pointer flex items-center gap-2"

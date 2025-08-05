@@ -3,32 +3,24 @@
 import { DialogContent, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { useModalStore } from "@/app/store/projectsPage/modalStore";
-import { useReceiptStore } from "@/app/store/projectDetails/receiptsStore";
+import { useModalStore } from "@/app/store/project/modal-store";
+import { useReceiptStore } from "@/app/store/project/receipt-store";
 import { usePurchaseStore } from "@/app/store/receiptDetails/purchaseStore";
 import { useState } from "react";
 
-interface ChangeStoreModalProps {
-  receiptId: string;
-}
-
-export default function ChangeStoreModal({ receiptId }: ChangeStoreModalProps) {
+export default function ChangeStoreModal() {
   const { closeChangeStoreModal, isInEditMode } = useModalStore();
-  const receipt = useReceiptStore((state) => state.getReceiptById(receiptId));
-  const updateReceipt = useReceiptStore((state) => state.updateReceipt);
-  const { setStoreName } = usePurchaseStore();
+  const { receipt } = useReceiptStore();
+  const { setVendorName } = usePurchaseStore();
 
-  const [storeName, setLocalStoreName] = useState(receipt?.address || "");
+  const [vendorName, setLocalVendorName] = useState(receipt?.vendor_name || "");
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
-    // Update the receipt store
-    updateReceipt(receiptId, { address: storeName });
-
     // If in edit mode, also update the purchase store
     if (isInEditMode) {
-      setStoreName(storeName);
+      setVendorName(vendorName);
     }
 
     closeChangeStoreModal?.();
@@ -46,8 +38,8 @@ export default function ChangeStoreModal({ receiptId }: ChangeStoreModalProps) {
           <Input
             className="w-full bg-white"
             type="text"
-            value={storeName}
-            onChange={(e) => setLocalStoreName(e.target.value)}
+            value={vendorName}
+            onChange={(e) => setLocalVendorName(e.target.value)}
             required
           />
         </div>

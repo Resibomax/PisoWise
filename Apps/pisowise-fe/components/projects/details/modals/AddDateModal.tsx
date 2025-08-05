@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { DialogContent, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { useModalStore } from "@/app/store/projectsPage/modalStore";
+import { useModalStore } from "@/app/store/project/modal-store";
 import { Calendar } from "@/components/ui/calendar";
 import { usePurchaseStore } from "@/app/store/receiptDetails/purchaseStore";
 
@@ -16,7 +16,7 @@ export default function AddDateModal() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (selectedDate) {
-      const formatted = selectedDate.toISOString().split("T")[0];
+      const formatted = selectedDate.toLocaleDateString("en-CA");
       setDate(formatted);
       console.log("Selected Date:", formatted);
     }

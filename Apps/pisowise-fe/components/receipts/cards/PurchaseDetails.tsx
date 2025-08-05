@@ -1,26 +1,24 @@
 "use client";
 
-import { useReceiptStore } from "@/app/store/projectDetails/receiptsStore";
 import { Card, CardContent } from "@/components/ui/card";
-import { useModalStore } from "@/app/store/projectsPage/modalStore";
+import { useModalStore } from "@/app/store/project/modal-store";
 import { usePurchaseStore } from "@/app/store/receiptDetails/purchaseStore";
 import { Calendar, Store } from "lucide-react";
 import Image from "next/image";
 import { ImageModal } from "../modals/ImageModal";
 import { Button } from "@/components/ui/button";
+import type { Receipt } from "@/app/store/project/receipt-store";
 
 interface PurchaseDeetsProps {
-  receiptId: string;
+  receipt: Receipt;
   isEditMode?: boolean;
 }
 
-export default function DetailsCard({ receiptId }: PurchaseDeetsProps) {
-  const { getReceiptById } = useReceiptStore();
-  const receipt = getReceiptById(receiptId);
+export default function DetailsCard({ receipt }: PurchaseDeetsProps) {
   const { openImageModal, openChangeStoreModal, openChangeDateModal } =
     useModalStore();
   const isInEditMode = useModalStore((state) => state.isInEditMode);
-  const { storeName, date } = usePurchaseStore();
+  const { vendor_name, transaction_date } = usePurchaseStore();
 
   if (!receipt) {
     return (
@@ -36,7 +34,7 @@ export default function DetailsCard({ receiptId }: PurchaseDeetsProps) {
   }
 
   return (
-    <Card className="bg-[#1B1212] border-none shadow-lg hover:shadow-xl transition-shadow rounded-[12px] text-white w-full">
+    <Card className="bg-[#1B1212] border-none shadow-lg hover:shadow-xl transition-shadow rounded-[12px] md:h-[480px] h-auto text-white w-full">
       <CardContent className="p-5 flex flex-col h-full">
         {/* Header */}
         <div className="flex-shrink-0 mb-4">
@@ -45,9 +43,9 @@ export default function DetailsCard({ receiptId }: PurchaseDeetsProps) {
 
         {/* Image or Placeholder */}
         <div className="flex-grow flex justify-center items-center mb-4">
-          {receipt.receiptImage && receipt.receiptImage.trim() !== "" ? (
+          {receipt.image_url && receipt.image_url.trim() !== "" ? (
             <Image
-              src={receipt.receiptImage || "/placeholder.svg"}
+              src={receipt.image_url || "/placeholder.svg"}
               alt="Receipt"
               width={150}
               height={150}
@@ -63,45 +61,55 @@ export default function DetailsCard({ receiptId }: PurchaseDeetsProps) {
 
         {/* Store and Date Details Layout */}
         {isInEditMode ? (
-          <div className="flex flex-col justify-between items-start gap-4 mt-4 font-roboto-regular">
-            <div className="flex flex-col gap-4">
+          <div className="flex flex-col justify-between items-start gap-4 mt-2 font-roboto-regular">
+            <div className="flex gap-8">
               <div className="flex items-center gap-2">
                 <Store className="h-4 w-4" />
-                <p className="text-sm">{storeName || "No address provided"}</p>
+                <p className="text-sm">
+                  {vendor_name || "No address provided"}
+                </p>
               </div>
               <div className="flex items-center gap-2">
                 <Calendar className="h-4 w-4" />
-                <p className="text-sm">{date || "No date provided"}</p>
+                <p className="text-sm">
+                  {transaction_date || "No date provided"}
+                </p>
               </div>
             </div>
 
-            <div className="flex flex-row gap-2 justify-end w-full">
-              <Button className="bg-[#349868]" onClick={openChangeStoreModal}>
-                {storeName ? "Change Store" : "Add Store"}
+            <div className="flex flex-row gap-2 justify-end mt-1 w-full">
+              <Button
+                className="bg-[#349868] hover:bg-[#49C187] rounded-[12px] font-roboto-regular"
+                onClick={openChangeStoreModal}
+              >
+                {vendor_name ? "Change Store" : "Add Store"}
               </Button>
-              <Button className="bg-[#349868]" onClick={openChangeDateModal}>
-                {date ? "Change Date" : "Add Date"}
+              <Button
+                className="bg-[#349868] hover:bg-[#49C187] rounded-[12px] font-roboto-regular"
+                onClick={openChangeDateModal}
+              >
+                {transaction_date ? "Change Date" : "Add Date"}
               </Button>
             </div>
           </div>
         ) : (
-          <div className="flex flex-col gap-4 mt-4 text-[14px] font-roboto-light">
+          <div className="flex justify-start gap-8 mt-2 text-[14px] font-roboto-light">
             <div className="flex items-center gap-2">
               <Store className="h-4 w-4" />
               <p className="text-sm">
-                {receipt.address || "No address provided"}
+                {receipt.vendor_name || "No address provided"}
               </p>
             </div>
             <div className="flex items-center gap-2">
               <Calendar className="h-4 w-4" />
-              <p className="text-sm">{receipt.date}</p>
+              <p className="text-sm">{receipt.transaction_date}</p>
             </div>
           </div>
         )}
       </CardContent>
 
       {/* Image modal */}
-      <ImageModal receiptId={receiptId} />
+      <ImageModal receipt={receipt} />
     </Card>
   );
 }

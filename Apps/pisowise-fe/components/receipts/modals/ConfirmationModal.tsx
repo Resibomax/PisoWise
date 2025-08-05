@@ -1,5 +1,7 @@
+"use client";
+
 import { useModalStore } from "@/app/store/project/modal-store";
-import { useProjectsStore } from "@/app/store/project/projects-store";
+import { useReceiptStore } from "@/app/store/project/receipt-store";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -9,20 +11,26 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { useParams, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 
-export function ConfirmationModal() {
+interface ConfirmationModalProps {
+  receiptId?: string;
+}
+
+export function ConfirmationModal({ receiptId }: ConfirmationModalProps) {
   const { isConfirmDeleteModalOpen, closeConfirmDeleteModal } = useModalStore();
   const router = useRouter();
-  const params = useParams();
-  const { deleteProject, getProjectById } = useProjectsStore();
-  const project = params.id ? getProjectById(params.id as string) : null;
+  const { deleteReceipt } = useReceiptStore();
 
-  const handleDelete = () => {
-    if (project) {
-      deleteProject(project.project_id);
-      closeConfirmDeleteModal();
-      router.push("/projects");
+  const handleDelete = async () => {
+    try {
+      if (receiptId) {
+        await deleteReceipt(receiptId);
+        closeConfirmDeleteModal();
+        router.push(`/projects/`);
+      }
+    } catch (error) {
+      console.error("Error deleting receipt:", error);
     }
   };
 
@@ -37,7 +45,7 @@ export function ConfirmationModal() {
             Are you absolutely sure?
           </DialogTitle>
           <DialogDescription className="font-roboto-light text-[14px] md:text-[18px]">
-            You are about to permanently delete this project. This action cannot
+            You are about to permanently delete this receipt. This action cannot
             be undone.
           </DialogDescription>
         </DialogHeader>

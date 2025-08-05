@@ -12,6 +12,8 @@ import {
 } from "aws-amplify/auth";
 import { initializeAmplifyOAuth } from "@/lib/auth/amplify-oauth";
 import { handleOAuthCallback } from "@/lib/auth/oauth-handler";
+import { fetchAuthSession } from "@aws-amplify/core";
+import axios from "axios";
 
 interface User {
   email: string;
@@ -63,6 +65,8 @@ interface AuthStore {
   handleOAuthCallback: () => Promise<void>;
   clearError: () => void;
 }
+
+const API_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
 export const useAuthStore = create<AuthStore>((set, get) => ({
   isLoginOpen: false,
@@ -137,12 +141,37 @@ export const useAuthStore = create<AuthStore>((set, get) => ({
     set({ isLoading: true, error: null });
     try {
       const { isSignedIn } = await signIn({ username: email, password });
+
       if (isSignedIn) {
         const currentUser = await getCurrentUser();
         const attributes = await fetchUserAttributes();
+        const idToken = (await fetchAuthSession()).tokens?.idToken?.toString();
+
+        // Prepare payload
+        const userPayload = {
+          email: attributes?.email ?? email,
+          username: (attributes?.email ?? email).split("@")[0],
+        };
+
+        try {
+          await axios.post(`${API_URL}/users`, userPayload, {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${idToken}`,
+            },
+          });
+          console.log("Internal user pushed to DB");
+        } catch (pushErr: unknown) {
+          if (axios.isAxiosError(pushErr) && pushErr.response?.status === 409) {
+            console.log("User already exists in DB, skipping POST");
+          } else {
+            console.error("Error pushing user to DB:", pushErr);
+          }
+        }
+
         set({
           user: {
-            email: attributes?.email ?? email,
+            email: userPayload.email,
             sub: currentUser.userId,
             attributes,
           },
@@ -264,7 +293,7 @@ export const useAuthStore = create<AuthStore>((set, get) => ({
         user: null,
         isAuthenticated: false,
         isLoading: false,
-        hasCheckedAuth: true, // Keep this as true to prevent loading loop
+        hasCheckedAuth: true,
       });
     } catch (err: unknown) {
       const message = isErrorWithMessage(err)
