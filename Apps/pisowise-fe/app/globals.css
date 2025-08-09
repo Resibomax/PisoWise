@@ -2,6 +2,11 @@
 @import "tw-animate-css";
 @import url("https://fonts.googleapis.com/css2?family=Roboto:wght@300;400&display=swap");
 
+::selection {
+  background-color: #012ae0d4;
+  color: white;
+}
+
 @layer utilities {
   .custom-scrollbar::-webkit-scrollbar {
     width: 8px;
