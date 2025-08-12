@@ -4,12 +4,12 @@ A comprehensive expense tracking and project management application that helps u
 
 ## Architecture
 
-**Frontend**: Next.js 15 with TypeScript, React 19, and Tailwind CSS
-**Backend**: FastAPI with Python 3.11, deployed as serverless functions
-**Database**: PostgreSQL with SQLAlchemy ORM and Alembic migrations
-**Cloud Infrastructure**: AWS (Lambda, S3, Textract, Cognito)
-**Authentication**: AWS Cognito with OAuth integration
-**Deployment**: Serverless Framework with GitHub Actions CI/CD
+**Frontend**: Next.js 15 with TypeScript, React 19, and Tailwind CSS <br>
+**Backend**: FastAPI with Python 3.11, deployed as serverless functions <br>
+**Database**: PostgreSQL with SQLAlchemy ORM and Alembic migrations <br>
+**Cloud Infrastructure**: AWS (Lambda, S3, Textract, Cognito) <br>
+**Authentication**: AWS Cognito with OAuth integration <br>
+**Deployment**: Serverless Framework with GitHub Actions CI/CD <br>
 
 ## Key Services & Frameworks
 
