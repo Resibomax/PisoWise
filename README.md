@@ -18,7 +18,7 @@ A comprehensive expense tracking and project management application that helps u
 - **TypeScript** - Type-safe development
 - **Tailwind CSS** - Utility-first styling
 - **Radix UI** - Accessible component primitives
-- **Material-UI** - Additional UI components
+- **ShadCN UI** - Additional UI components
 - **Zustand** - State management
 - **AWS Amplify** - Authentication integration
 - **Axios** - HTTP client for API calls
